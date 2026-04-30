@@ -1,0 +1,922 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Digital Brain 시스템 분석 보고서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+  :root {
+    --navy: #102a43;
+    --blue: #1f5fbf;
+    --teal: #0f766e;
+    --gold: #b7791f;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #d8e2ef;
+    --bg: #f4f7fb;
+    --paper: #ffffff;
+    --soft: #eef5ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    line-height: 1.66;
+    letter-spacing: 0;
+  }
+  .page {
+    max-width: 1220px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+    padding: 58px 68px 50px;
+    color: #fff;
+    background:
+      linear-gradient(135deg, rgba(16, 42, 67, 0.98), rgba(31, 95, 191, 0.9)),
+      radial-gradient(circle at 84% 22%, rgba(45, 212, 191, 0.26), transparent 36%);
+  }
+  .hero:after {
+    content: "";
+    position: absolute;
+    right: -110px;
+    bottom: -180px;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    max-width: 850px;
+    margin: 28px 0 14px;
+    color: #fff;
+    border: 0;
+    padding: 0;
+    font-size: 42px;
+    line-height: 1.22;
+    font-weight: 800;
+  }
+  .subtitle {
+    max-width: 850px;
+    color: rgba(255,255,255,0.86);
+    font-size: 17px;
+  }
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 42px;
+    position: relative;
+    z-index: 1;
+  }
+  .metric {
+    min-height: 92px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.11);
+  }
+  .metric span {
+    display: block;
+    color: rgba(255,255,255,0.66);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .metric strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 34px;
+    padding: 42px 68px 70px;
+  }
+  .toc {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+  .toc-title {
+    margin-bottom: 12px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .toc a {
+    display: block;
+    padding: 8px 0;
+    border-top: 1px solid #e9eef6;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .content h1 {
+    display: none;
+  }
+  h2 {
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--navy);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+  }
+  h2:first-child, hr + h2 {
+    margin-top: 24px;
+  }
+  h3 {
+    margin: 26px 0 10px;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+  }
+  h4 {
+    margin: 20px 0 8px;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  blockquote {
+    margin: 14px 0 18px;
+    padding: 18px 20px;
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+  }
+  ul, ol {
+    margin: 10px 0 18px 22px;
+    padding: 0;
+  }
+  li {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eef2f7;
+    color: #174ea6;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92em;
+  }
+  .code {
+    overflow-x: auto;
+    margin: 16px 0 22px;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 12px;
+    line-height: 1.48;
+  }
+  .code code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+  .code.mermaid {
+    background: #f8fbff;
+    color: #1f2937;
+  }
+  .architecture-diagram {
+    margin: 18px 0 26px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fbfdff 0%, #f3f8ff 100%);
+  }
+  .architecture-layer {
+    position: relative;
+    margin-bottom: 14px;
+    padding: 16px;
+    border: 1px solid #cbd8ea;
+    border-radius: 12px;
+    background: #fff;
+  }
+  .architecture-layer:last-child {
+    margin-bottom: 0;
+  }
+  .architecture-layer::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -15px;
+    width: 2px;
+    height: 15px;
+    background: #94a3b8;
+  }
+  .architecture-layer:last-child::after {
+    display: none;
+  }
+  .architecture-layer.dark {
+    border-color: #1f5fbf;
+    background: #102a43;
+    color: #fff;
+  }
+  .architecture-layer.accent {
+    border-color: #93c5fd;
+    background: #edf5ff;
+  }
+  .layer-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 12px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  }
+  .layer-title {
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .layer-ref {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: right;
+  }
+  .architecture-layer.dark .layer-ref {
+    color: rgba(255,255,255,0.72);
+  }
+  .node-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .node-grid.four {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .node-grid.five {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .node-grid.source {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .diagram-node {
+    min-height: 78px;
+    padding: 12px;
+    border: 1px solid #d6e1ef;
+    border-radius: 10px;
+    background: #f8fbff;
+  }
+  .architecture-layer.dark .diagram-node {
+    border-color: rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.08);
+  }
+  .diagram-node strong {
+    display: block;
+    margin-bottom: 5px;
+    color: inherit;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .diagram-node span {
+    display: block;
+    color: inherit;
+    opacity: 0.75;
+    font-size: 11px;
+    line-height: 1.42;
+  }
+  .security-band {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    text-align: left;
+  }
+  th, td {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td {
+    background: #fafcff;
+  }
+  hr {
+    height: 1px;
+    margin: 32px 0;
+    border: 0;
+    background: var(--line);
+  }
+  strong {
+    color: #0f172a;
+    font-weight: 800;
+  }
+  a {
+    color: var(--blue);
+  }
+  .footer {
+    padding: 24px 68px 34px;
+    background: #0f172a;
+    color: #cbd5e1;
+    font-size: 12px;
+  }
+  .footer strong {
+    color: #fff;
+  }
+  @media (max-width: 960px) {
+    .hero, .layout, .footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .layout {
+      display: block;
+    }
+    .toc {
+      position: static;
+      margin-bottom: 28px;
+    }
+    .hero-metrics {
+      grid-template-columns: 1fr;
+    }
+    .node-grid,
+    .node-grid.four,
+    .node-grid.five,
+    .node-grid.source {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media print {
+    body {
+      background: #fff;
+    }
+    .page {
+      box-shadow: none;
+    }
+    .toc {
+      display: none;
+    }
+    .layout {
+      display: block;
+      padding: 28px 36px;
+    }
+    h2, h3, .table-wrap, blockquote {
+      break-inside: avoid;
+    }
+  }
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.85);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+  }
+  .top-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .top-nav a:hover,
+  .top-nav a:focus {
+    border-color: #1f5fbf;
+    background: #eef5ff;
+    color: #1f5fbf;
+    outline: none;
+  }
+  
+  .top-nav a.is-active {
+    background: #102a43;
+    border-color: #102a43;
+    color: #fff;
+  }
+  @media print {
+    .top-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav" aria-label="보고서 페이지 이동">
+  <a class="main-link" href="index.html">메인</a>
+  <a href="1_공통.html">1</a>
+  <a class="is-active" href="2_Trade_Digital_Brain.html">2</a>
+  <a href="3_Trade_Agent.html">3</a>
+  <a href="4_Trade_Dashboard.html">4</a>
+  <a href="5_Export_Certification.html">5</a>
+  <a href="6_Global_IP_Service.html">6</a>
+  <a href="7_tradeKorea%20Enhancement.html">7</a>
+  <a href="8_ESG_Compliance_Platform.html">8</a>
+  <a href="9_Academy.html">9</a>
+</nav>
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">Executive Report · RFP Analysis</div>
+    <h1>Trade Digital Brain 시스템 분석 보고서</h1>
+    <p class="subtitle">분산 데이터 통합, AI Readable Data Foundation, Lakehouse·거버넌스·마이그레이션 전략을 정리한 보고서</p>
+    <div class="hero-metrics">
+      <div class="metric"><span>SYSTEM</span><strong>Trade Digital Brain</strong></div>
+      <div class="metric"><span>CORE</span><strong>Data Lakehouse + AI Data Hub</strong></div>
+      <div class="metric"><span>FOCUS</span><strong>거버넌스·품질·연계 전환</strong></div>
+      <div class="metric"><span>DELIVERABLE</span><strong>Executive HTML Report</strong></div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#1-목표-시스템-정의">1. 목표 시스템 정의</a>
+<a href="#2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</a>
+<a href="#3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</a>
+<a href="#4-추천-기술-스택">4. 추천 기술 스택</a>
+<a href="#5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</a>
+<a href="#6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</a>
+<a href="#7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</a>
+<a href="#부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</a>
+<a href="#부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</a>
+    </aside>
+    <article class="content">
+      <h1>Trade Digital Brain 시스템 분석 보고서</h1>
+<hr>
+<h2 id="1-목표-시스템-정의">1. 목표 시스템 정의</h2>
+<h3 id="1-Liner-Definition">1-Liner Definition</h3>
+<blockquote><strong>Trade Digital Brain은 KITA 산하 8개 분산 서비스의 정형·비정형·반정형·행동 데이터를 단일 Data Lakehouse 위에 표준·메타·품질·리니지·라이프사이클 거버넌스 체계로 통합하고, AI Data Hub(Vector·Knowledge·Prompt 라이브러리)를 통해 Multi-Agent와 통합대시보드가 공통 활용 가능한 &quot;AI Readable Data Foundation&quot;을 구축하는 사업이다.</strong></blockquote>
+<h3 id="1-1-사업-배경-Why">1.1 사업 배경 (Why)</h3>
+<ul>
+<li><strong>As-Is 사일로 구조</strong>: KITA.net, tradeKorea, TradePro, 무역통계, 무역아카데미, 멤버십, KNEX(내부), 콜센터/SR이 별도 운영. 회원 식별·행동로그·콘텐츠 메타가 서비스 경계에 갇혀 있어 횡단 활용 불가 <code>[RFP II-1, p.9]</code></li>
+<li><strong>인프라 노후</strong>: 무역통계 운영계가 Solaris 11 / Oracle 19c / NetApp SAN 기반 온프레로 잔존, ETL은 InnoQuartz 7.2.1, 모니터링은 Zenius/Sherpa 등 레거시 솔루션 의존 <code>[RFP II-2, p.10~14]</code></li>
+<li><strong>AI Data Readable 부재</strong>: AI 학습/추론에 직접 활용 가능한 표준화·벡터화 데이터 계층이 존재하지 않음. 정형/비정형/반정형 데이터의 파싱·청킹·임베딩 파이프라인이 미구축 <code>[RFP III-나-DAR-DP-007, p.45~]</code></li>
+<li><strong>거버넌스 공백</strong>: 데이터 표준(단어·용어·도메인·코드), 메타데이터 카탈로그, 데이터 리니지, 품질 검증, 라이프사이클 관리 체계가 전사 통합 수준으로 정립되지 않음 <code>[RFP III-나-DAR-DP-001~017, p.42~50]</code></li>
+</ul>
+<h3 id="1-2-구축-목적-What">1.2 구축 목적 (What)</h3>
+<p>RFP I-3 사업목표 첫 번째 명문 <code>[RFP I-3, p.1]</code>:</p>
+<blockquote>&quot;글로벌 무역 데이터 플랫폼 기반 무역 특화 지능형 Trade Agent 구축 — 통합데이터플랫폼 구축을 통해 무역통계 서비스를 고도화하고, 수출 기업의 전주기 업무 프로세스에 특화된 대화형 AI Trade Agent 구축&quot;</blockquote>
+<p>RFP I-4 추진범위 첫 번째 항목 <code>[RFP I-4, p.2~3]</code>:</p>
+<blockquote>&quot;Trade Digital Brain 구축 — 협회의 산재되어 있는 다양한 서비스의 분산된 데이터 이용 환경을 통합데이터 플랫폼으로 일원화하고, AI 서비스와 통합대시보드에서 데이터 활용이 가능한 환경을 구축&quot;</blockquote>
+<h3 id="1-3-최종-지향점-Goal">1.3 최종 지향점 (Goal)</h3>
+<ul>
+<li><strong>AI Readable Data Foundation</strong>: 모든 데이터가 표준·메타·벡터화 상태로 전환되어 27종 Trade Agent와 통합대시보드가 공통 소비 가능한 단일 데이터 기반 제공</li>
+<li><strong>데이터 주권</strong>: 회원사 정보·매출·통상정보가 외부 LLM/CSP에 잔류하지 않는 폐쇄망 운영 가능 구조</li>
+<li><strong>확장 가능 거버넌스</strong>: 신규 서비스(ESG·지재권 등) 추가 시 표준·메타·품질·리니지가 자동 적용되는 셀프 서비스 거버넌스</li>
+<li><strong>레거시 무중단 전환</strong>: 현행 무역통계(Solaris/Oracle 19c) 서비스를 무중단으로 Lakehouse 환경으로 마이그레이션 <code>[RFP III-나-PER-DP-002, p.40]</code></li>
+</ul>
+<hr>
+<h2 id="2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</h2>
+<h3 id="2-1-논리-아키텍처-5계층">2.1 논리 아키텍처 (5계층)</h3>
+<p>Trade Digital Brain은 <strong>5개 논리 계층</strong>으로 구성되며, 각 계층은 표준 인터페이스(JDBC/ODBC/REST/Kafka/MCP)로 결합된다.</p>
+<div class="architecture-diagram" aria-label="Trade Digital Brain 논리 아키텍처 다이어그램">
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L5 Data Consumption Layer</div>
+      <div class="layer-ref">MCP/RAG · JDBC/REST · APIM/CDC</div>
+    </div>
+    <div class="node-grid">
+      <div class="diagram-node"><strong>Trade Agent</strong><span>27 Unit Agent<br>RAG·MCP 기반 활용</span></div>
+      <div class="diagram-node"><strong>통합대시보드</strong><span>위젯·추천·알림<br>개인화 데이터 소비</span></div>
+      <div class="diagram-node"><strong>8개 도메인 서비스</strong><span>tradeKorea · TradePro<br>무역아카데미 등</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer accent">
+    <div class="layer-head">
+      <div class="layer-title">L4 Data Service / API Layer</div>
+      <div class="layer-ref">ECR-DP-006 APIM · ECR-DP-007 데이터가상화</div>
+    </div>
+    <div class="node-grid four">
+      <div class="diagram-node"><strong>APIM</strong><span>셀프 포털<br>API 생명주기 관리</span></div>
+      <div class="diagram-node"><strong>Data Virtualization</strong><span>Virtual View<br>물리 이동 없는 통합</span></div>
+      <div class="diagram-node"><strong>JDBC/ODBC Gateway</strong><span>분석·조회 표준 인터페이스</span></div>
+      <div class="diagram-node"><strong>Vector / RAG API</strong><span>FastAPI 기반<br>AI Data Hub 제공</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L3 Governance / Metadata Layer</div>
+      <div class="layer-ref">DAR-DP-001~017</div>
+    </div>
+    <div class="node-grid four">
+      <div class="diagram-node"><strong>Metadata Catalog</strong><span>ECR-DP-003<br>기술·Biz 메타 관리</span></div>
+      <div class="diagram-node"><strong>Data Standard</strong><span>표준사전·코드<br>명명규칙</span></div>
+      <div class="diagram-node"><strong>Data Quality</strong><span>DQ 검증<br>오류 식별·재검증</span></div>
+      <div class="diagram-node"><strong>Lifecycle / Lineage</strong><span>수집~삭제<br>흐름·이력 추적</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer dark">
+    <div class="layer-head">
+      <div class="layer-title">L2 Storage / Compute Layer</div>
+      <div class="layer-ref">ECR-DP-001 데이터플랫폼</div>
+    </div>
+    <div class="node-grid four">
+      <div class="diagram-node"><strong>Data Lakehouse</strong><span>ACID · Bronze/Silver/Gold<br>Parquet/Iceberg</span></div>
+      <div class="diagram-node"><strong>AI Data Hub</strong><span>Vector DB · Prompt Library<br>Knowledge Base</span></div>
+      <div class="diagram-node"><strong>Operational DB</strong><span>PostgreSQL / Oracle 호환<br>운영 데이터</span></div>
+      <div class="diagram-node"><strong>Cache</strong><span>Redis Cluster<br>세션·LLM 캐시</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L1 Ingestion / Pipeline Layer</div>
+      <div class="layer-ref">ECR-DP-005 ETL</div>
+    </div>
+    <div class="node-grid four">
+      <div class="diagram-node"><strong>ETL</strong><span>Batch<br>InnoQuartz 호환</span></div>
+      <div class="diagram-node"><strong>CDC / Stream</strong><span>Kafka · CDC<br>실시간 수집</span></div>
+      <div class="diagram-node"><strong>비정형 처리</strong><span>HWP/PDF/OCR<br>문서 파싱</span></div>
+      <div class="diagram-node"><strong>Embedding Pipeline</strong><span>Parsing → Chunking → Vector</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">Source Systems</div>
+      <div class="layer-ref">KITA 내부 + 외부 데이터</div>
+    </div>
+    <div class="node-grid source">
+      <div class="diagram-node"><strong>내부 시스템</strong><span>KITA.net · tradeKorea · TradePro · 무역통계 · 무역아카데미 · 멤버십(KNEX) · 콜센터/SR · KAMIS · 행동로그</span></div>
+      <div class="diagram-node"><strong>외부 시스템</strong><span>관세청 · FTA포털 · TradeNAVI · 공공데이터포털 · IMF 통계 등</span></div>
+    </div>
+    <div class="security-band">ECR-DP-008/009/010 보안 영역은 시스템 접근제어, 서버보안, DB보안으로 전 계층 횡단 적용</div>
+  </div>
+</div>
+<h3 id="2-2-내부-연계-KITA-내부-시스템">2.2 내부 연계 (KITA 내부 시스템)</h3>
+<p>RFP III-나-DAR-DP-006 / 007 명문 <code>[RFP III-나-DAR-DP-006~007, p.45]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>구분</th><th>Source 시스템</th><th>데이터 유형</th><th>수집 방식</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td>정형</td><td>무역통계 (Oracle 19c)</td><td>통계 DB</td><td>마이그레이션 + CDC</td><td>Solaris→Lakehouse 전환</td></tr>
+<tr><td>정형</td><td>KITA.net</td><td>콘텐츠·뉴스·연구</td><td>API + Batch</td><td>멀티사이트 통합</td></tr>
+<tr><td>정형</td><td>멤버십 (KNEX)</td><td>회원·결제·이용이력</td><td>API + CDC</td><td>KAMIS 정산 연동</td></tr>
+<tr><td>정형</td><td>TradeNAVI</td><td>관세·규제</td><td>API</td><td>관세청 원본</td></tr>
+<tr><td>비정형</td><td>TradePro</td><td>상담 텍스트·녹음</td><td>Batch + STT</td><td>Multi-turn 대화 보존</td></tr>
+<tr><td>비정형</td><td>무역아카데미 LMS</td><td>강의·자료(HWP/PDF)</td><td>문서 파서 + OCR</td><td>hwpx 포맷 포함</td></tr>
+<tr><td>반정형</td><td>콜센터/SR</td><td>티켓 JSON</td><td>API</td><td>답변·녹음 메타</td></tr>
+<tr><td>행동로그</td><td>전 서비스</td><td>클릭·탐색·다운로드</td><td>Kafka Stream</td><td>사용자 행동</td></tr>
+</tbody></table></div>
+<h3 id="2-3-외부-연계-Public-External">2.3 외부 연계 (Public·External)</h3>
+<p>RFP III-나-DAR-DP-007 명문 <code>[RFP III-나-DAR-DP-007, p.45]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>외부 시스템</th><th>데이터</th><th>연계 방식</th><th>인증</th></tr></thead>
+<tbody>
+<tr><td>관세청</td><td>통관·HS·관세율</td><td>OpenAPI / 전용 회선</td><td>API Key + IP 화이트리스트</td></tr>
+<tr><td>FTA포털</td><td>원산지·FTA 활용</td><td>OpenAPI</td><td>API Key</td></tr>
+<tr><td>공공데이터포털 (data.go.kr)</td><td>무역·산업 통계</td><td>OpenAPI</td><td>인증키</td></tr>
+<tr><td>IMF / UN Comtrade</td><td>글로벌 무역통계</td><td>API + Batch</td><td>API Key</td></tr>
+<tr><td>KTNET</td><td>전자무역 EDI</td><td>EDI/AS2</td><td>mTLS</td></tr>
+<tr><td>외부 LLM (선택)</td><td>모델 추론</td><td>LiteLLM Proxy</td><td>API Key (비식별 후)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</h2>
+<p>기술평가 100점 중 &quot;기술 및 기능 25점&quot;, &quot;성능 및 품질 15점&quot;, &quot;프로젝트 지원 20점&quot;의 핵심 가점은 <strong>L2 Lakehouse, L3 거버넌스, L1 ETL/문서처리, L4 데이터가상화, 무역통계 무중단 전환</strong> 5가지 영역에 집중된다.</p>
+<h3 id="KEY-1-Data-Lakehouse-도입-분산-클러스터-아키텍처">KEY-1. Data Lakehouse 도입 + 분산 클러스터 아키텍처</h3>
+<p><strong>근거</strong>: <code>[RFP III-나-ECR-DP-001, p.32]</code></p>
+<ul>
+<li>ACID 트랜잭션 지원, 메타데이터 기반 관리, 고속 분석 쿼리 명문 요구</li>
+<li>정형·비정형 분리 저장, 증분 적재, 이력 관리 필수</li>
+<li>클러스터 기반 분산 컴퓨팅, 부하 분산, 확장성 보장 명문</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★ (가장 핵심)</p>
+<ul>
+<li>ECR 11개 중 1순위. 평가표 &quot;기술 및 기능 25점&quot;의 직접 대상</li>
+<li>&quot;구현 방안이 구체적으로 기술&quot; 평가 기준에 정조준되는 영역. ADR(Architecture Decision Record) 형태로 채택안과 기각안의 근거를 명시 필요</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>Bronze(Raw) → Silver(Cleansed) → Gold(Curated) 3계층 메달리온 아키텍처</li>
+<li>Apache Iceberg 또는 Delta Lake (ACID + Time Travel + Schema Evolution)</li>
+<li>컴퓨팅: Apache Spark + Trino(쿼리) 분리. 스토리지/컴퓨팅 디커플링</li>
+<li>오브젝트 스토리지: MinIO(S3 호환) 또는 KT Cloud Object Storage</li>
+</ul>
+<hr>
+<h3 id="KEY-2-통합-메타데이터-관리-데이터-표준-품질-리니지-라이프사이클-거버넌스">KEY-2. 통합 메타데이터 관리 + 데이터 표준·품질·리니지·라이프사이클 거버넌스</h3>
+<p><strong>근거</strong>: <code>[RFP III-나-ECR-DP-003, p.36]</code> + <code>[DAR-DP-001 데이터 표준화, p.42]</code> + <code>[DAR-DP-007~008 데이터 품질·라이프사이클, p.45~46]</code></p>
+<ul>
+<li>메타데이터 자동 수집·등록·승인·감사 명문</li>
+<li>표준사전(단어·용어·도메인·코드) + DB Object 명명규칙 + 정합성 검증</li>
+<li>데이터 품질 검증 방안(검증 대상·시점·항목·방법) + 오류 식별·재검증 절차</li>
+<li>라이프사이클(생성·수집·적재·활용·보관·이관·삭제) 관리 + 개인정보 보관·삭제 기준</li>
+<li>메타데이터 기반 통합 거버넌스 + 데이터카탈로그·Biz메타 연계</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>DAR(데이터 요구사항) 17개 중 다수가 거버넌스 영역. 평가표 &quot;데이터 요구사항&quot; 기준 평가 직접 매핑</li>
+<li>표준 정의 → 카탈로그 등록 → 품질 검증 → 변경 이력 → 라이프사이클이 <strong>순서적 의존 관계</strong>여서 일정 관리 난이도 매우 높음</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>카탈로그: DataHub 또는 OpenMetadata (오픈소스 + 한국어 검증 사례 풍부)</li>
+<li>표준사전: DA# 또는 ERwin 기반 + 카탈로그 자동 동기화</li>
+<li>품질: Great Expectations + Soda Core, 임계치 위반 시 파이프라인 차단</li>
+<li>리니지: OpenLineage / Marquez (Spark·Airflow 자동 수집)</li>
+<li>라이프사이클: Iceberg Snapshot Expiration + Object Storage Lifecycle Policy</li>
+</ul>
+<hr>
+<h3 id="KEY-3-AI-Data-Hub-비정형-특히-HWP-HWPX-처리-임베딩-파이프라인">KEY-3. AI Data Hub — 비정형(특히 HWP/HWPX) 처리 + 임베딩 파이프라인</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-SFR-AP-010 AI Data 파이프라인, p.55]</code> + <code>[SFR-AP-011 AI Data 전처리·가공, p.55~]</code></p>
+<ul>
+<li>정형·비정형·반정형을 표준 메타·AI 메타 표준에 따라 Parsing·Chunking·Embedding 명문</li>
+<li><strong>hwpx, hwp 포맷 지원 명문</strong> (발주처 특성)</li>
+<li>복합 구성 문서(이미지·그래프·차트·표·문장)의 요소별 분리·구조 정보 보존</li>
+<li>데이터 분할 정보·원본 위치·식별 정보 메타화</li>
+<li>평가 데이터셋 구축 + 피드백 루프</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>HWP/HWPX 처리는 한국 공공기관 사업의 단골 위험 요소. 정확도 미달 시 Trade Agent 전체 응답 품질 하락</li>
+<li>&quot;발주처 특성을 고려&quot;라는 명문이 들어 있어 평가위원의 특정 솔루션 사례 요구 가능성 큼</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>문서 파서: Docling(IBM, 표·차트 인식 SOTA) + pyhwp/olefile(HWP/HWPX) + PyMuPDF(PDF) 다단 파이프라인</li>
+<li>OCR: PaddleOCR 2.9 (한·영 동시 지원, GPU 가속)</li>
+<li>Chunking: Recursive Character + Semantic Chunking 혼합. 표·차트는 별도 청크 분리</li>
+<li>Embedding: BGE-M3(다국어) + KURE-v1(한국어 SOTA) 듀얼 모델</li>
+<li>파이프라인 오케스트레이션: Apache Airflow 2.10 DAG + Ray(분산 임베딩)</li>
+</ul>
+<hr>
+<h3 id="KEY-4-데이터-가상화-APIM-Single-View-제공">KEY-4. 데이터 가상화 + APIM (Single View 제공)</h3>
+<p><strong>근거</strong>: <code>[RFP III-나-ECR-DP-007 데이터가상화, p.40]</code> + <code>[ECR-DP-006 APIM, p.38]</code></p>
+<ul>
+<li>물리적 데이터 이동 없이 논리적 가상 뷰 생성·통합 명문</li>
+<li>Row/Column 단위 보안 정책(RLS/CLS) 적용</li>
+<li>JDBC/ODBC 표준 인터페이스 + Trade Agent·Dashboard 공통 활용</li>
+<li>API 생명주기 관리, 트래픽 제어, 개발자 포털, 로그 감사</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>&quot;AI Agent + Dashboard 공통 활용&quot; 명문 → 단일 진실 소스(SSOT) 제공의 결정적 메커니즘</li>
+<li>Trade Agent의 RAG·MCP 호출 정확도가 이 계층 품질에 직결</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>데이터 가상화: Denodo 또는 Trino + Starburst(오픈소스 친화). 가상 뷰 메타는 카탈로그와 자동 동기화</li>
+<li>APIM: Apache APISIX 3.x(오픈소스) 또는 Kong Gateway 3.8. 셀프 서비스 포털, 트래픽/할당량 관리, OAuth2/JWT 표준 인증</li>
+<li>보안 필터: SQL Injection 방어, 메시지 암복호화, IP 화이트리스트</li>
+<li>관찰성: OpenTelemetry Tracing → Grafana Tempo</li>
+</ul>
+<hr>
+<h3 id="KEY-5-무역통계-시스템-무중단-마이그레이션-성능-SLA">KEY-5. 무역통계 시스템 무중단 마이그레이션 + 성능 SLA</h3>
+<p><strong>근거</strong>: <code>[RFP III-나-PER-DP-001/002, p.39~40]</code></p>
+<ul>
+<li>일반 조회 응답시간 3초, 복합 통계 5초 명문 (예시 기준, 발주처와 협의 확정)</li>
+<li>무역통계 마이그레이션 + 서비스 전환 + 롤백 절차 + 서비스 중단 허용 시간 명시 필요</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>평가표 &quot;성능 요구사항 15점&quot; + &quot;프로젝트 관리 15점&quot; 동시 매핑</li>
+<li>Solaris 11 / Oracle 19c / NetApp SAN의 운영계 데이터 → Lakehouse 환경으로 무중단 전환은 사업 후반부 최대 리스크 지점</li>
+<li>ECR-DP-005 ETL 호환성 명문(기존 InnoQuartz 호환) 충족 필요 <code>[RFP III-나-ECR-DP-005, p.37]</code></li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>전환 전략: Strangler Fig + Dual-Write (구·신 동시 적재 → 정합성 검증 → 컷오버)</li>
+<li>마이그레이션 도구: Oracle GoldenGate(CDC) 또는 Debezium for Oracle</li>
+<li>성능 검증: 일반 조회 P95 ≤ 3초, 복합 조회 P95 ≤ 5초, 동시 사용자 N명 → k6/JMeter 부하 테스트</li>
+<li>롤백: Lakehouse Time Travel + Iceberg Snapshot Rollback. 컷오버 후 N일 이내 원복 가능 보장</li>
+</ul>
+<hr>
+<h2 id="4-추천-기술-스택">4. 추천 기술 스택</h2>
+<h3 id="4-1-계층별-기술-매트릭스">4.1 계층별 기술 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>계층</th><th>영역</th><th>추천 솔루션</th><th>라이선스</th><th>채택 사유</th></tr></thead>
+<tbody>
+<tr><td><strong>L1 수집</strong></td><td>Batch ETL</td><td>InnoQuartz 7.x → Apache Airflow 2.10 점진 전환</td><td>상용 + Apache 2.0</td><td>KITA 기존 운영 호환 (ECR-DP-005 명문)</td></tr>
+<tr><td>L1 수집</td><td>실시간 CDC</td><td>Debezium 2.x + Apache Kafka 3.7</td><td>Apache 2.0</td><td>Oracle 19c CDC 표준</td></tr>
+<tr><td>L1 수집</td><td>문서 파서</td><td>Docling + pyhwp + PaddleOCR</td><td>MIT/Apache</td><td>HWP/HWPX 명문 + 한국어 OCR</td></tr>
+<tr><td>L1 수집</td><td>임베딩</td><td>BGE-M3 + KURE-v1 + sentence-transformers</td><td>Apache 2.0</td><td>한국어 SOTA</td></tr>
+<tr><td><strong>L2 저장</strong></td><td>Lakehouse</td><td>Apache Iceberg 1.5 + Apache Spark 3.5</td><td>Apache 2.0</td><td>ACID + 분산 + 한국 사례 풍부</td></tr>
+<tr><td>L2 저장</td><td>Object Storage</td><td>MinIO RELEASE.2025 (S3 호환)</td><td>AGPLv3/상용</td><td>폐쇄망 운영 + 데이터 주권</td></tr>
+<tr><td>L2 저장</td><td>Vector DB</td><td>Milvus 2.4 (Cluster) + pgvector(보조)</td><td>Apache 2.0</td><td>대용량 + 한국어 임베딩 호환</td></tr>
+<tr><td>L2 저장</td><td>Operational DB</td><td>PostgreSQL 16 (HA + Patroni) + Tibero 7(호환)</td><td>PostgreSQL/상용</td><td>표준 RDB + 기존 환경 호환</td></tr>
+<tr><td>L2 저장</td><td>Cache</td><td>Redis 7.x Cluster + GPTCache</td><td>BSD/MIT</td><td>세션 + LLM 응답 캐싱</td></tr>
+<tr><td><strong>L3 거버넌스</strong></td><td>메타카탈로그</td><td>DataHub 0.14 (또는 OpenMetadata)</td><td>Apache 2.0</td><td>한국 공공 사례 보유</td></tr>
+<tr><td>L3 거버넌스</td><td>표준사전·모델링</td><td>DA# 4.x 또는 ERwin</td><td>상용</td><td>KITA 기존 표준 호환</td></tr>
+<tr><td>L3 거버넌스</td><td>데이터 품질</td><td>Great Expectations 0.18 + Soda Core</td><td>Apache 2.0</td><td>정량 임계치 자동화</td></tr>
+<tr><td>L3 거버넌스</td><td>리니지</td><td>OpenLineage + Marquez</td><td>Apache 2.0</td><td>Spark/Airflow 자동 수집</td></tr>
+<tr><td><strong>L4 서비스</strong></td><td>APIM</td><td>Apache APISIX 3.x</td><td>Apache 2.0</td><td>ECR-DP-006 명문 충족</td></tr>
+<tr><td>L4 서비스</td><td>데이터가상화</td><td>Trino 460 + Starburst Enterprise</td><td>Apache 2.0 + 상용</td><td>ECR-DP-007 명문 충족</td></tr>
+<tr><td>L4 서비스</td><td>RAG API</td><td>FastAPI 0.115 + LangChain 0.3</td><td>MIT/Apache</td><td>Agent와 표준 인터페이스</td></tr>
+<tr><td>L4 서비스</td><td>쿼리 엔진/BI</td><td>Apache Superset 4.x</td><td>Apache 2.0</td><td>무역통계 시각화</td></tr>
+<tr><td><strong>L5 소비</strong></td><td>(외부 — Trade Agent / 대시보드 / 도메인 서비스)</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<h3 id="4-2-인프라-선택-Hybrid-Cloud">4.2 인프라 선택 — Hybrid Cloud</h3>
+<p>RFP는 클라우드 랜딩존을 명시하면서도 무역통계 운영계의 SAN/Solaris 자산이 존재 → <strong>Hybrid Cloud</strong> 전제</p>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>배치</th><th>사유</th></tr></thead>
+<tbody>
+<tr><td>L2 Lakehouse·AI Data Hub</td><td>KT Cloud Public/Private (GPU 인스턴스 포함)</td><td>GPU 활용 + 데이터 주권 (회원사 정보 국내 잔류)</td></tr>
+<tr><td>L1 비정형 처리·임베딩</td><td>KT Cloud GPU (H100/H200)</td><td>OCR·Embedding GPU 가속 필수</td></tr>
+<tr><td>L2 Operational DB</td><td>Private Cloud / DR 이중화</td><td>트랜잭션 정합성·SLA</td></tr>
+<tr><td>외부 LLM (옵션)</td><td>LiteLLM Proxy → 비식별 후 호출</td><td>데이터 주권 + 모델 자유도</td></tr>
+<tr><td>백업</td><td>NetBackup 10 (KITA 기존) + Object Lock</td><td>ECR-DP-009/010 보안 + KITA 기존 자산</td></tr>
+</tbody></table></div>
+<h3 id="4-3-보안-스택-ECR-DP-008-009-010-정조준">4.3 보안 스택 (ECR-DP-008/009/010 정조준)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>솔루션</th><th>RFP 매핑</th></tr></thead>
+<tbody>
+<tr><td>시스템 접근제어(MFA·세션·승인)</td><td>휴네시온 i-One NGS 7.0 (KITA 기존)</td><td>ECR-DP-008</td></tr>
+<tr><td>서버보안(MAC·무결성)</td><td>TrustZone / 자체정보보안</td><td>ECR-DP-009</td></tr>
+<tr><td>DB보안(SQL 분석·접근통제)</td><td>셀파소프트 Sherpa(KITA 기존 호환)</td><td>ECR-DP-010</td></tr>
+<tr><td>비식별 / PII 처리</td><td>Microsoft Presidio + spaCy ko_core_news</td><td>LLM 입력 전 필수</td></tr>
+<tr><td>가드레일</td><td>NeMo Guardrails + Llama Guard 3</td><td>Trade Agent 연계</td></tr>
+<tr><td>시크릿·암호화</td><td>HashiCorp Vault + KMS</td><td>키 관리 표준</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</h2>
+<h3 id="V-1-Sovereign-Data-Foundation-회원사-데이터가-미국-GPU에-한-줄도-남지-않는다">V-1. Sovereign Data Foundation — &quot;회원사 데이터가 미국 GPU에 한 줄도 남지 않는다&quot;</h3>
+<p><strong>고객 Pain</strong>: 회원사 매출·통상·개인정보의 외부 LLM 학습 데이터 잔류 리스크. RFP는 데이터 주권을 명문화하지 않았으나 발주처 담당자의 잠재 두려움 1순위.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>KT Cloud GPU + vLLM(self-hosted) + LiteLLM Proxy 3축으로 모든 추론을 국내 잔류</li>
+<li>외부 LLM 호출 시 Presidio PII 비식별 → LiteLLM Adapter → 응답 수신 후 재식별</li>
+<li>모든 트레이스를 Langfuse(self-hosted)에 기록, 외부 SaaS 추적 차단</li>
+<li><strong>차별화 메시지</strong>: &quot;발주처가 외부 LLM에 종속되지 않을 자유&quot;를 데이터 플랫폼 본문에 박음</li>
+</ul>
+<h3 id="V-2-기존-KITA-자산-무중단-통합-운영-단절-0의-전환">V-2. 기존 KITA 자산 무중단 통합 — &quot;운영 단절 0의 전환&quot;</h3>
+<p><strong>고객 Pain</strong>: 기존 솔루션(InnoQuartz, Sherpa, Zenius, NetBackup, 휴네시온)에 운영 노하우가 축적되어 있으나 차세대 전환 시 단절되면 운영팀 적응 비용 폭증.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>ECR-DP-005 ETL 호환성 명문에 따라 <strong>InnoQuartz를 1차 ETL로 유지</strong> + Airflow를 2차 오케스트레이터로 점진 도입(Strangler Fig)</li>
+<li>DB 모니터링은 Sherpa/Zenius를 그대로 유지 + Prometheus/Grafana를 새 영역에만 도입</li>
+<li>백업은 NetBackup 10을 메인으로, Iceberg Snapshot은 보조로</li>
+<li><strong>차별화 메시지</strong>: &quot;혁신은 더하되 운영팀은 익숙한 도구를 잃지 않는다&quot;</li>
+</ul>
+<h3 id="V-3-Eval-Driven-Data-Pipeline-데이터-품질을-정량-SLA로-약속">V-3. Eval-Driven Data Pipeline — &quot;데이터 품질을 정량 SLA로 약속&quot;</h3>
+<p><strong>고객 Pain</strong>: 데이터 품질 검증을 RFP가 요구하지만, 대부분의 SI는 &quot;QA 수행&quot; 수준의 추상 답안만 제출. 발주처는 정량 지표를 보고 싶어 한다.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>Great Expectations 임계치(완전성·유일성·정합성·범위) 자동 검증 + 위반 시 파이프라인 차단(CD Gate)</li>
+<li>Embedding Pipeline은 Ragas 0.2의 Context Precision/Recall 지표로 검증 → 임계치 미달 시 재처리</li>
+<li>분기별 발주처 합동 리뷰: 표준 적용률·품질 지표·리니지 커버리지 정량 SLA 보고</li>
+<li><strong>차별화 메시지</strong>: &quot;데이터 품질을 산문이 아닌 숫자로 보증한다&quot;</li>
+</ul>
+<h3 id="V-4-AI-Ready-Data-Catalog-Agent와-사람이-같은-카탈로그를-본다">V-4. AI-Ready Data Catalog — &quot;Agent와 사람이 같은 카탈로그를 본다&quot;</h3>
+<p><strong>고객 Pain</strong>: 카탈로그는 통상 데이터 엔지니어용 도구로 머무름. 27 Trade Agent가 메타데이터를 직접 검색·활용하는 구조까지 가는 사례가 드물다.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>DataHub 메타데이터를 Vector화 → AI Data Hub에 저장 → Agent가 RAG로 메타 검색</li>
+<li>&quot;어떤 데이터가 어디 있는가&quot;를 자연어로 질의 가능 (예: &quot;2024년 베트남 수출 통계 테이블 어디 있어?&quot;)</li>
+<li>메타 변경 시 임베딩 자동 재생성 (CDC + Webhook)</li>
+<li><strong>차별화 메시지</strong>: &quot;AI가 직접 카탈로그를 읽는 데이터 플랫폼&quot;</li>
+</ul>
+<h3 id="V-5-단계형-4-Wave-이행안-12개월-빅뱅-금지-안정적-단계-오픈">V-5. 단계형 4-Wave 이행안 — &quot;12개월 빅뱅 금지, 안정적 단계 오픈&quot;</h3>
+<p><strong>고객 Pain</strong>: 12개월 내 8개 도메인 + 5계층 동시 신축 = 빅뱅 사고 두려움.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li><strong>Wave 1 (M1~M3)</strong>: L1 인프라 + L2 Lakehouse MVP (5개 핵심 도메인 데이터 우선 적재)</li>
+<li><strong>Wave 2 (M3~M6)</strong>: L3 거버넌스 + L4 APIM·데이터가상화 + 무역통계 마이그레이션 Dual-Write 시작</li>
+<li><strong>Wave 3 (M6~M9)</strong>: AI Data Hub 정식 + Trade Agent 27종 RAG 연계 + 8개 도메인 MCP 노출</li>
+<li><strong>Wave 4 (M9~M12)</strong>: 통합 테스트·전환 리허설·컷오버 + 안정화</li>
+<li>각 Wave 종료 시 발주처 Go/No-Go 게이트</li>
+<li><strong>차별화 메시지</strong>: &quot;사고 가능성을 12배 분산한다&quot;</li>
+</ul>
+<hr>
+<h2 id="6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ID</th><th>리스크</th><th>발생 확률</th><th>영향도</th><th>심각도</th><th>완화 전략</th></tr></thead>
+<tbody>
+<tr><td><strong>R1</strong></td><td><strong>무역통계 마이그레이션 실패</strong> — Solaris 11 / Oracle 19c / NetApp SAN 데이터를 무중단으로 Lakehouse 전환 실패 시 전체 사업 슬립</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>Dual-Write(GoldenGate or Debezium) 전략. 정합성 검증 N개월. 컷오버 후 30일 롤백 가능 보장. PER-DP-002 SLA를 마일스톤별 정량 측정</td></tr>
+<tr><td><strong>R2</strong></td><td><strong>L2 Lakehouse 임계경로 슬립</strong> — Lakehouse MVP 4개월 미완 시 L4·L5 전체 일정 도미노 슬립</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>M2 Go/No-Go 게이트 사전 합의. MVP 범위를 5개 핵심 도메인으로 제한(빅뱅 금지). Iceberg + Spark + Trino 사전 PoC를 제안 단계에 첨부</td></tr>
+<tr><td><strong>R3</strong></td><td><strong>HWP/HWPX 비정형 처리 정확도 부족</strong> — 발주처 특성 명문 요구 미충족 시 Trade Agent 응답 품질 저하</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>Docling + pyhwp + PaddleOCR 사전 PoC. 골든 데이터셋 100건 사전 구축. 정확도 임계치 미달 시 HITL(Human-in-the-Loop) 보정 루프</td></tr>
+<tr><td><strong>R4</strong></td><td><strong>데이터 표준·메타 정의 지연</strong> — 부서 간 표준 합의 실패 시 카탈로그·품질·리니지 전체 슬립</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>발주처 데이터 거버넌스 협의체 사업 초기 1개월 내 발족. 표준 정의는 Top-Down(코어 도메인 우선) + Bottom-Up(부서별 비표준 식별) 동시 진행. ISP 산출물 표준 활용</td></tr>
+<tr><td><strong>R5</strong></td><td><strong>외부 연계 지연</strong> — 관세청 / FTA / TradeNAVI 등 외부 OpenAPI 변경·제한·지연</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>외부 API 사양 사전 동결 협의. 캐싱 레이어(GPTCache/Redis) + Stale-While-Revalidate 패턴. 장애 시 Fallback 데이터셋</td></tr>
+<tr><td><strong>R6</strong></td><td><strong>데이터 라이프사이클·개인정보 삭제 누락</strong> — 라이프사이클 정책 미적용으로 PII 잔존 시 컴플라이언스 사고</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>Iceberg Snapshot Expiration + Object Storage Lifecycle Policy 자동화. PII 컬럼 자동 식별(Presidio) → 라이프사이클 정책 강제. 분기별 감사</td></tr>
+<tr><td><strong>R7</strong></td><td><strong>8개 도메인 서비스 동시 연계 일정 충돌</strong> — APIM/MCP 노출 시점 불일치로 Agent·대시보드 통합 테스트 슬립</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>도메인별 PL을 컨소시엄에 명시 + 통합 인터페이스 설계서를 사업 초기 1개월 내 동결. APIM 사양은 OpenAPI 3.x로 표준화</td></tr>
+<tr><td><strong>R8</strong></td><td><strong>GPU 자원 부족 / 토큰 비용 폭증</strong> — Embedding·LLM 운영 비용이 추정 대비 3~5배 증가</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>KT Cloud GPU 예약 인스턴스 + Self-hosted 우선 라우팅. GPTCache + Semantic Cache 도입. LiteLLM Spend Tracker 일일 알림</td></tr>
+<tr><td><strong>R9</strong></td><td><strong>레거시 솔루션 라이선스 / EOS</strong> — InnoQuartz·Sherpa·Zenius 등의 라이선스 갱신·EOS 시점 미파악</td><td>Low</td><td>Med</td><td><strong>MED</strong></td><td>사업 초기 라이선스 인벤토리 작성 + 제조사 기술지원 확약서 첨부(ECR 산출물 명문). EOS 시점 18개월 전 알림</td></tr>
+<tr><td><strong>R10</strong></td><td><strong>데이터 가상화 성능 병목</strong> — Trino/Denodo 가상 뷰 응답 지연으로 Agent TTFT(첫 토큰) 성능 미달</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>가상 뷰는 Hot Data만 적용. Cold Data는 Materialized View로 사전 계산. PER-DP-001 응답 SLA를 가상화 계층 단위로 분해</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</h2>
+<h3 id="7-1-사업-본질-재정의">7.1 사업 본질 재정의</h3>
+<blockquote>Trade Digital Brain은 &quot;데이터 플랫폼&quot;이라는 일반 명사가 아니라, <strong>&quot;27 Trade Agent + 통합대시보드 + 8개 도메인 서비스가 공통으로 소비 가능한 AI Readable Data Foundation&quot;</strong>이다. 이 본질을 놓치면 단순 ETL/Lakehouse 사업으로 격하되어 평가에서 차별화 불가.</blockquote>
+<h3 id="7-2-제안-3축-메시지">7.2 제안 3축 메시지</h3>
+<ol>
+<li><strong>Sovereign Data Foundation</strong> — KT Cloud GPU + vLLM + LiteLLM 3축으로 데이터 주권 보증</li>
+<li><strong>Open + Compatible Stack</strong> — Apache Iceberg/Spark/Trino/DataHub 오픈소스 + InnoQuartz/Sherpa/Zenius/NetBackup 기존 자산 호환</li>
+<li><strong>Eval-Driven Quality SLA</strong> — Great Expectations + Ragas로 데이터·임베딩 품질을 정량 SLA로 약속</li>
+</ol>
+<h3 id="7-3-평가표-매핑">7.3 평가표 매핑</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>평가 영역</th><th>점수</th><th>TDB 영역의 매핑</th></tr></thead>
+<tbody>
+<tr><td>기술 및 기능</td><td><strong>25</strong></td><td>ECR-DP-001 Lakehouse + ECR-DP-007 데이터가상화 + AI Data Hub 구체 구현안</td></tr>
+<tr><td>성능 및 품질</td><td><strong>15</strong></td><td>PER-DP-001 응답 SLA + 데이터 품질 정량 지표</td></tr>
+<tr><td>데이터 요구사항 (기능 내)</td><td>(배점 분포)</td><td>DAR-DP-001~017 17개 항목 직접 매핑. 표준·메타·품질·리니지·라이프사이클</td></tr>
+<tr><td>프로젝트 지원</td><td><strong>20</strong></td><td>6개월 무상 안정화 + Eval-Driven 분기 리뷰 + 자산 인계(표준사전·카탈로그·평가셋)</td></tr>
+<tr><td>프로젝트 관리</td><td><strong>15</strong></td><td>4-Wave 단계형 이행안 + Go/No-Go 게이트 + 무중단 마이그레이션</td></tr>
+</tbody></table></div>
+<h3 id="7-4-단독-제안-vs-컨소시엄">7.4 단독 제안 vs 컨소시엄</h3>
+<ul>
+<li><strong>단독 제안 시</strong>: 무역 도메인 깊이 약점으로 평가표 &quot;조직·인력 10점&quot; + &quot;유사분야 수행경험&quot;에서 격차</li>
+<li><strong>컨소시엄 권장</strong>: kt ds(통합 SI/PMO) + KT(K Intelligence·GPU) + KT Cloud + KTNET(전자무역 EDI) + ESG/IP 전문 파트너 4축</li>
+</ul>
+<hr>
+<h2 id="부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>RFP 절 / ID</th><th>추정 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>RFP I-3 사업목표</td><td>p.1</td><td>Trade Digital Brain 사업 정의</td></tr>
+<tr><td>RFP I-4 추진범위</td><td>p.2~3</td><td>TDB·Trade Agent·대시보드 등 8개 영역</td></tr>
+<tr><td>RFP II-1 업무현황</td><td>p.9</td><td>KITA 8개 서비스 As-Is</td></tr>
+<tr><td>RFP II-2 정보시스템 현황</td><td>p.10~14</td><td>무역통계 운영계 HW/SW 현황</td></tr>
+<tr><td>RFP III-나 Trade Digital Brain 구축 (37개 요구사항)</td><td>p.16~50</td><td>TDB 본문</td></tr>
+<tr><td>ECR-DP-001 데이터플랫폼(Lakehouse)</td><td>p.32</td><td>핵심 요구 #1</td></tr>
+<tr><td>ECR-DP-002 DB 모델링 SW</td><td>p.33</td><td>모델링 도구</td></tr>
+<tr><td>ECR-DP-003 메타데이터 관리 SW</td><td>p.36</td><td>거버넌스</td></tr>
+<tr><td>ECR-DP-004 DB 모니터링 SW</td><td>p.37</td><td>운영</td></tr>
+<tr><td>ECR-DP-005 ETL SW 업그레이드</td><td>p.37</td><td>기존 호환</td></tr>
+<tr><td>ECR-DP-006 APIM</td><td>p.38</td><td>서비스 레이어</td></tr>
+<tr><td>ECR-DP-007 데이터가상화</td><td>p.40</td><td>Single View</td></tr>
+<tr><td>ECR-DP-008/009/010 보안 SW</td><td>p.41</td><td>시스템·서버·DB 보안</td></tr>
+<tr><td>ECR-DP-011 통계 화면 SW</td><td>p.42</td><td>UI 컴포넌트</td></tr>
+<tr><td>SFR-DP-001~005</td><td>p.42~44</td><td>기능 개발 공통 + 무역통계 고도화</td></tr>
+<tr><td>PER-DP-001/002</td><td>p.39~40</td><td>응답 SLA + 마이그레이션 SLA</td></tr>
+<tr><td>INR-DP-001/002</td><td>p.40~41</td><td>UI/UX 가이드 + 권한 통합</td></tr>
+<tr><td>DAR-DP-001~017</td><td>p.42~50</td><td>표준·품질·리니지·라이프사이클</td></tr>
+<tr><td>RFP III-다-SFR-AP-010/011</td><td>p.55~56</td><td>AI Data 파이프라인 (TDB와 직결)</td></tr>
+<tr><td>RFP V-1~3 제안서 목차</td><td>p.107</td><td>제안서 작성 가이드</td></tr>
+<tr><td>RFP 붙임1 기술평가기준표</td><td>p.108~</td><td>평가 항목 100점 분배</td></tr>
+</tbody></table></div>
+<h2 id="부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ISP 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>ISP p.5</td><td>차세대 무역플랫폼 구축 14개 과제 (Digital Brain 데이터플랫폼이 ①번 과제로 지정)</td></tr>
+<tr><td>ISP p.7</td><td>AI 서비스 전환 / 원스톱 수출지원 / 디지털 인프라 3축</td></tr>
+<tr><td>ISP p.7807</td><td>데이터 솔루션 후보 비교: 이노트리·데이터스트림즈·AWS Prefect·dbt Labs</td></tr>
+<tr><td>ISP p.8005</td><td>솔루션 레퍼런스: LG U+, 시티은행, Trade Korea, 이노브랜치, 한국조폐공사</td></tr>
+<tr><td>ISP p.8139</td><td>메타·품질 솔루션 비교: 엔코아·데이터스트림즈·GT ONE·위세아이텍</td></tr>
+</tbody></table></div>
+<hr>
+    </article>
+  </div>
+  <footer class="footer">
+    <strong>Trade Digital Brain 시스템 분석 보고서</strong><br>
+    한국무역협회 차세대 플랫폼 구축 RFP 분석 기반 · 임원 보고용 HTML
+  </footer>
+</main>
+</body>
+</html>

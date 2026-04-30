@@ -1,699 +1,592 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>KITA 차세대 무역플랫폼 구축 사업 브리핑 — 제안팀용</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>차세대 AX무역플랫폼 구축 사업 일반현황 및 관리요건</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
-
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
-
+  :root {
+    --navy: #102a43;
+    --blue: #1f5fbf;
+    --teal: #0f766e;
+    --gold: #b7791f;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #d8e2ef;
+    --bg: #f4f7fb;
+    --paper: #ffffff;
+    --soft: #eef5ff;
+    --danger: #b91c1c;
+  }
+  * { box-sizing: border-box; }
   body {
-    background: #f5f7fa;
-    color: #1f2937;
-    line-height: 1.55;
-    font-size: 14px;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+    line-height: 1.62;
+    letter-spacing: 0;
   }
-
-  .container {
-    max-width: 1100px;
+  .page {
+    max-width: 1220px;
     margin: 0 auto;
-    background: #ffffff;
-    box-shadow: 0 0 24px rgba(0,0,0,0.05);
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
   }
-
-  /* Cover */
-  header.cover {
-    position: relative;
-    background: linear-gradient(135deg, #1e3a8a 0%, #2E5597 50%, #3b82f6 100%);
+  .hero {
+    padding: 56px 68px 44px;
     color: #fff;
-    padding: 36px 48px 28px;
+    background:
+      linear-gradient(135deg, rgba(16, 42, 67, 0.98), rgba(31, 95, 191, 0.9)),
+      radial-gradient(circle at 88% 18%, rgba(45, 212, 191, 0.28), transparent 34%);
   }
-  .top-action {
-    position: absolute;
-    top: 28px;
-    right: 48px;
+  .eyebrow {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 34px;
-    padding: 0 14px;
-    border: 1px solid rgba(255,255,255,0.55);
-    border-radius: 6px;
-    background: rgba(255,255,255,0.16);
-    color: #fff;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
     font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    font-weight: 800;
+    text-transform: uppercase;
   }
-  .top-action:hover {
-    background: rgba(255,255,255,0.26);
-    border-color: rgba(255,255,255,0.85);
+  h1 {
+    max-width: 940px;
+    margin: 26px 0 12px;
+    font-size: 40px;
+    line-height: 1.22;
+    font-weight: 800;
   }
-  header.cover .tag {
-    display: inline-block;
-    background: rgba(255,255,255,0.2);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 12px;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+  .subtitle {
+    max-width: 900px;
+    margin: 0;
+    color: rgba(255,255,255,0.86);
+    font-size: 16px;
   }
-  header.cover h1 {
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 6px;
-  }
-  header.cover .sub {
-    font-size: 13px;
-    opacity: 0.85;
-  }
-  header.cover .meta {
-    margin-top: 18px;
+  .hero-metrics {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    font-size: 12px;
+    margin-top: 38px;
   }
-  header.cover .meta .item {
-    background: rgba(255,255,255,0.1);
-    padding: 8px 12px;
-    border-left: 3px solid #fbbf24;
+  .metric {
+    min-height: 92px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.11);
   }
-  header.cover .meta .label {
-    opacity: 0.7;
-    font-size: 10px;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
+  .metric span {
+    display: block;
+    color: rgba(255,255,255,0.66);
+    font-size: 11px;
+    font-weight: 800;
   }
-  header.cover .meta .value {
-    font-weight: 600;
+  .metric strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 34px;
+    padding: 42px 68px 70px;
+  }
+  .toc {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+  .toc-title {
+    margin-bottom: 12px;
+    color: var(--navy);
     font-size: 13px;
+    font-weight: 800;
   }
-
-  /* Sections */
-  section {
-    padding: 28px 48px;
-    border-bottom: 1px solid #e5e7eb;
+  .toc a {
+    display: block;
+    padding: 8px 0;
+    border-top: 1px solid #e9eef6;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
   }
-  section h2 {
+  h2 {
+    margin: 42px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--navy);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+  }
+  h2:first-child { margin-top: 0; }
+  h3 {
+    margin: 24px 0 10px;
+    color: #0f172a;
     font-size: 17px;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 14px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #1e3a8a;
-    display: inline-block;
+    font-weight: 800;
   }
-  section h3 {
+  ul {
+    margin: 10px 0 18px 22px;
+    padding: 0;
+  }
+  li {
+    margin: 7px 0;
     font-size: 14px;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 16px 0 8px;
   }
-  section p {
-    margin-bottom: 10px;
-  }
-  section ul, section ol {
-    margin: 6px 0 10px 22px;
-  }
-  section li {
-    margin-bottom: 4px;
-  }
-
-  /* Inline tags */
-  .tag-rfp {
-    display: inline-block;
-    background: #eef2ff;
-    color: #4338ca;
-    font-size: 10.5px;
-    font-weight: 600;
-    padding: 1px 5px;
-    border-radius: 3px;
-    margin: 0 2px;
-    font-family: 'Consolas', 'Menlo', monospace;
-  }
-  .tag-num {
-    display: inline-block;
-    background: #fef3c7;
-    color: #92400e;
-    font-size: 10.5px;
+  strong { color: #0f172a; font-weight: 800; }
+  .callout {
+    margin: 14px 0 22px;
+    padding: 16px 18px;
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--navy);
+    font-size: 14px;
     font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-    margin: 0 2px;
   }
-  .tag-new {
-    background: #fee2e2;
-    color: #b91c1c;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 14px 0 22px;
   }
-  .tag-up {
-    background: #dbeafe;
-    color: #1e40af;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
+  .card {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fbfdff;
   }
-
-  /* TL;DR box */
-  .tldr {
-    background: #fafafa;
-    border-left: 4px solid #1e3a8a;
-    padding: 14px 18px;
-    margin-bottom: 16px;
-    font-size: 13.5px;
+  .card h3 { margin-top: 0; }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 22px;
   }
-  .tldr strong { color: #1e3a8a; }
-
-  /* Tables */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 7px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .tag.primary {
+    border-color: rgba(31, 95, 191, 0.35);
+    background: var(--soft);
+    color: var(--blue);
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12.5px;
-    margin: 10px 0;
-  }
-  th {
-    background: #1e3a8a;
-    color: #fff;
-    padding: 8px 10px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-  }
-  td {
-    padding: 7px 10px;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: top;
-  }
-  tr:nth-child(even) td { background: #f9fafb; }
-  td.center { text-align: center; }
-  td.num { text-align: right; font-family: 'Consolas', monospace; font-weight: 600; }
-
-  /* Architecture stack */
-  .arch {
-    margin: 14px 0 8px;
-  }
-  .layer {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    margin-bottom: 6px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  }
-  .layer-label {
-    background: #1e3a8a;
-    color: #fff;
-    padding: 12px 10px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .layer-label .ln {
-    font-size: 18px;
-    margin-bottom: 2px;
-  }
-  .layer-body {
-    padding: 12px 14px;
-    background: #fff;
-  }
-  .layer-body .lname {
-    font-weight: 700;
-    color: #1f2937;
-    font-size: 13.5px;
-    margin-bottom: 4px;
-  }
-  .layer-body .ldesc {
-    font-size: 12.5px;
-    color: #4b5563;
-    margin-bottom: 6px;
-  }
-  .layer-body .lcomp {
-    font-size: 11.5px;
-    color: #6b7280;
-    line-height: 1.6;
-  }
-  .layer-body .lcomp b { color: #1e3a8a; }
-
-  .layer.l1 .layer-label { background: #6b7280; }
-  .layer.l2 .layer-label { background: #0e7490; }
-  .layer.l3 .layer-label { background: #1e3a8a; }
-  .layer.l4 .layer-label { background: #6d28d9; }
-  .layer.l5 .layer-label { background: #b91c1c; }
-
-  /* Dependency matrix */
-  .matrix {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 12px 0;
-  }
-  .dep-card {
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    padding: 10px 12px;
-    background: #f9fafb;
-  }
-  .dep-card .dep-from {
-    font-weight: 700;
-    color: #b91c1c;
-    font-size: 12px;
-  }
-  .dep-card .arrow { color: #6b7280; margin: 0 6px; }
-  .dep-card .dep-to {
-    font-weight: 700;
-    color: #1e3a8a;
-    font-size: 12px;
-  }
-  .dep-card .dep-why {
-    font-size: 11.5px;
-    color: #4b5563;
-    margin-top: 4px;
-    line-height: 1.5;
-  }
-
-  /* Scenario flow */
-  .flow {
-    margin: 12px 0;
-    counter-reset: step;
-  }
-  .step {
-    display: grid;
-    grid-template-columns: 36px 1fr 200px;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px dashed #e5e7eb;
-    align-items: start;
-  }
-  .step:last-child { border-bottom: none; }
-  .step-no {
-    counter-increment: step;
-    background: #1e3a8a;
-    color: #fff;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
     font-size: 13px;
   }
-  .step-no::before { content: counter(step); }
-  .step-text { font-size: 12.5px; color: #1f2937; line-height: 1.55; }
-  .step-text b { color: #1e3a8a; }
-  .step-layer {
-    font-size: 11px;
-    color: #6b7280;
-    background: #f3f4f6;
-    padding: 4px 8px;
-    border-radius: 3px;
-    border-left: 3px solid #1e3a8a;
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
     text-align: left;
   }
-
-  /* Scoring chart */
-  .score-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-    margin: 8px 0;
+  th, td {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
   }
-  .score-cell {
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    padding: 8px 6px;
-    text-align: center;
-    background: #f9fafb;
+  tbody tr:nth-child(even) td { background: #fafcff; }
+  .timeline {
+    margin: 16px 0 24px;
+    border-left: 3px solid var(--blue);
   }
-  .score-cell .score-name {
-    font-size: 11px;
-    color: #4b5563;
-    margin-bottom: 4px;
-    line-height: 1.3;
+  .timeline-item {
+    position: relative;
+    padding: 0 0 18px 18px;
   }
-  .score-cell .score-pt {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e3a8a;
+  .timeline-item:before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 6px;
+    width: 13px;
+    height: 13px;
+    border: 3px solid var(--blue);
+    border-radius: 50%;
+    background: #fff;
   }
-  .score-cell.hot { background: #fef3c7; border-color: #f59e0b; }
-  .score-cell.hot .score-pt { color: #b45309; }
-
-  /* Risk box */
-  .risk {
-    border-left: 4px solid #b91c1c;
-    background: #fef2f2;
-    padding: 10px 14px;
-    margin: 8px 0;
-    font-size: 12.5px;
+  .timeline-title {
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
   }
-  .risk strong { color: #b91c1c; }
-
-  /* Footer */
-  footer {
-    background: #1e3a8a;
+  .timeline-desc {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .warning {
+    color: var(--danger);
+    font-weight: 800;
+  }
+  .source {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .footer {
+    padding: 24px 68px 34px;
+    background: #0f172a;
     color: #cbd5e1;
-    padding: 16px 48px;
-    font-size: 11px;
-    display: flex;
-    justify-content: space-between;
+    font-size: 12px;
   }
-  footer .ktds {
-    background: #ED1C24;
+  @media (max-width: 960px) {
+    .hero, .layout, .footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .layout { display: block; }
+    .toc {
+      position: static;
+      margin-bottom: 28px;
+    }
+    .hero-metrics, .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 32px; }
+  }
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.85);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+  }
+  .top-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .top-nav a:hover,
+  .top-nav a:focus {
+    border-color: #1f5fbf;
+    background: #eef5ff;
+    color: #1f5fbf;
+    outline: none;
+  }
+  
+  .top-nav a.is-active {
+    background: #102a43;
+    border-color: #102a43;
     color: #fff;
-    padding: 3px 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
+  }
+  @media print {
+    .top-nav { display: none; }
   }
 </style>
 </head>
 <body>
-
-<div class="container">
-
-  <header class="cover">
-    <a class="top-action" href="slide-01.html">영역별 분석</a>
-    <div class="tag">PROPOSAL TEAM BRIEFING</div>
-    <h1>한국무역협회 차세대 AX무역플랫폼 구축 사업</h1>
-    <div class="sub">RFP·ISP 분석 기반 사업 본질 / 시스템 구조 / 의존관계 정리 — 제안팀 공유용</div>
-    <div class="meta">
-      <div class="item"><div class="label">CLIENT</div><div class="value">한국무역협회 (KITA) 무역플랫폼실</div></div>
-      <div class="item"><div class="label">DURATION</div><div class="value">계약일 + 12개월</div></div>
-      <div class="item"><div class="label">REQUIREMENTS</div><div class="value">총 181개 (8개 추진영역)</div></div>
-      <div class="item"><div class="label">EVALUATION</div><div class="value">기술 100점 기준 / PM 직접 발표</div></div>
+<nav class="top-nav" aria-label="보고서 페이지 이동">
+  <a class="main-link is-active" href="index.html">메인</a>
+  <a href="1_공통.html">1</a>
+  <a href="2_Trade_Digital_Brain.html">2</a>
+  <a href="3_Trade_Agent.html">3</a>
+  <a href="4_Trade_Dashboard.html">4</a>
+  <a href="5_Export_Certification.html">5</a>
+  <a href="6_Global_IP_Service.html">6</a>
+  <a href="7_tradeKorea%20Enhancement.html">7</a>
+  <a href="8_ESG_Compliance_Platform.html">8</a>
+  <a href="9_Academy.html">9</a>
+</nav>
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">Proposal PM Brief</div>
+    <h1>차세대 AX무역플랫폼 구축 사업<br>일반현황 및 관리요건 요약</h1>
+    <p class="subtitle">제안팀이 사업 성격, 일정, 제출 제약, 평가 포인트를 즉시 파악할 수 있도록 RFP와 ISP의 핵심 관리 정보를 정리한 보고서</p>
+    <div class="hero-metrics">
+      <div class="metric"><span>사업명</span><strong>차세대 AX무역플랫폼 구축 사업</strong></div>
+      <div class="metric"><span>발주기관</span><strong>한국무역협회 무역플랫폼실</strong></div>
+      <div class="metric"><span>사업기간</span><strong>계약 체결일로부터 12개월 이내</strong></div>
+      <div class="metric"><span>핵심 방향</span><strong>AI 서비스 전환 + 원스톱 수출지원 + 클라우드 인프라</strong></div>
     </div>
   </header>
 
-  <!-- 1. 사업 본질 -->
-  <section>
-    <h2>1. 사업 본질 — 한 줄 정의</h2>
-    <div class="tldr">
-      KITA가 운영 중인 <strong>8개 분산 서비스를 단일 통합 데이터 기반(Lakehouse) 위에서 재구성</strong>하고, 그 위에 <strong>Multi-Agent 기반 27종 Trade Agent</strong>와 <strong>초개인화 통합대시보드</strong>를 올려 <strong>수출기업 업무 전주기를 단일 UX로 제공</strong>하는 12개월짜리 통합 SI 사업. AI 챗봇 도입 사업이 아니라 <strong>"데이터 통합 + AI Agent + 8개 서비스 동시 신·증축 + 클라우드 랜딩존 신규 구성"이 한 계약 안에 묶인 멀티트랙 SI</strong>가 본질.
-    </div>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#overview">1. 사업 개요</a>
+      <a href="#background">2. 추진 배경 및 필요성</a>
+      <a href="#objectives">3. 사업의 목적</a>
+      <a href="#schedule">4. 주요 일정 및 마일스톤</a>
+      <a href="#requirements">5. 제안 시 필수 고려사항</a>
+      <a href="#winpoints">6. 핵심 관전 포인트</a>
+    </aside>
 
-    <h3>왜 이 사업인가 (As-Is 문제 정의)</h3>
-    <ul>
-      <li><strong>서비스 사일로화</strong> — KITA.net·tradeKorea·TradePro·무역통계·무역아카데미·멤버십·수출실적증명·KNEX(내부)가 별도 운영. 회원 식별·행동 로그·콘텐츠 메타가 서비스 경계에 갇혀 있음.</li>
-      <li><strong>데이터 활용 한계</strong> — 정형/비정형/행동 데이터의 표준·메타·리니지·라이프사이클이 부재. AI 학습/추론에 바로 쓸 수 있는 "AI Readable Data" 계층이 없음.</li>
-      <li><strong>AI 부재 또는 단발성</strong> — TradePro 일부에만 AI 상담 존재. HS Code 매칭, 바이어 추천, 서류 자동심사, ESG 진단, 지재권 모니터링 등 도메인 AI 시나리오 미구현.</li>
-      <li><strong>인프라 노후 및 신규 수요 미대응</strong> — 무역통계 운영계는 Solaris 11/Oracle 19c/NetApp 기반 온프레, ESG·지재권은 시스템 자체가 없음. 클라우드 랜딩존·MCP 서버 신규 구축이 동시에 필요.</li>
-    </ul>
-
-    <h3>RFP 명문 사업 목표 (Section I-3)</h3>
-    <ol>
-      <li>글로벌 무역 데이터 플랫폼 기반 무역 특화 지능형 Trade Agent 구축</li>
-      <li>수출 기업의 업무 전주기를 지원하는 원스톱 통합 서비스 도입 (tradeKorea·수출실적증명·무역아카데미 AI 도입·고도화 + ESG·IP 신규)</li>
-      <li>클라우드 환경 구성을 통한 인프라 운영의 확장성·민첩성 확보 (랜딩존·공통 운영환경·보안체계)</li>
-    </ol>
-  </section>
-
-  <!-- 2. 추진범위 -->
-  <section>
-    <h2>2. 추진 범위 — 8개 트랙 / 신규 vs 고도화</h2>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:24%">트랙</th>
-          <th style="width:11%">분류</th>
-          <th style="width:9%" class="center">요구사항</th>
-          <th>핵심 과업</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><b>Trade Digital Brain</b></td>
-          <td><span class="tag-new">신규</span></td>
-          <td class="center">37</td>
-          <td>Data Lakehouse + AI Data Hub + 메타데이터·표준·품질·리니지·라이프사이클 거버넌스. ECR-DP-001~006 (플랫폼·모델링·메타·DB모니터링·ETL·APIM)</td>
-        </tr>
-        <tr>
-          <td><b>Trade Agent</b></td>
-          <td><span class="tag-new">신규</span></td>
-          <td class="center">23</td>
-          <td>Master/Orchestration + Unit Agent 27종 (범용 16 + 도메인 11). SFR-AP-001~012, 가드레일·평가체계 포함</td>
-        </tr>
-        <tr>
-          <td><b>통합대시보드</b></td>
-          <td><span class="tag-new">신규</span></td>
-          <td class="center">~20</td>
-          <td>HS·관심국가·업종 기반 위젯 자동구성, 행동로그 기반 추천, 다채널 알림(SMS/메신저/Push), 회원 등급 차등</td>
-        </tr>
-        <tr>
-          <td>tradeKorea</td>
-          <td><span class="tag-up">고도화</span></td>
-          <td class="center">~25</td>
-          <td>모바일 App 재구축, AI 매칭 알고리즘, Direct Live Chat, 글로벌 무역 확장 모델 설계 (견적·계약·물류·통관 연계)</td>
-        </tr>
-        <tr>
-          <td>수출실적증명</td>
-          <td><span class="tag-up">고도화</span></td>
-          <td class="center">~12</td>
-          <td>AI 기반 증빙서류 자동 인식·검증·심사 우선순위 추천 (HWP/HWPX/PDF 멀티모달 처리)</td>
-        </tr>
-        <tr>
-          <td>ESG 규제 대응 플랫폼</td>
-          <td><span class="tag-new">신규</span></td>
-          <td class="center">~15</td>
-          <td>VSME 기반 ESG 진단 (도입기/안정기/성숙기), 약식 ESG 보고서 자동생성(XBRL), 업종/품목/국가별 규제 정보, AI 상담 후 1:1 연계</td>
-        </tr>
-        <tr>
-          <td>지재권 특화 서비스</td>
-          <td><span class="tag-new">신규</span></td>
-          <td class="center">~12</td>
-          <td>유관기관 협업구조 설계, 분류체계 수립, 지재권 상담·지원·교육 포털 신규 구축</td>
-        </tr>
-        <tr>
-          <td>무역아카데미</td>
-          <td><span class="tag-up">재구축</span></td>
-          <td class="center">~25</td>
-          <td>LMS 재구축, AI 튜터, 모바일 학습, KNEX/KAMIS 연계, 학습 데이터 분석</td>
-        </tr>
-        <tr>
-          <td>무역통계 전환</td>
-          <td><span class="tag-up">전환</span></td>
-          <td class="center">~12</td>
-          <td>Solaris/Oracle 기반 운영계를 Lakehouse 환경으로 전환, 통계 Report Agent 연계</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="font-size:11.5px; color:#6b7280;">* 요구사항 수는 RFP 본문 분포 기준 추정. 최종 범위는 Trade Digital Brain 37개, Trade Agent 23개를 제외한 나머지가 약 121개로 분포.</p>
-  </section>
-
-  <!-- 3. 시스템 아키텍처 계층 -->
-  <section>
-    <h2>3. 시스템 아키텍처 — 5계층 구조</h2>
-    <p>전체 산출물은 다음 5계층으로 정렬된다. 하위 계층의 산출물이 상위 계층의 전제조건이며, 임계 경로(Critical Path)는 L2 → L3 → L5 순서다.</p>
-
-    <div class="arch">
-      <div class="layer l5">
-        <div class="layer-label"><span class="ln">L5</span>UX / Agent</div>
-        <div class="layer-body">
-          <div class="lname">Trade Agent (Multi-Agent) + 단일 포털 UI</div>
-          <div class="ldesc">사용자가 직접 상호작용하는 계층. Master Agent가 의도·맥락 분석 후 Orchestration이 Unit Agent 호출 사슬을 구성. 모든 Agent는 표준 아키텍처(시스템 프롬프트·지식데이터·파이프라인) 기반으로 구현되며, LLM 추상화(LiteLLM)로 모델 종속을 회피.</div>
-          <div class="lcomp"><b>구성요소:</b> Master Agent · Orchestration · Unit Agent 27종 · Agent Portal Web · SSO · 운영자 콘솔(LLM/파라미터 관리)</div>
+    <article>
+      <section id="overview">
+        <h2>1. 사업 개요</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>구분</th><th>내용</th><th>제안 PM 관점</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>사업명</td>
+                <td><strong>차세대 AX무역플랫폼 구축 사업</strong></td>
+                <td>단순 포털 개편이 아니라 데이터·AI·업무서비스·인프라를 묶은 전사 플랫폼 전환 사업</td>
+              </tr>
+              <tr>
+                <td>발주기관</td>
+                <td><strong>한국무역협회 무역플랫폼실</strong></td>
+                <td>무역진흥 선도기관의 디지털 서비스 허브 재구축 성격</td>
+              </tr>
+              <tr>
+                <td>사업기간</td>
+                <td><strong>계약 체결일로부터 12개월 이내</strong></td>
+                <td>8개 이상 주요 구축 영역을 12개월 내 병렬 수행해야 하므로 통합 PMO와 단계별 품질 게이트가 중요</td>
+              </tr>
+              <tr>
+                <td>예산/규모</td>
+                <td><strong>RFP 초안 내 구체 금액 미기재</strong></td>
+                <td>가격제안서는 <strong>총합계금액과 항목별 금액</strong>을 부가세 포함 기준으로 상세 제출 필요</td>
+              </tr>
+              <tr>
+                <td>주요 범위</td>
+                <td>Trade Digital Brain, Trade Agent, 통합대시보드, 수출실적증명, 글로벌 IP, tradeKorea, ESG, 무역아카데미, 클라우드 공통 인프라</td>
+                <td>데이터 플랫폼이 중심축이고, 각 업무 서비스는 AI·개인화·연계 기반으로 고도화</td>
+              </tr>
+              <tr>
+                <td>평가 구조</td>
+                <td>전략/방법론 <strong>15점</strong>, 기술/기능 <strong>25점</strong>, 성능/품질 <strong>15점</strong>, 프로젝트 관리 <strong>15점</strong>, 프로젝트 지원 <strong>20점</strong>, 조직/인력 <strong>10점</strong></td>
+                <td>기술 구현안뿐 아니라 관리·품질·운영·인력 증빙이 수주 핵심</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-
-      <div class="layer l4">
-        <div class="layer-label"><span class="ln">L4</span>Personalization</div>
-        <div class="layer-body">
-          <div class="lname">통합대시보드 + 알림·추천</div>
-          <div class="ldesc">사용자 회원정보·행동로그·관심도(HS·국가·업종)를 기반으로 위젯 자동구성. AI Agent의 추천 결과를 화면 위에 띄우고, 다채널 알림으로 푸시.</div>
-          <div class="lcomp"><b>구성요소:</b> Dashboard Engine · Recommendation Engine · Notification Hub (SMS/메신저/App Push) · A/B 위젯 관리</div>
+        <div class="callout">
+          제안서 첫 장의 포지셔닝은 “AI 기능 구축”보다 <strong>무역 전주기 업무를 데이터·AI·클라우드 기반으로 연결하는 AX 플랫폼 전환</strong>으로 잡는 것이 적합하다.
         </div>
-      </div>
+      </section>
 
-      <div class="layer l3">
-        <div class="layer-label"><span class="ln">L3</span>Domain Services</div>
-        <div class="layer-body">
-          <div class="lname">8개 도메인 서비스 (신규 4 / 고도화·전환 4)</div>
-          <div class="ldesc">실제 비즈니스 트랜잭션이 발생하는 계층. 모든 서비스는 L2 데이터플랫폼과 표준 API/이벤트로 연계되며, L5 Agent가 도메인 작업을 수행할 때 MCP 서버를 통해 호출됨.</div>
-          <div class="lcomp"><b>구성요소:</b> tradeKorea · 수출실적증명 · 무역아카데미 · 무역통계(전환) · ESG 플랫폼 · 지재권 서비스 · TradePro AI 고도화 · 통합 회원/SSO</div>
+      <section id="background">
+        <h2>2. 추진 배경 및 필요성</h2>
+        <h3>고객사가 사업을 시작한 이유</h3>
+        <ul>
+          <li>국내 수출기업이 요구하는 <strong>지능형 수출지원 서비스</strong> 제공을 통해 무역진흥 선도기관 위상 강화 필요</li>
+          <li>공공·민간 데이터 연계와 통합을 통해 KITA 플랫폼을 <strong>무역 생태계 허브</strong>로 전환할 필요</li>
+          <li>사용자 여정의 전주기를 지원하는 <strong>원스톱 업무서비스</strong> 요구 증가</li>
+          <li>무역 업무에 필요한 정보가 여러 서비스와 메뉴에 분산되어 있어 고객이 필요한 정보를 적시에 찾기 어려움</li>
+          <li>단순 검색·상담 중심 서비스에서 <strong>AI Agent 기반 업무 지원</strong>으로 전환해야 하는 시점</li>
+          <li>클라우드 기반 확장성과 보안 운영체계를 확보해 인프라 노후화와 성능 이슈를 해소해야 함</li>
+        </ul>
+
+        <h3>핵심 Pain Point</h3>
+        <div class="grid">
+          <div class="card">
+            <h3>사용자 경험</h3>
+            <ul>
+              <li>복잡한 메뉴 구조와 분산된 진입 채널로 접근성 저하</li>
+              <li>검색 정확도 부족으로 정보 탐색 효율 저하</li>
+              <li>타 서비스 이동 시 기존 입력 데이터 재입력 발생</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>데이터/AI 활용</h3>
+            <ul>
+              <li>서비스 간 정보 단절 및 데이터 미수집으로 고도화 한계</li>
+              <li>AI가 즉시 활용 가능한 데이터 정보/구조 부족</li>
+              <li>전사 통합 데이터 품질관리 기준 부재</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>업무 생산성</h3>
+            <ul>
+              <li>상담 대기, 바이어/셀러 매칭, 증빙 검증 등 반복·수작업 업무 부담</li>
+              <li>수작업 처리로 정확도 저하 및 처리 지연 리스크 존재</li>
+              <li>업무별 지원 서비스가 단절되어 E2E 업무 완결성이 부족</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>운영/인프라</h3>
+            <ul>
+              <li>IT 확장성 부족 및 인프라 노후화에 따른 성능·속도 이슈</li>
+              <li>AX 전략 실행을 위한 전담 체계와 단계적 목표 수립 미흡</li>
+              <li>서비스별 데이터 품질과 운영 수준 편차 존재</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="layer l2">
-        <div class="layer-label"><span class="ln">L2</span>Data Foundation</div>
-        <div class="layer-body">
-          <div class="lname">Trade Digital Brain (Data Lakehouse + AI Data Hub)</div>
-          <div class="ldesc">전사 데이터의 단일 진실 공급원(SSOT). 정형/비정형/반정형 수집 → Parsing/Chunking/Embedding → Lakehouse 적재 → 메타·표준·품질·리니지·라이프사이클 거버넌스. AI Data Hub는 벡터·지식베이스·프롬프트 라이브러리를 표준 메타 기반으로 관리.</div>
-          <div class="lcomp"><b>구성요소:</b> Lakehouse (ACID·메타·고속분석) · AI Data Hub (Vector·RAG) · ETL/CDC 파이프라인 · 메타데이터 카탈로그 · DB 모델링 · DQ/리니지 · APIM</div>
+      <section id="objectives">
+        <h2>3. 사업의 목적</h2>
+        <h3>정성 목표</h3>
+        <ul>
+          <li><strong>글로벌 무역 데이터 플랫폼</strong> 기반의 무역 특화 지능형 Trade Agent 구축</li>
+          <li>분산 데이터의 <strong>통합 View</strong> 제공 및 AI Agent 연계를 통한 맞춤형 대시보드·알림 제공</li>
+          <li>수출 준비부터 글로벌 디지털 무역 연계, 사후관리까지 <strong>원스톱 E2E 무역 수출 업무 지원</strong> 구현</li>
+          <li>tradeKorea, 수출실적증명, 무역아카데미의 AI 도입 및 기능 고도화</li>
+          <li>ESG, IP 신규 플랫폼 구축을 통한 글로벌 수출지원 서비스 확대</li>
+          <li>클라우드 랜딩존, 공통 운영환경, 보안체계 구축을 통한 인프라 고가용성·확장성 확보</li>
+        </ul>
+
+        <h3>정량/관리 목표</h3>
+        <ul>
+          <li>사업기간: <strong>계약 체결일로부터 12개월 이내</strong></li>
+          <li>공통 요구사항: <strong>40개</strong>, 전체 요구사항: <strong>181개</strong></li>
+          <li>Trade Agent: 범용 기능 Agent <strong>16종</strong> 및 도메인 특화 Agent <strong>11종</strong> 개발 요구</li>
+          <li>ISP 기준 Agent Use Case: <strong>88개</strong> 도출, Agent 기능 후보 <strong>56개</strong> 식별</li>
+          <li>평가 배점상 기술/기능 <strong>25점</strong>, 프로젝트 지원 <strong>20점</strong>, 전략/방법론·성능품질·프로젝트관리 각 <strong>15점</strong></li>
+        </ul>
+      </section>
+
+      <section id="schedule">
+        <h2>4. 주요 일정 및 마일스톤</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-title">입찰 공고</div>
+            <div class="timeline-desc"><strong>2026년 X월XX일</strong> · RFP 초안 기준 구체 일자 미정</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">제안접수 마감</div>
+            <div class="timeline-desc"><strong>2026년 X월XX일</strong> · 직접 제출 필수, 우편접수 불가</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">제안발표</div>
+            <div class="timeline-desc"><strong>2026년 X월XX일</strong> · 세부 일정은 개별 공지 예정, 사업 참여 PM 발표 필요</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">우선협상대상자 선정</div>
+            <div class="timeline-desc"><strong>2026년 X월XX일</strong> · 평가 및 업체 선정 기준은 비공개</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">프로젝트 착수</div>
+            <div class="timeline-desc"><strong>2026년 X월XX일</strong> · 우선협상대상자 대상 상세 일정 수립</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">구축 완료 목표</div>
+            <div class="timeline-desc"><strong>계약 체결일로부터 12개월 이내</strong> · 필요 시 적절한 기간과 개발 방식 변경 제안 가능</div>
+          </div>
         </div>
-      </div>
 
-      <div class="layer l1">
-        <div class="layer-label"><span class="ln">L1</span>Infrastructure</div>
-        <div class="layer-body">
-          <div class="lname">클라우드 랜딩존 + 보안 + MCP 인프라</div>
-          <div class="ldesc">멀티 Account 랜딩존, 전용회선, 모니터링/로그/백업/비용관리, 보안체계, 고가용성/Auto Scaling. AI Agent 연계용 MCP 서버를 협회 도메인별로 신규 구축.</div>
-          <div class="lcomp"><b>구성요소:</b> 클라우드 랜딩존 · 네트워크/보안 · 통합 모니터링 · 로그/APM · 백업/DR · MCP 서버 (도메인별)</div>
+        <div class="callout">
+          RFP 초안의 공식 일정은 placeholder이므로, 제안팀은 실제 공고문 확인 후 <strong>제안 마감 D-Day 역산 일정표</strong>, <strong>발표 리허설 일정</strong>, <strong>가격/법무/인감 제출 체크리스트</strong>를 별도 갱신해야 한다.
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- 4. 의존관계 -->
-  <section>
-    <h2>4. 시스템 간 의존관계 — 임계 경로 식별</h2>
-    <p>제안 일정 설계 시 반드시 인지해야 할 핵심 의존성. <strong>L2 Trade Digital Brain이 모든 상위 계층의 전제조건</strong>이며, L2가 늦으면 L3/L4/L5 전체가 일정 슬립.</p>
+      <section id="requirements">
+        <h2>5. 제안 시 필수 고려사항</h2>
+        <h3>입찰·참가 및 인력 관련</h3>
+        <ul>
+          <li>참여 예정 인력은 <strong>개인별 세부 이력서</strong>와 수행실적을 제출해야 함</li>
+          <li>사업자 선정 후 참여인력의 <strong>이력 증빙</strong>, 예: 고용보험 납입 내역 등을 제출해야 함</li>
+          <li>타 과제 참여 중인 인력을 개발인력으로 제안하면 <strong>기술평가 대상 제외</strong>, 선정 후 확인 시 <strong>사업자 선정 무효</strong> 가능</li>
+          <li>공동수급 가능 양식이 포함되어 있으며, 공동수급 시 대표자 및 공동수급현황표, 지분율, 책임 범위를 명확히 해야 함</li>
+          <li>하도급은 발주처 승인 시에만 가능하며, 관련 증빙 제출 필요</li>
+        </ul>
 
-    <div class="matrix">
-      <div class="dep-card">
-        <div><span class="dep-from">L5 Trade Agent</span><span class="arrow">→</span><span class="dep-to">L2 Digital Brain</span></div>
-        <div class="dep-why">Agent의 RAG·지식베이스·프롬프트 라이브러리·메타데이터가 L2에 표준화되어야 응답 품질 보장. AI Data Hub 미완성 시 Agent는 빈 깡통.</div>
-      </div>
-      <div class="dep-card">
-        <div><span class="dep-from">L5 Trade Agent</span><span class="arrow">→</span><span class="dep-to">L3 도메인 서비스</span></div>
-        <div class="dep-why">Agent의 Tool Use(MCP) 호출 대상이 L3. 수출실적증명 심사·tradeKorea 매칭·ESG 진단을 Agent가 직접 수행하려면 L3 API가 MCP로 노출되어야 함.</div>
-      </div>
-      <div class="dep-card">
-        <div><span class="dep-from">L4 대시보드</span><span class="arrow">→</span><span class="dep-to">L2 + L5</span></div>
-        <div class="dep-why">L2의 사용자 행동로그·관심 메타로 위젯 구성, L5 추천 Agent의 결과를 위젯에 노출. 양쪽 모두 의존.</div>
-      </div>
-      <div class="dep-card">
-        <div><span class="dep-from">L3 도메인 서비스</span><span class="arrow">→</span><span class="dep-to">L2 Digital Brain</span></div>
-        <div class="dep-why">서비스 간 데이터 공유는 L2를 경유해야 함 (Point-to-Point 연계 금지). 무역통계 전환은 L2 Lakehouse로 직접 마이그레이션.</div>
-      </div>
-      <div class="dep-card">
-        <div><span class="dep-from">전 계층</span><span class="arrow">→</span><span class="dep-to">L1 인프라</span></div>
-        <div class="dep-why">랜딩존·SSO·보안·MCP 서버가 선행되지 않으면 어떤 계층도 구동 불가. L1은 사업 초기 1~2개월 내 완료가 필수.</div>
-      </div>
-      <div class="dep-card">
-        <div><span class="dep-from">전 계층</span><span class="arrow">→</span><span class="dep-to">통합 SSO/IAM</span></div>
-        <div class="dep-why">단일 세션 유지·RBAC·SSO가 L1의 인증 컴포넌트로 일원화되어야 함. 8개 서비스 + 대시보드 + Agent 포털이 같은 토큰 체계 사용.</div>
-      </div>
-    </div>
+        <h3>제안서 작성 제약</h3>
+        <ul>
+          <li>모호한 표현, 예: “할 수 있다”, “할 예정이다”, “고려하고 있다”는 <strong>불가능으로 간주</strong></li>
+          <li>허위 또는 예상 기반 기재 금지, 모든 기재사항은 <strong>객관적 입증 가능</strong>해야 함</li>
+          <li>제안서 목차는 제안 개요, 업체 일반사항, 용역수행계획, 수행 일정, 수행 방법, 조직·업무분장, 인력 이력 중심으로 구성</li>
+          <li>최근 <strong>3년간</strong> 관련 유사용역 수행실적 제시 및 실적증명원 원본 제출 필요</li>
+          <li>소프트웨어 라이선스는 정품 원본 기준, 공급사 인증서 등 증빙자료 제출 요구 가능</li>
+        </ul>
 
-    <h3>임계 경로 (Critical Path)</h3>
-    <p style="font-size:12.5px; color:#374151;">
-      <span class="tag-num">M1</span> L1 랜딩존·MCP 베이스 →
-      <span class="tag-num">M2</span> L2 Lakehouse·AI Data Hub MVP →
-      <span class="tag-num">M3</span> L3 도메인 API/MCP 서버 노출 →
-      <span class="tag-num">M4</span> L5 Master/Orchestration + Unit Agent 27종 단계 오픈 →
-      <span class="tag-num">M5</span> L4 대시보드 위젯 + 알림 →
-      <span class="tag-num">M6</span> 통합 테스트·전환 리허설.
-      병렬 가능 트랙은 L3 8개 도메인 서비스 내부 고도화이지만, MCP·메타데이터 연계 시점은 M3에 동기화 필요.
-    </p>
-  </section>
+        <h3>제출 방식 및 서류</h3>
+        <ul>
+          <li>제안서는 <strong>직접 제출</strong>해야 하며 <strong>우편접수 불가</strong></li>
+          <li>제안서 제출 시 관련 파일을 담당자에게 <strong>이메일 송부 필수</strong></li>
+          <li>제안서는 공문 첨부 및 <strong>대표자 인감 날인</strong> 필요, 날인 없을 경우 제안으로 인정하지 않음</li>
+          <li>서식 기준 제출물: 용역제안서 제출신청서, 제안서 <strong>10부</strong>, 제출서류 목록 및 관련서류 <strong>1부</strong></li>
+          <li>가격제안서는 <strong>총합계금액</strong>과 <strong>항목별 금액</strong>을 자세히 작성하고 <strong>부가가치세 포함</strong> 기준으로 제출</li>
+          <li>제안 설명회 개최 시 실제 사업에 참여하는 <strong>PM이 발표</strong>해야 함</li>
+        </ul>
 
-  <!-- 5. 데이터 흐름 시나리오 -->
-  <section>
-    <h2>5. 엔드투엔드 시나리오 — 5계층이 한 요청에 어떻게 맞물리는가</h2>
-    <p>예시: 회원사 사용자가 "베트남에 우리 화장품 수출하려는데 절차와 바이어를 알려달라"라고 요청한 경우.</p>
+        <h3>관리·수행 요건</h3>
+        <ul>
+          <li>분석, 설계, 개발, 테스트, 전환 단계별 일정과 산출물, 선·후행 관계를 구체화해야 함</li>
+          <li>범위, 일정, 품질, 위험, 변경사항에 대한 관리체계와 절차 제시 필요</li>
+          <li>착수, 정기, 중간, 완료 및 수시보고 체계를 포함해야 함</li>
+          <li>산출물 작성·관리·제출 방안과 형상·문서관리 체계 제시 필요</li>
+          <li>서비스 전환 일정은 발주처와 협의하되, 주요 업무 일정 영향 최소화와 장애 복구 절차 확보 필요</li>
+          <li>보안서약, 보안교육, 자료·장비·산출물 보안관리 및 하도급 동일 보안 기준 적용 필요</li>
+        </ul>
+      </section>
 
-    <div class="flow">
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">사용자가 통합 포털 접속. <b>SSO 토큰 발급</b>(KITA 통합 IAM) 후 세션 생성.</div>
-        <div class="step-layer">L1 인프라 / L3 SSO</div>
+      <section id="winpoints">
+        <h2>6. 핵심 관전 포인트</h2>
+        <div class="tag-row">
+          <span class="tag primary">AI Agent</span>
+          <span class="tag primary">Data Lakehouse</span>
+          <span class="tag primary">E2E 수출지원</span>
+          <span class="tag primary">초개인화 대시보드</span>
+          <span class="tag primary">Cloud Landing Zone</span>
+          <span class="tag primary">PMO·품질·보안</span>
+        </div>
+
+        <h3>수주를 위해 제안서에서 강조해야 할 6가지</h3>
+        <ul>
+          <li><strong>AI Agent 실현 가능성</strong>: Master/Orchestration/Unit Agent 구조, 평가 지표, 운영 모니터링, Hallucination 관리까지 구체화</li>
+          <li><strong>AI-Readable Data Foundation</strong>: 분산 데이터를 Lakehouse와 AI Data Hub로 통합하고, 메타데이터·품질·리니지·보안 체계를 함께 제시</li>
+          <li><strong>무역 전주기 원스톱 업무 완결성</strong>: 준비, 정보탐색, 바이어 매칭, 증빙, ESG/IP, 교육, 사후관리까지 연결되는 사용자 여정 중심 제안</li>
+          <li><strong>개인화·알림 기반 고객 체감</strong>: 회원정보, 행동로그, 관심국가/품목 기반 대시보드와 선제적 알림으로 “매일 쓰는 플랫폼” 메시지 강화</li>
+          <li><strong>클라우드·보안·성능 운영모델</strong>: Landing Zone, 이중화, 모니터링, 백업/복구, 비용관리, 보안관제, 성능 테스트까지 운영 가능한 구조로 제시</li>
+          <li><strong>12개월 병렬 구축 PMO 역량</strong>: 181개 요구사항, 다수 도메인, 데이터/AI/인프라 동시 추진을 통제할 일정·위험·품질·산출물 관리체계 강조</li>
+        </ul>
+
+        <div class="callout">
+          제안 메시지는 “기능을 많이 만든다”가 아니라 <strong>무역협회가 데이터와 AI로 회원사의 수출 업무를 24시간 지원하는 운영 플랫폼을 갖게 된다</strong>로 정리하는 것이 가장 선명하다.
+        </div>
+      </section>
+
+      <div class="source">
+        <strong>근거 문서</strong><br>
+        - RFP: projects\한국무역협회_차세대 플랫폼 구축\01_RFP\KITA 차세대 무역플랫폼 구축 RFP_통합_초안.md<br>
+        - ISP: projects\한국무역협회_차세대 플랫폼 구축\01_RFP\ISP.md<br>
+        - 주요 근거: RFP I.사업개요 및 추진방안, IV.제안서 작성·제출 유의사항, V.제안서 목차 및 작성방법, 붙임 기술평가기준표, ISP Page 8/20/22/73/130 등
       </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">대시보드가 사용자 프로필·행동로그·HS Code·관심국가를 조회해 <b>위젯 자동구성</b>. 동시에 추천 Agent 호출.</div>
-        <div class="step-layer">L4 대시보드 ↔ L2 Digital Brain</div>
-      </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">사용자 자연어 입력 → <b>Master Agent</b>가 의도·맥락 분석. 가드레일 통과 후 작업 시나리오 정의 (HS 매칭 → 관세·규제 → 바이어 추천 → 보고서 생성).</div>
-        <div class="step-layer">L5 Master Agent</div>
-      </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text"><b>Orchestration</b>이 Unit Agent 호출 사슬 구성: HS Code 매칭 Agent → 외부검색 Agent (관세규제/TradeNAVI) → 바이어 추천 Agent (tradeKorea) → 생성형 Agent (보고서 초안).</div>
-        <div class="step-layer">L5 Orchestration</div>
-      </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">각 Agent가 <b>RAG 조회 (Vector DB) + Tool Use (MCP)</b>로 데이터/기능 호출. 정형 데이터는 Lakehouse, 비정형/지식은 AI Data Hub, 도메인 트랜잭션은 L3 서비스 MCP 서버.</div>
-        <div class="step-layer">L2 Digital Brain + L3 서비스</div>
-      </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">결과 스트리밍으로 챗 UI에 토큰 단위 출력. 동시에 대시보드 위젯에 <b>후속 추천</b>(예: ESG 진단, 수출실적증명 신청 가이드) 자동 추가.</div>
-        <div class="step-layer">L5 → L4 대시보드</div>
-      </div>
-      <div class="step">
-        <div class="step-no"></div>
-        <div class="step-text">전체 대화·Tool 호출·프롬프트 입출력·LLM 토큰 사용량이 <b>관찰성 스택(Langfuse·OTel)</b>에 트레이스로 기록되며, 가드레일 차단·민감정보 비식별 결과도 감사 로그로 적재.</div>
-        <div class="step-layer">L1 모니터링·감사</div>
-      </div>
-    </div>
-  </section>
+    </article>
+  </div>
 
-  <!-- 6. 평가 매핑 -->
-  <section>
-    <h2>6. 기술평가 100점 분포 — 가산점 핫스팟</h2>
-    <div class="score-grid">
-      <div class="score-cell hot"><div class="score-name">기술 및 기능</div><div class="score-pt">25</div></div>
-      <div class="score-cell hot"><div class="score-name">프로젝트 지원</div><div class="score-pt">20</div></div>
-      <div class="score-cell"><div class="score-name">전략 및 방법론</div><div class="score-pt">15</div></div>
-      <div class="score-cell"><div class="score-name">성능 및 품질</div><div class="score-pt">15</div></div>
-      <div class="score-cell"><div class="score-name">프로젝트 관리</div><div class="score-pt">15</div></div>
-      <div class="score-cell"><div class="score-name">조직 및 인력</div><div class="score-pt">10</div></div>
-    </div>
-    <p style="font-size:12.5px; color:#374151;">
-      <strong>기술 및 기능 25점</strong>이 최대 가중치. 평가 기준은 "기능 요구사항·기대사항·제약사항 파악 후 <strong>구현 방안이 구체적으로 기술</strong>"되었는지. <strong>프로젝트 지원 20점</strong>은 품질보증·시험운영·교육·유지관리·하자보수·보안·비상대책. RFP 본문에 "<em>~할 수 있다, 고려한다 등 모호 표현은 불가능으로 간주</em>" 룰이 박혀 있어 <strong>구체성·정량성 없는 표현은 그대로 감점</strong>이 됨. 제안 설명회는 <strong>사업 PM이 직접 발표</strong> 의무.
-    </p>
-  </section>
-
-  <!-- 7. 본질적 리스크 -->
-  <section>
-    <h2>7. 사업 본질 리스크 — 제안팀이 반드시 인지할 4가지</h2>
-
-    <div class="risk">
-      <strong>R1. 12개월 내 5계층 동시 신·증축의 일정 리스크</strong>
-      &nbsp;신규 4개 + 고도화/전환 4개 + 클라우드 랜딩존 + Multi-Agent + 대시보드를 한 계약 안에 묶음. 빅뱅 일정 시 통합 테스트 단계에서 사고 확률 급증. 단계형 이행안(공통 기반 → 핵심 Agent/대시보드 → 도메인 병행 → 통합 테스트·전환)이 평가표 "프로젝트 관리"의 사실상 통과 기준.
-    </div>
-
-    <div class="risk">
-      <strong>R2. L2 Digital Brain의 임계경로 종속</strong>
-      &nbsp;Lakehouse·AI Data Hub·메타·표준·리니지가 늦으면 L5 Agent와 L4 대시보드 전체가 슬립. M2 마일스톤(Lakehouse MVP)이 사업 성패의 첫 분기점.
-    </div>
-
-    <div class="risk">
-      <strong>R3. AI 품질·비용·종속 3중 함정</strong>
-      &nbsp;LLM 모델 종속(SFR-AP-001 명문 금지), 데이터 주권(개인정보·매출정보 외부 유출 방지), 토큰 비용 폭증을 동시에 통제해야 함. LiteLLM·vLLM·GPTCache·Langfuse 조합이 사실상 표준 답안. Hallucination 통제·평가체계(Ragas/DeepEval)가 정량 산출물로 제안서에 명시되지 않으면 평가위원이 "구체성 미달"로 감점.
-    </div>
-
-    <div class="risk">
-      <strong>R4. 도메인 깊이 부족 — 공통 약점</strong>
-      &nbsp;무역 도메인(HS Code, 관세, 수출실적증명, 지재권, ESG VSME) 전문성은 SI사 공통 약점. 무역 도메인 파트너 컨소시엄 없이 단독 제안 시 평가표 "사업수행조직 + 유사분야 수행경험"에서 격차 발생. KTNET 등 무역 정보통신 전문 파트너의 표지 노출이 차별화의 핵심.
-    </div>
-  </section>
-
-  <!-- 8. 한 페이지 요약 -->
-  <section>
-    <h2>8. 제안팀 핵심 메시지 한 페이지</h2>
-    <ol style="font-size:13px; color:#1f2937; line-height:1.8;">
-      <li><strong>이 사업은 AI 챗봇 도입이 아니다.</strong> "데이터 통합 + AI Agent + 8개 도메인 서비스 신·증축 + 클라우드 랜딩존"이 하나의 계약으로 묶인 멀티트랙 SI다.</li>
-      <li><strong>L2 Trade Digital Brain이 사업의 토대.</strong> 임계경로의 첫 분기점이고, 여기서 늦으면 L4·L5 전체가 일정 슬립.</li>
-      <li><strong>Trade Agent는 Unit Agent 27종 + Master + Orchestration의 통합 시스템.</strong> 모델 추상화·MCP·가드레일·평가체계가 표준 답안. 단순 LLM 통합으로 접근하면 평가에서 떨어진다.</li>
-      <li><strong>평가 핵심은 25 + 20 = 45점의 "구체성".</strong> 모호 표현은 불가능 간주 룰이 박혀 있다. 정량 지표·산출물·일정·자산 인계까지 숫자로 박을 것.</li>
-      <li><strong>경쟁력의 본질은 도메인 깊이와 운영 책임.</strong> 기술 스택은 LG CNS·메가존·kt ds 모두 비슷하게 그릴 수 있다. 무역 도메인 컨소시엄 + 12개월 사고 0 + 운영 트랜지션 보증이 차별화의 마지막 칼날.</li>
-    </ol>
-  </section>
-
-  <footer>
-    <div>한국무역협회 차세대 AX무역플랫폼 구축 사업 — 제안팀 브리핑 (RFP·ISP 분석 기반)</div>
-    <div class="ktds">kt ds</div>
+  <footer class="footer">
+    <strong>차세대 AX무역플랫폼 구축 사업 일반현황 및 관리요건</strong><br>
+    한국무역협회 RFP·ISP 분석 기반 · 제안 PM 브리핑 HTML
   </footer>
-
-</div>
-
+</main>
 </body>
 </html>

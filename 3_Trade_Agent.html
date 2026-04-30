@@ -1,0 +1,1066 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Agent 시스템 분석 보고서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+  :root {
+    --navy: #102a43;
+    --blue: #1f5fbf;
+    --teal: #0f766e;
+    --gold: #b7791f;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #d8e2ef;
+    --bg: #f4f7fb;
+    --paper: #ffffff;
+    --soft: #eef5ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    line-height: 1.66;
+    letter-spacing: 0;
+  }
+  .page {
+    max-width: 1220px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+    padding: 58px 68px 50px;
+    color: #fff;
+    background:
+      linear-gradient(135deg, rgba(16, 42, 67, 0.98), rgba(31, 95, 191, 0.9)),
+      radial-gradient(circle at 84% 22%, rgba(45, 212, 191, 0.26), transparent 36%);
+  }
+  .hero:after {
+    content: "";
+    position: absolute;
+    right: -110px;
+    bottom: -180px;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    max-width: 850px;
+    margin: 28px 0 14px;
+    color: #fff;
+    border: 0;
+    padding: 0;
+    font-size: 42px;
+    line-height: 1.22;
+    font-weight: 800;
+  }
+  .subtitle {
+    max-width: 850px;
+    color: rgba(255,255,255,0.86);
+    font-size: 17px;
+  }
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 42px;
+    position: relative;
+    z-index: 1;
+  }
+  .metric {
+    min-height: 92px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.11);
+  }
+  .metric span {
+    display: block;
+    color: rgba(255,255,255,0.66);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .metric strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 34px;
+    padding: 42px 68px 70px;
+  }
+  .toc {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+  .toc-title {
+    margin-bottom: 12px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .toc a {
+    display: block;
+    padding: 8px 0;
+    border-top: 1px solid #e9eef6;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .content h1 {
+    display: none;
+  }
+  h2 {
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--navy);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+  }
+  h2:first-child, hr + h2 {
+    margin-top: 24px;
+  }
+  h3 {
+    margin: 26px 0 10px;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+  }
+  h4 {
+    margin: 20px 0 8px;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  blockquote {
+    margin: 14px 0 18px;
+    padding: 18px 20px;
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+  }
+  ul, ol {
+    margin: 10px 0 18px 22px;
+    padding: 0;
+  }
+  li {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eef2f7;
+    color: #174ea6;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92em;
+  }
+  .code {
+    overflow-x: auto;
+    margin: 16px 0 22px;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 12px;
+    line-height: 1.48;
+  }
+  .code code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+  .code.mermaid {
+    background: #f8fbff;
+    color: #1f2937;
+  }
+  .architecture-diagram {
+    margin: 18px 0 26px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fbfdff 0%, #f3f8ff 100%);
+  }
+  .architecture-layer {
+    position: relative;
+    margin-bottom: 14px;
+    padding: 16px;
+    border: 1px solid #cbd8ea;
+    border-radius: 12px;
+    background: #fff;
+  }
+  .architecture-layer:last-child {
+    margin-bottom: 0;
+  }
+  .architecture-layer::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -15px;
+    width: 2px;
+    height: 15px;
+    background: #94a3b8;
+  }
+  .architecture-layer:last-child::after {
+    display: none;
+  }
+  .architecture-layer.dark {
+    border-color: #1f5fbf;
+    background: #102a43;
+    color: #fff;
+  }
+  .architecture-layer.accent {
+    border-color: #93c5fd;
+    background: #edf5ff;
+  }
+  .layer-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 12px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  }
+  .layer-title {
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .layer-ref {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: right;
+  }
+  .architecture-layer.dark .layer-ref {
+    color: rgba(255,255,255,0.72);
+  }
+  .node-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .node-grid.seven {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .node-grid.six {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .node-grid.five {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .diagram-node {
+    min-height: 76px;
+    padding: 12px;
+    border: 1px solid #d6e1ef;
+    border-radius: 10px;
+    background: #f8fbff;
+  }
+  .architecture-layer.dark .diagram-node {
+    border-color: rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.08);
+  }
+  .diagram-node strong {
+    display: block;
+    margin-bottom: 5px;
+    color: inherit;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .diagram-node span {
+    display: block;
+    color: inherit;
+    opacity: 0.75;
+    font-size: 11px;
+    line-height: 1.42;
+  }
+  .trust-band {
+    margin-top: 14px;
+    padding: 15px;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #fff;
+  }
+  .trust-band strong {
+    color: #fff;
+  }
+  .trust-items {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .trust-items span {
+    padding: 9px 10px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tdb-foundation {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border: 1px dashed #1f5fbf;
+    border-radius: 10px;
+    background: #eef5ff;
+    color: #174ea6;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    text-align: left;
+  }
+  th, td {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td {
+    background: #fafcff;
+  }
+  hr {
+    height: 1px;
+    margin: 32px 0;
+    border: 0;
+    background: var(--line);
+  }
+  strong {
+    color: #0f172a;
+    font-weight: 800;
+  }
+  a {
+    color: var(--blue);
+  }
+  .footer {
+    padding: 24px 68px 34px;
+    background: #0f172a;
+    color: #cbd5e1;
+    font-size: 12px;
+  }
+  .footer strong {
+    color: #fff;
+  }
+  @media (max-width: 960px) {
+    .hero, .layout, .footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .layout {
+      display: block;
+    }
+    .toc {
+      position: static;
+      margin-bottom: 28px;
+    }
+    .hero-metrics {
+      grid-template-columns: 1fr;
+    }
+    .node-grid,
+    .node-grid.seven,
+    .node-grid.six,
+    .node-grid.five,
+    .trust-items {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media print {
+    body {
+      background: #fff;
+    }
+    .page {
+      box-shadow: none;
+    }
+    .toc {
+      display: none;
+    }
+    .layout {
+      display: block;
+      padding: 28px 36px;
+    }
+    h2, h3, .table-wrap, blockquote {
+      break-inside: avoid;
+    }
+  }
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.85);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+  }
+  .top-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .top-nav a:hover,
+  .top-nav a:focus {
+    border-color: #1f5fbf;
+    background: #eef5ff;
+    color: #1f5fbf;
+    outline: none;
+  }
+  
+  .top-nav a.is-active {
+    background: #102a43;
+    border-color: #102a43;
+    color: #fff;
+  }
+  @media print {
+    .top-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav" aria-label="보고서 페이지 이동">
+  <a class="main-link" href="index.html">메인</a>
+  <a href="1_공통.html">1</a>
+  <a href="2_Trade_Digital_Brain.html">2</a>
+  <a class="is-active" href="3_Trade_Agent.html">3</a>
+  <a href="4_Trade_Dashboard.html">4</a>
+  <a href="5_Export_Certification.html">5</a>
+  <a href="6_Global_IP_Service.html">6</a>
+  <a href="7_tradeKorea%20Enhancement.html">7</a>
+  <a href="8_ESG_Compliance_Platform.html">8</a>
+  <a href="9_Academy.html">9</a>
+</nav>
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">Executive Report · RFP Analysis</div>
+    <h1>Trade Agent 시스템 분석 보고서</h1>
+    <p class="subtitle">분산 데이터 통합, AI Readable Data Foundation, Lakehouse·거버넌스·마이그레이션 전략을 정리한 보고서</p>
+    <div class="hero-metrics">
+      <div class="metric"><span>SYSTEM</span><strong>Trade Digital Brain</strong></div>
+      <div class="metric"><span>CORE</span><strong>Data Lakehouse + AI Data Hub</strong></div>
+      <div class="metric"><span>FOCUS</span><strong>거버넌스·품질·연계 전환</strong></div>
+      <div class="metric"><span>DELIVERABLE</span><strong>Executive HTML Report</strong></div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#1-목표-시스템-정의">1. 목표 시스템 정의</a>
+<a href="#2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</a>
+<a href="#3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</a>
+<a href="#4-추천-기술-스택">4. 추천 기술 스택</a>
+<a href="#5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</a>
+<a href="#6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</a>
+<a href="#7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</a>
+<a href="#부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</a>
+<a href="#부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</a>
+    </aside>
+    <article class="content">
+      <h1>Trade Agent 시스템 분석 보고서</h1>
+<hr>
+<h2 id="1-목표-시스템-정의">1. 목표 시스템 정의</h2>
+<h3 id="1-Liner-Definition">1-Liner Definition</h3>
+<blockquote><strong>Trade Agent는 KITA 회원기업의 무역 업무 전주기를 지원하기 위해 Master/Orchestration + 27종 Unit Agent(범용 16 + 도메인 11)를 LLM 추상화·MCP·RAG·가드레일·평가체계 위에 통합한 Multi-Agent 기반 무역 특화 지능형 비서 시스템이다.</strong></blockquote>
+<h3 id="1-1-사업-배경-Why">1.1 사업 배경 (Why)</h3>
+<ul>
+<li><strong>단발성·고립형 AI</strong>: 현재 KITA AI 서비스는 TradePro 1:1 상담 영역의 단순 챗봇 수준에 한정. HS Code 매칭, 바이어 추천, 서류 자동 심사, ESG 진단, 지재권 모니터링 등 무역 도메인 핵심 시나리오는 미구현 <code>[RFP II-1, p.9]</code></li>
+<li><strong>데이터 단절</strong>: 분산된 8개 서비스의 데이터·메타·지식이 통합되어 있지 않아 AI가 &quot;어디에 무슨 데이터가 있는지&quot;를 인지하지 못함. RAG·Tool Use를 위한 표준 데이터 계층이 부재 <code>[RFP III-다-SFR-AP-001, p.51]</code></li>
+<li><strong>모델 종속 리스크</strong>: 특정 외부 LLM에 종속될 경우 정책 변경·가격 인상·데이터 주권 이슈에 취약. RFP가 명시적으로 &quot;특정 모델 종속형 아키텍처 지양&quot;을 요구 <code>[RFP III-다-SFR-AP-001, p.52]</code></li>
+<li><strong>보안·윤리 공백</strong>: 가드레일·프롬프트 인젝션 방어·PII 비식별·감사 로그 등 LLM 운영의 표준 보안 체계가 미구축 → 회원사 데이터 외부 유출 시 신뢰 사고 직결 <code>[RFP III-다-SER-AP-001~004, p.62~64]</code></li>
+</ul>
+<h3 id="1-2-구축-목적-What">1.2 구축 목적 (What)</h3>
+<p>RFP I-3 사업목표 첫 번째 항목 <code>[RFP I-3, p.1]</code>:</p>
+<blockquote>&quot;수출 기업의 전주기 업무 프로세스에 특화된 대화형 AI Trade Agent 구축 — 분산된 데이터의 통합 View 제공 및 AI Agent 연계를 통해 수출 기업의 관심·행동 기반 맞춤형 대시보드 및 알림 서비스 제공&quot;</blockquote>
+<p>RFP I-4 추진범위 둘째 항목 <code>[RFP I-4, p.3]</code>:</p>
+<blockquote>&quot;Multi Agent 기반의 통합 Agent 서비스를 구축하여 협회의 다양한 서비스를 원페이지 통합뷰 기반의 대화형 환경에서 정보를 제공하고 사용자의 업무를 지원&quot;</blockquote>
+<p>RFP III-다-SFR-AP-001 <code>[RFP III-다-SFR-AP-001, p.51~52]</code>:</p>
+<blockquote>&quot;범용 기능 Agent 16종 개발 및 도메인 특화 Agent 11종 개발. LLM·데이터·템플릿·규칙 기반 기능 등 전 유형의 Unit Agent에 공통으로 적용되는 표준 아키텍처가 제시되어야 함&quot;</blockquote>
+<h3 id="1-3-최종-지향점-Goal">1.3 최종 지향점 (Goal)</h3>
+<ul>
+<li><strong>Domain-Native AI Workforce</strong>: 무역 도메인 27 Unit Agent가 협력하여 수출기업 업무 시나리오(HS 매칭 → 관세규제 → 바이어 매칭 → 수출실적 증명 → ESG 진단)를 단일 대화로 끝낼 수 있는 통합 환경</li>
+<li><strong>Vendor-Neutral LLM Layer</strong>: LiteLLM 기반 모델 추상화로 self-hosted(vLLM) ↔ HyperCLOVA ↔ GPT/Claude 무중단 교체 가능</li>
+<li><strong>Sovereign &amp; Trustworthy AI</strong>: 가드레일·PII 비식별·프롬프트 인젝션 방어·감사 로그를 표준화하여 데이터 주권과 신뢰성 동시 보증</li>
+<li><strong>Eval-Driven Operation</strong>: Ragas·DeepEval 기반 정량 평가 자동화로 운영 중 지속 품질 개선 가능 (HITL 피드백 루프)</li>
+</ul>
+<hr>
+<h2 id="2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</h2>
+<h3 id="2-1-논리-아키텍처-5계층-횡단-영역">2.1 논리 아키텍처 (5계층 + 횡단 영역)</h3>
+<div class="architecture-diagram" aria-label="Trade Agent 논리 아키텍처 다이어그램">
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L5 Presentation Layer</div>
+      <div class="layer-ref">SSE/WebSocket · Admin REST · Embed API</div>
+    </div>
+    <div class="node-grid">
+      <div class="diagram-node">
+        <strong>Agent Portal Web</strong>
+        <span>Next.js 기반 대화형 포털<br>실시간 스트리밍 응답</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Admin Console</strong>
+        <span>LLM 모델·파라미터<br>서비스 운영 관리</span>
+      </div>
+      <div class="diagram-node">
+        <strong>통합대시보드 연동 UI</strong>
+        <span>위젯 인박스<br>Agent 결과 연계</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="architecture-layer accent">
+    <div class="layer-head">
+      <div class="layer-title">L4 Agent Orchestration Layer</div>
+      <div class="layer-ref">SFR-AP-001/002 · SFR-AP-008</div>
+    </div>
+    <div class="node-grid">
+      <div class="diagram-node">
+        <strong>Master Agent</strong>
+        <span>사용자 의도 분석<br>작업 정의·라우팅</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Orchestrator</strong>
+        <span>LangGraph StateGraph<br>작업 순서·분기·오류 제어</span>
+      </div>
+      <div class="diagram-node">
+        <strong>State / Context Store</strong>
+        <span>Checkpointer · mem0<br>멀티턴 맥락 유지</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L3 Unit Agent Layer</div>
+      <div class="layer-ref">27 Agents · SFR-AP-003~009</div>
+    </div>
+    <div class="node-grid seven">
+      <div class="diagram-node">
+        <strong>검색형 Agent</strong>
+        <span>내·외부 데이터 검색</span>
+      </div>
+      <div class="diagram-node">
+        <strong>대화형 Agent</strong>
+        <span>멀티턴 상담·응대</span>
+      </div>
+      <div class="diagram-node">
+        <strong>분석형 Agent</strong>
+        <span>통계 분석·해석</span>
+      </div>
+      <div class="diagram-node">
+        <strong>추천형 Agent</strong>
+        <span>정보·행동 추천</span>
+      </div>
+      <div class="diagram-node">
+        <strong>생성형 Agent</strong>
+        <span>보고서·문안 생성</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Master Agent</strong>
+        <span>작업 총괄·검수</span>
+      </div>
+      <div class="diagram-node">
+        <strong>서비스 특화 Agent</strong>
+        <span>도메인 11종<br>수출실적·ESG·IP 등</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="architecture-layer dark">
+    <div class="layer-head">
+      <div class="layer-title">L2 AI Foundation Layer</div>
+      <div class="layer-ref">SFR-AP-010/011 · DAR-AP-001~003</div>
+    </div>
+    <div class="node-grid six">
+      <div class="diagram-node">
+        <strong>LLM Serving</strong>
+        <span>vLLM · LiteLLM<br>모델 추상화</span>
+      </div>
+      <div class="diagram-node">
+        <strong>RAG / Vector / KB</strong>
+        <span>Milvus · BGE · KURE<br>지식 검색</span>
+      </div>
+      <div class="diagram-node">
+        <strong>AI Data Pipeline</strong>
+        <span>Parsing · Chunking · Embedding</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Prompt Library</strong>
+        <span>DAR-AP-002<br>프롬프트 표준 관리</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Workflow Definition</strong>
+        <span>시나리오 데이터<br>작업 흐름 정의</span>
+      </div>
+      <div class="diagram-node">
+        <strong>Memory</strong>
+        <span>Long / Short Memory<br>사용자 맥락</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L1 Tool / MCP Layer</div>
+      <div class="layer-ref">도메인 Tool · External API</div>
+    </div>
+    <div class="node-grid five">
+      <div class="diagram-node">
+        <strong>MCP 서버</strong>
+        <span>tradeKorea</span>
+      </div>
+      <div class="diagram-node">
+        <strong>MCP 서버</strong>
+        <span>TradePro</span>
+      </div>
+      <div class="diagram-node">
+        <strong>MCP 서버</strong>
+        <span>무역통계</span>
+      </div>
+      <div class="diagram-node">
+        <strong>MCP 서버</strong>
+        <span>ESG / IP</span>
+      </div>
+      <div class="diagram-node">
+        <strong>External API</strong>
+        <span>관세청 · FTA</span>
+      </div>
+    </div>
+    <div class="trust-band">
+      <strong>횡단 영역 — Trust &amp; Governance</strong>
+      <div class="trust-items">
+        <span>Guardrails<br>NeMo · Llama Guard · Rebuff</span>
+        <span>PII Detection / Masking<br>Presidio</span>
+        <span>LLM Data Protection<br>학습 차단</span>
+        <span>Observability<br>Langfuse · OTel · Ragas</span>
+        <span>Audit Log<br>Tool/API · Prompt I/O</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tdb-foundation">Trade Digital Brain 기반 데이터 · Knowledge · Vector를 전 계층에서 공통 활용</div>
+</div>
+<h3 id="2-2-27-Unit-Agent-분류-RFP-붙임2-기준">2.2 27 Unit Agent 분류 (RFP 붙임2 기준)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>유형 (요구사항 ID)</th><th>범용 (16)</th><th>도메인 특화 (11)</th></tr></thead>
+<tbody>
+<tr><td><strong>검색형</strong> <code>SFR-AP-003</code></td><td>외부 검색·정보제공 / 내부 검색·정보제공 / 통계 검색·정보제공</td><td>TradeNAVI HS·관세 검색 / FTA 검색</td></tr>
+<tr><td><strong>대화형</strong> <code>SFR-AP-004</code></td><td>다국어 번역 / 멀티턴 상담 / Welcome 대응</td><td>TradePro 전문가 상담 / 연구 상담</td></tr>
+<tr><td><strong>분석형</strong> <code>SFR-AP-005</code></td><td>통계 Report 생성 / 무역 트렌드 분석 / 데이터 인사이트</td><td>TradePro 상담 데이터 분석</td></tr>
+<tr><td><strong>추천형</strong> <code>SFR-AP-006</code></td><td>추천 / 외부검색 추천 / 연계 서비스 추천</td><td>바이어/셀러 추천 (tradeKorea) / 전문가 배정 (TradePro)</td></tr>
+<tr><td><strong>생성형</strong> <code>SFR-AP-007</code></td><td>상담 Report / 통계 Report / 보고서 초안</td><td>수출실적증명 자동심사 / ESG Report (XBRL) / 지재권 서류 초안</td></tr>
+<tr><td><strong>Master</strong> <code>SFR-AP-008</code></td><td>Master</td><td>—</td></tr>
+<tr><td><strong>서비스 특화</strong> <code>SFR-AP-009</code></td><td>—</td><td>수출실적증명 / ESG / 지재권 / 무역아카데미 AI 튜터</td></tr>
+</tbody></table></div>
+<blockquote>※ 27종 정확 목록은 RFP 붙임2 Agent 기능 목록을 기준으로 발주처와 협의하여 확정 <code>[RFP 붙임2, p.108~]</code></blockquote>
+<h3 id="2-3-내부-연계-Trade-Digital-Brain-Trade-Agent">2.3 내부 연계 (Trade Digital Brain ↔ Trade Agent)</h3>
+<p>INR-AP-001 명문 <code>[RFP III-다-INR-AP-001, p.61]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>연계 대상</th><th>연계 방식</th><th>데이터/기능</th><th>Agent 활용 시나리오</th></tr></thead>
+<tbody>
+<tr><td>Trade Digital Brain Lakehouse</td><td>JDBC/Trino + Data Virtualization</td><td>정형 데이터(통계·회원·거래)</td><td>통계 검색 Agent / 분석형 Agent</td></tr>
+<tr><td>AI Data Hub Vector DB</td><td>RAG API (FastAPI)</td><td>문서·지식·매뉴얼 임베딩</td><td>검색형 Agent / 대화형 Agent (RAG)</td></tr>
+<tr><td>Prompt Library</td><td>Object Storage + Catalog</td><td>시나리오·정책·응답 템플릿</td><td>모든 Agent 공통</td></tr>
+<tr><td>Workflow Definition</td><td>JSON + Catalog</td><td>Multi-Agent 시나리오</td><td>Orchestrator</td></tr>
+<tr><td>통합대시보드</td><td>REST + SSE</td><td>추천 결과 위젯 인박스</td><td>추천형 Agent → 대시보드</td></tr>
+</tbody></table></div>
+<h3 id="2-4-외부-연계-KITA-도메인-서비스-외부-시스템-MCP-표준">2.4 외부 연계 (KITA 도메인 서비스 + 외부 시스템 — MCP 표준)</h3>
+<p>RFP III-나-ECR-DP-006 <code>[RFP III-나-ECR-DP-006, p.38]</code> + RFP I-4 클라우드 인프라(MCP 서버 구성 포함) <code>[RFP I-4, p.3]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>MCP 서버 / 외부 시스템</th><th>노출 도구 (Tool)</th><th>인증</th><th>사용 Agent</th></tr></thead>
+<tbody>
+<tr><td>MCP-tradeKorea</td><td>회원사 매칭, Live Chat, 상품 Inquiry</td><td>OAuth2 + RBAC</td><td>바이어/셀러 추천</td></tr>
+<tr><td>MCP-TradePro</td><td>1:1 상담 예약, 상담 이력, 전문가 배정</td><td>OAuth2 + RBAC</td><td>전문가 상담·배정</td></tr>
+<tr><td>MCP-무역통계</td><td>통계 조회, 리포트 생성</td><td>OAuth2 + Rate Limit</td><td>통계 검색·Report</td></tr>
+<tr><td>MCP-수출실적증명</td><td>신청·증빙 검증·심사·발급</td><td>OAuth2 + 결재 라인</td><td>수출실적 자동심사</td></tr>
+<tr><td>MCP-ESG</td><td>VSME 진단, 보고서(XBRL)</td><td>OAuth2</td><td>ESG Report</td></tr>
+<tr><td>MCP-지재권</td><td>분류체계, 상담, 서류 초안</td><td>OAuth2</td><td>지재권 특화</td></tr>
+<tr><td>MCP-무역아카데미</td><td>과정 추천, 학습 이력, AI 튜터</td><td>OAuth2</td><td>AI 튜터</td></tr>
+<tr><td>외부: 관세청 / FTA / TradeNAVI</td><td>HS·관세·규제 OpenAPI</td><td>API Key + IP 화이트리스트</td><td>HS 매칭·관세규제 검색</td></tr>
+<tr><td>외부: 공공데이터포털 / IMF / UN Comtrade</td><td>통계 OpenAPI</td><td>API Key</td><td>외부 검색·트렌드 분석</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</h2>
+<p>기술평가 100점 중 &quot;기술 및 기능 25점&quot;의 직접 대상이며, <strong>27 Unit Agent의 표준 아키텍처·Orchestration·서비스 특화·보안·성능</strong> 5축이 평가 가중치의 70% 이상을 가져간다.</p>
+<h3 id="KEY-1-Agent-표준-아키텍처-LLM-추상화-모델-종속-회피">KEY-1. Agent 표준 아키텍처 + LLM 추상화 (모델 종속 회피)</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-SFR-AP-001, p.51~52]</code></p>
+<ul>
+<li>27 Unit Agent 전체에 공통 적용되는 표준 아키텍처(시스템 프롬프트·지식데이터 계층·파이프라인) 명문 요구</li>
+<li>&quot;각 Agent들이 정의된 역할과 수행 작업의 성격에 맞게 LLM모델을 선택하고 교체할 수 있게 구현되어야 함 (<strong>특정 모델 종속형 아키텍처 지양</strong>)&quot; 명문</li>
+<li>&quot;모델 추상화를 통해 추가 LLM 모델 도입 시 추가 개발 없이 연동 가능한 구조&quot; 명문</li>
+<li>Multi Modal 지원(문서·이미지·음성), 토큰 최적화(캐싱·로그·Context 관리), 평가 지표 정의</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>SFR-AP-001은 27 Agent 전체의 공통 설계서. 평가위원이 &quot;표준 아키텍처 다이어그램&quot;과 &quot;모델 교체 데모&quot;를 직접 요구할 가능성 매우 높음</li>
+<li>추상화 레이어 미흡 시 향후 LLM 가격 변동·정책 변경에 대응 불가 → 발주처 장기 ROI 직격</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>LLM Gateway: <strong>LiteLLM Proxy</strong> (OpenAI 호환 API, 라우팅·폴백·Spend Tracker)</li>
+<li>표준 Agent 골격: 시스템 프롬프트 분리(YAML) + 지식 어셈블리(LangChain Retriever) + Tool 매니페스트(JSON Schema) + 평가 어댑터</li>
+<li>토큰 최적화: <strong>GPTCache + Semantic Cache</strong> (의미 기반 캐시) → 30~50% 비용 절감</li>
+<li>모델 풀: vLLM(self-hosted Llama 3.3 70B / Qwen 2.5 / EXAONE 3.5) + 외부(HyperCLOVA·GPT-4o·Claude·Gemini)</li>
+</ul>
+<hr>
+<h3 id="KEY-2-Multi-Agent-Orchestration-A2A-워크플로우-컨텍스트">KEY-2. Multi-Agent Orchestration (A2A · 워크플로우 · 컨텍스트)</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-SFR-AP-002, p.52~53]</code> + <code>[SFR-AP-008 Master Agent, p.54]</code></p>
+<ul>
+<li>다양한 A2A 아키텍처 검토 후 발주처 환경에 적합한 Orchestration 구조 제시 명문</li>
+<li>작업 순서·의존성·분기·오류 대응·Fallback 시나리오 정의</li>
+<li>작업 진행 상태와 맥락의 멀티턴 유지 + 세션 초기화 후에도 과거 대화 호출 시 맥락 복원</li>
+<li>중앙 집중형(Orchestration) vs 분산형(Choreography) 적합 구조 선택 + 근거 명시</li>
+<li>Orchestration 레벨에서 전체 작업 이력 관리 + Agent별 행동 모니터링 + 평가</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>SI 시장에서 가장 많이 실패하는 영역. 단일 Agent → Multi-Agent 확장 시 컨텍스트 폭주, 무한 호출, 상태 동기화 실패가 빈번</li>
+<li>중앙형 vs 분산형 선택의 명확한 ADR(Architecture Decision Record)이 평가위원 질문 방어용 필수</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>메인 Orchestrator: <strong>LangGraph 0.2 StateGraph</strong> (체크포인트·재시작·시각화 지원, Trace 표준 호환)</li>
+<li>보조 패턴: <strong>CrewAI</strong> (Role-based 협업, 도메인 특화 Agent 그룹)</li>
+<li>State Store: PostgreSQL Checkpointer + <strong>mem0</strong> (장기 기억) + Redis(단기 세션)</li>
+<li>Fallback 전략: Tool 호출 실패 → Retry(지수 백오프) → 대체 Agent → 사용자 가이드 메시지</li>
+<li>시나리오 데이터화: 워크플로우를 JSON으로 정의해 신규 시나리오 추가 시 코드 수정 없이 적용 (DAR-AP-002 명문)</li>
+</ul>
+<hr>
+<h3 id="KEY-3-서비스-특화-Agent-수출실적증명-ESG-지재권-도메인-깊이">KEY-3. 서비스 특화 Agent — 수출실적증명·ESG·지재권 (도메인 깊이)</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-SFR-AP-009, p.57~58]</code></p>
+<ul>
+<li><strong>수출실적증명 자동화</strong>: HWP/HWPX/PDF 등 다양한 양식 자동 인식 + 필드 입력 검증 + 심사 규칙 기반 판정 + 우선순위 추천 + 담당자 자동 통보</li>
+<li><strong>ESG 전문 Agent</strong>: VSME 기반 진단, 약식 ESG 보고서(XBRL) 작성 지원, 1:1 상담 연계</li>
+<li><strong>지재권 전문 Agent</strong>: 지재권 특화 상담, 서류 초안 작성, IP 사업화 지원, 법률 상담</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>도메인 깊이가 SI사 공통 약점. 평가위원의 &quot;정말 무역을 아는가&quot;라는 질문의 직접 대상</li>
+<li>HWP/HWPX 자동 인식 정확도가 부족하면 Trade Agent 전체 신뢰도 동시 하락 (도미노 리스크)</li>
+<li>ESG VSME / XBRL은 한국 SI 사례가 매우 적은 신영역</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>문서 인식: <strong>Docling</strong>(IBM, 표·차트·레이아웃 SOTA) + <strong>pyhwp / olefile</strong>(HWP·HWPX) + <strong>PyMuPDF</strong>(PDF) + <strong>PaddleOCR 2.9</strong>(한·영) 다단 파이프라인</li>
+<li>검증 규칙: 룰 엔진(Drools or 자체) + LLM as Judge 이중 검증</li>
+<li>HITL 루프: 자동심사 후 담당자 확인 단계 필수 (RFP &quot;사용자 확인 및 심사 결과 발급&quot; 명문)</li>
+<li>ESG: VSME 질문 트리(인터랙티브) + Argilla 라벨링 → XBRL 보고서 자동 생성</li>
+<li>지재권: 분류체계 데이터(KIPRIS 연계) + 법률 코퍼스 RAG + 출처 인용 필수</li>
+</ul>
+<hr>
+<h3 id="KEY-4-가드레일-프롬프트-인젝션-방어-PII-비식별-Trustworthy-AI">KEY-4. 가드레일 + 프롬프트 인젝션 방어 + PII 비식별 (Trustworthy AI)</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-SER-AP-001~004, p.62~64]</code></p>
+<ul>
+<li>SER-AP-001 가드레일: 행동정책·보안·윤리 (비속어·왜곡·근거 없는 임의 생성 차단)</li>
+<li>SER-AP-002 LLM 데이터 접근 보안: <strong>활용 대상 데이터가 학습 데이터로 전송되지 않도록 보호</strong> 명문</li>
+<li>SER-AP-003 민감정보 비식별화: 자동 탐지 + 마스킹 + 비식별 전 원본 미입력</li>
+<li>SER-AP-004 Agent 보안 취약점 강화: <strong>시스템 프롬프트 캡슐화·분리, 입력값 검증·필터링, 인젝션 패턴 탐지·클렌징, 맥락 제한, 작업 결과 사전 검증</strong></li>
+<li>모든 Tool/API 호출 + 프롬프트 입출력의 감사 로그</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>평가표상 SER 4개 항목이 모두 보안 영역에 직접 매핑</li>
+<li>&quot;회원사 데이터 외부 LLM 학습 잔류&quot; 시 신뢰 사고 + 컴플라이언스 리스크. 발주처 담당자의 가장 큰 잠재 두려움</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>가드레일: <strong>NVIDIA NeMo Guardrails 0.10</strong> (Colang 정책 DSL) + <strong>Llama Guard 3</strong> (Meta 표준 분류기)</li>
+<li>프롬프트 인젝션: <strong>Rebuff</strong> (Vector + Heuristic 이중 탐지) + <strong>Prompt Guard</strong> (Llama Family) + 시스템 프롬프트 외부 격리(Vault)</li>
+<li>PII: <strong>Microsoft Presidio 2.x</strong> + spaCy ko_core_news + 정규식 룰 (주민번호·사업자번호·HS Code 민감 표현)</li>
+<li>출력 검증: Pydantic Output Parser + Hallucination Score(Ragas Faithfulness) 임계치 미달 시 차단</li>
+<li>외부 LLM 호출 시: 비식별 → LiteLLM Adapter → 응답 → 재식별 매핑 (원본은 폐쇄망 잔류)</li>
+<li>감사: Langfuse(self-hosted) + OpenTelemetry + 보관주기 정책 (DAR-AP-003)</li>
+</ul>
+<hr>
+<h3 id="KEY-5-성능-TTFT-첫-토큰-응답-동시접속-스트리밍">KEY-5. 성능 — TTFT(첫 토큰 응답) · 동시접속 · 스트리밍</h3>
+<p><strong>근거</strong>: <code>[RFP III-다-PER-AP-001, p.60]</code> + <code>[PER-AP-002, p.60]</code></p>
+<ul>
+<li>사용자 요청 실시간 전달 + Agent 응답 UI 실시간 표시</li>
+<li>활성화율·가동률·동시성계수 산출 → 동시 접속 성능 확보</li>
+<li>작업 수행 시작 ~ 첫 토큰 UI 표시까지 시간(TTFT) 기준 수립 + 보장</li>
+<li>동시 접속 + 동일 작업 병렬 처리 가능 성능</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>&quot;성능 및 품질 15점&quot;의 직접 대상. 정량 SLA 미명시 시 감점</li>
+<li>Multi-Agent 시스템은 호출 사슬이 길어 TTFT가 단일 LLM 호출 대비 5~10배 길어지는 경향. 별도 최적화 필수</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>추론 최적화: <strong>vLLM 0.6 PagedAttention</strong> + Continuous Batching → 처리량 5~24배 향상</li>
+<li>스트리밍: SSE(Server-Sent Events) + LangGraph Stream API + 첫 토큰 우선 송출 (TTFT &lt; 1.5초 목표)</li>
+<li>캐시: <strong>GPTCache + Semantic Cache</strong> (Embedding 기반 의미 캐시) + Redis(세션) + 정적 응답 사전 생성</li>
+<li>동시성: KServe Auto-scaling + Knative Serving (요청량 기반 스케일업)</li>
+<li>부하 테스트: k6 + Locust → P50/P95/P99 응답시간·TTFT·동시 N명 검증</li>
+<li>GPU 효율: NVIDIA GPU Operator + Volcano(Job 스케줄링) + Run:ai(옵션, GPU 분할)</li>
+</ul>
+<hr>
+<h2 id="4-추천-기술-스택">4. 추천 기술 스택</h2>
+<h3 id="4-1-계층별-기술-매트릭스">4.1 계층별 기술 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>계층</th><th>영역</th><th>추천 솔루션</th><th>라이선스</th><th>채택 사유</th></tr></thead>
+<tbody>
+<tr><td><strong>L5 UI</strong></td><td>사용자 포털</td><td>Next.js 15 + Vercel AI SDK 4.x + React 18</td><td>MIT/Apache</td><td>SSE 스트리밍 표준, 한국어 자료 풍부</td></tr>
+<tr><td>L5 UI</td><td>관리자 콘솔</td><td>Open WebUI 0.5 / Streamlit 1.40</td><td>MIT</td><td>LLM 운영 콘솔 사실상 표준</td></tr>
+<tr><td>L5 UI</td><td>API Gateway</td><td>Kong Gateway 3.8 (SSE/WebSocket Proxy)</td><td>Apache 2.0</td><td>인증·트래픽·WAF 통합</td></tr>
+<tr><td><strong>L4 Orchestration</strong></td><td>Multi-Agent</td><td><strong>LangGraph 0.2</strong> (StateGraph) + CrewAI 0.80</td><td>MIT</td><td>중앙형 + Role-based 보조, 한국어 사례 풍부</td></tr>
+<tr><td>L4 Orchestration</td><td>의도 분석</td><td>LangChain 0.3 + Pydantic v2</td><td>MIT</td><td>표준 인터페이스</td></tr>
+<tr><td>L4 Orchestration</td><td>State Store</td><td>LangGraph Checkpointer + mem0 0.1 + PostgreSQL 16</td><td>MIT/PG</td><td>장기/단기 메모리 분리</td></tr>
+<tr><td>L4 Orchestration</td><td>Workflow Engine</td><td>Temporal 1.25 (Durable Execution)</td><td>MIT</td><td>재시작·재시도 표준</td></tr>
+<tr><td><strong>L3 Unit Agent</strong></td><td>Runtime</td><td>FastAPI 0.115 + Pydantic v2 (각 Agent 독립 컨테이너)</td><td>MIT</td><td>Async 표준, 격리 배포</td></tr>
+<tr><td>L3 Unit Agent</td><td>분산 작업</td><td>Ray 2.40 (병렬 임베딩·전처리)</td><td>Apache 2.0</td><td>GPU 분산</td></tr>
+<tr><td><strong>L2 LLM</strong></td><td>Self-hosted Serving</td><td><strong>vLLM 0.6</strong> (PagedAttention·Continuous Batching)</td><td>Apache 2.0</td><td>추론 표준</td></tr>
+<tr><td>L2 LLM</td><td>Model Abstraction</td><td><strong>LiteLLM Proxy 1.55</strong></td><td>MIT</td><td>OpenAI 호환·라우팅·폴백·Cost Tracker</td></tr>
+<tr><td>L2 LLM</td><td>Self-hosted Models</td><td>Llama 3.3 70B / Qwen 2.5 / <strong>EXAONE 3.5</strong> / KoLlama</td><td>Llama·Apache·EXAONE</td><td>한국어 SOTA 우선</td></tr>
+<tr><td>L2 LLM</td><td>Hosted Models (선택)</td><td>HyperCLOVA X / GPT-4o / Claude 3.5 / Gemini 2.0</td><td>상용</td><td>비식별 후 LiteLLM 라우팅</td></tr>
+<tr><td><strong>L2 RAG</strong></td><td>Vector DB</td><td><strong>Milvus 2.4 Cluster</strong> + pgvector 0.8(보조)</td><td>Apache 2.0</td><td>대용량·HA·한국 사례</td></tr>
+<tr><td>L2 RAG</td><td>Embedding</td><td><strong>BGE-M3</strong> + <strong>KURE-v1</strong> (한국어 SOTA) + sentence-transformers 3.x</td><td>Apache 2.0</td><td>한국어 우선</td></tr>
+<tr><td>L2 RAG</td><td>Reranker</td><td>BGE-Reranker-v2-M3</td><td>Apache 2.0</td><td>정확도 향상</td></tr>
+<tr><td>L2 RAG</td><td>Document Parsing</td><td><strong>Docling</strong>(IBM) + Unstructured + <strong>pyhwp</strong> + PyMuPDF + <strong>PaddleOCR 2.9</strong></td><td>MIT/Apache</td><td>HWP/HWPX 명문 + 한국어 OCR</td></tr>
+<tr><td>L2 Pipeline</td><td>Embedding Pipeline</td><td>Apache Airflow 2.10 + Ray + LlamaIndex 0.12</td><td>Apache 2.0</td><td>DAG 표준</td></tr>
+<tr><td>L2 Pipeline</td><td>Eval Loop</td><td>Argilla 2.x (HITL 라벨링)</td><td>Apache 2.0</td><td>평가 데이터셋 운영</td></tr>
+<tr><td><strong>L1 Tool/MCP</strong></td><td>MCP Runtime</td><td><strong>MCP Python SDK 1.2</strong> + MCP TS SDK + FastMCP</td><td>MIT</td><td>Anthropic MCP 표준</td></tr>
+<tr><td>L1 Tool/MCP</td><td>Tool Registry</td><td>LangChain Tools / OpenAPI Tool Generator</td><td>MIT</td><td>자동화</td></tr>
+<tr><td><strong>횡단 보안</strong></td><td>Guardrails</td><td><strong>NeMo Guardrails 0.10</strong> + Guardrails AI + <strong>Llama Guard 3</strong> + Prompt Guard</td><td>Apache/MIT</td><td>SOTA 가드레일</td></tr>
+<tr><td>횡단 보안</td><td>PII</td><td><strong>Microsoft Presidio 2.x</strong> + spaCy ko_core_news</td><td>MIT</td><td>한국어 PII 표준</td></tr>
+<tr><td>횡단 보안</td><td>Prompt Injection</td><td>Rebuff + 시스템 프롬프트 외부 격리(Vault)</td><td>MIT</td><td>인젝션 방어 표준</td></tr>
+<tr><td>횡단 보안</td><td>Secret · 키 관리</td><td>HashiCorp Vault + KMS</td><td>MPL/상용</td><td>동적 자격 증명</td></tr>
+<tr><td><strong>횡단 관찰</strong></td><td>LLM Trace</td><td><strong>Langfuse 3.x</strong> (self-hosted)</td><td>MIT</td><td>데이터 주권 + 표준</td></tr>
+<tr><td>횡단 관찰</td><td>OTel</td><td>OpenTelemetry GenAI Semantic Conventions</td><td>Apache 2.0</td><td>표준</td></tr>
+<tr><td>횡단 관찰</td><td>Eval</td><td><strong>Ragas 0.2</strong> (RAG) + <strong>DeepEval 1.5</strong> (Agent) + TruLens</td><td>Apache 2.0</td><td>정량 평가 표준</td></tr>
+<tr><td>횡단 관찰</td><td>Cost · Token</td><td>LiteLLM Spend Tracker + Helicone(옵션)</td><td>MIT</td><td>비용 통제</td></tr>
+<tr><td><strong>공통 Infra</strong></td><td>Container</td><td>Kubernetes 1.31 + Knative + Istio</td><td>Apache 2.0</td><td>표준</td></tr>
+<tr><td>공통 Infra</td><td>Cache</td><td><strong>Redis 7.x Cluster + GPTCache</strong></td><td>BSD/MIT</td><td>LLM 캐시</td></tr>
+<tr><td>공통 Infra</td><td>메시징</td><td>Apache Kafka 3.7 / NATS JetStream</td><td>Apache 2.0</td><td>비동기 작업</td></tr>
+<tr><td>공통 Infra</td><td>GPU 자원</td><td>NVIDIA GPU Operator + Volcano</td><td>Apache 2.0</td><td>GPU 스케줄링</td></tr>
+</tbody></table></div>
+<h3 id="4-2-인프라-선택-Hybrid-Cloud-데이터-주권">4.2 인프라 선택 — Hybrid Cloud + 데이터 주권</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>배치</th><th>사유</th></tr></thead>
+<tbody>
+<tr><td>L2 vLLM (self-hosted)</td><td>KT Cloud GPU (H100/H200 8~16장)</td><td>데이터 주권 + 토큰 비용 통제</td></tr>
+<tr><td>L2 Embedding · OCR</td><td>KT Cloud GPU</td><td>GPU 가속 필수</td></tr>
+<tr><td>L4 Orchestrator · Agent Runtime</td><td>Kubernetes (KT Cloud)</td><td>무상태 컨테이너</td></tr>
+<tr><td>외부 LLM (옵션)</td><td>LiteLLM Proxy 경유 (비식별 후 호출)</td><td>모델 자유도</td></tr>
+<tr><td>L2 Vector DB</td><td>Private Cloud (HA)</td><td>임베딩 데이터 주권</td></tr>
+<tr><td>Trace · Eval</td><td>Self-hosted Langfuse</td><td>트레이스 외부 송출 차단</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</h2>
+<h3 id="V-1-Vendor-Neutral-LLM-Stack-모델-자유도가-곧-발주처의-협상력">V-1. Vendor-Neutral LLM Stack — &quot;모델 자유도가 곧 발주처의 협상력&quot;</h3>
+<p><strong>고객 Pain</strong>: 특정 LLM 종속 시 가격 인상·정책 변경·EOS에 발주처가 무력. RFP가 명문으로 종속 회피를 요구.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li><strong>LiteLLM Proxy</strong> 단일 게이트웨이로 self-hosted(vLLM) ↔ HyperCLOVA ↔ GPT-4o ↔ Claude ↔ Gemini 동일 인터페이스</li>
+<li>발표 시 <strong>GPT-4o → EXAONE 3.5 실시간 무중단 스왑 데모</strong> (코드 수정 없이 환경변수만 변경)</li>
+<li>LiteLLM Spend Tracker로 모델별 일일 비용 추이 시각화 → 발주처가 직접 비용 통제</li>
+<li><strong>차별화 메시지</strong>: &quot;발주처가 1년 후 어떤 LLM을 쓸지 미리 결정하지 않아도 된다&quot;</li>
+</ul>
+<h3 id="V-2-Sovereign-Trade-Agent-회원사-데이터가-미국-유럽-GPU에-한-줄도-남지-않는다">V-2. Sovereign Trade Agent — &quot;회원사 데이터가 미국·유럽 GPU에 한 줄도 남지 않는다&quot;</h3>
+<p><strong>고객 Pain</strong>: 회원사 매출·통상·개인정보의 외부 LLM 학습 데이터 잔류 + 외부 SaaS Trace 시스템 송출 리스크.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>KT Cloud GPU + vLLM(self-hosted) + Langfuse(self-hosted) 3축으로 모든 추론·트레이스를 국내 잔류</li>
+<li>외부 LLM 호출 필요 시 <strong>Presidio + Rebuff 2단 비식별</strong> → LiteLLM Adapter → 응답 후 재식별 매핑</li>
+<li>SER-AP-002 &quot;학습 데이터 유출 방지&quot; 명문 충족: 외부 LLM 호출 시 <code>enable_training=false</code> 강제 + 호출 페이로드 감사 로그</li>
+<li><strong>차별화 메시지</strong>: 메가존(AWS Bedrock 의존)과 정면 차별화</li>
+</ul>
+<h3 id="V-3-Eval-Driven-Agent-Quality-SLA-Agent-품질을-매주-정량-지표로-약속">V-3. Eval-Driven Agent Quality SLA — &quot;Agent 품질을 매주 정량 지표로 약속&quot;</h3>
+<p><strong>고객 Pain</strong>: Agent 품질이 정성적 표현(&quot;정확하게&quot;, &quot;빠르게&quot;)으로만 약속되는 SI 관행. RFP가 &quot;모호 표현 불가능 간주&quot; 룰로 정조준.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>모든 Agent에 <strong>Ragas + DeepEval</strong> 정량 임계치 자동 검증: Faithfulness ≥ 0.85, Context Precision ≥ 0.80, Answer Relevancy ≥ 0.85, TTFT ≤ 1.5s</li>
+<li>임계치 미달 시 CD Gate 차단(배포 불가) + Slack/이메일 알림</li>
+<li>분기별 발주처 합동 리뷰: 27 Agent별 점수 추이 + 개선 액션 + 평가 데이터셋 인계</li>
+<li><strong>차별화 메시지</strong>: &quot;Agent 품질은 SLA 숫자로 약속한다&quot;</li>
+</ul>
+<h3 id="V-4-MCP-First-Architecture-신규-도메인은-코드-수정-없이-추가">V-4. MCP-First Architecture — &quot;신규 도메인은 코드 수정 없이 추가&quot;</h3>
+<p><strong>고객 Pain</strong>: 신규 서비스 추가 시 Agent 코드 수정·재배포 필요한 구조 → 운영 부담 폭증.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>Anthropic <strong>MCP(Model Context Protocol) 표준</strong> 채택 → 8개 KITA 도메인을 MCP 서버로 노출</li>
+<li>신규 도메인 추가 시 MCP 서버만 구현하면 모든 Agent가 즉시 활용 (Tool Registry 자동 등록)</li>
+<li>외부 시스템(관세청·FTA·KTNET 등)도 MCP Adapter 패턴으로 표준화</li>
+<li><strong>차별화 메시지</strong>: &quot;운영 단계에서 도메인 확장 시 SI 재계약 없이 자체 추가 가능&quot;</li>
+</ul>
+<h3 id="V-5-Trade-Native-Agent-Library-27-Agent-중-11개를-사전-검증한-골든-데이터셋과-함께-제공">V-5. Trade-Native Agent Library — &quot;27 Agent 중 11개를 사전 검증한 골든 데이터셋과 함께 제공&quot;</h3>
+<p><strong>고객 Pain</strong>: SI 종료 후 Agent 품질 검증·개선이 발주처 부담으로 전가됨.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>27 Agent별 골든 데이터셋(각 50~200건) 사업 수행 중 구축 → 발주처 인계</li>
+<li>도메인 11 Agent(수출실적증명·ESG·지재권 등)는 <strong>사전 PoC 검증 데이터셋과 함께 제공</strong></li>
+<li>Argilla 기반 HITL 라벨링 인프라 + 운영팀 교육 자료 패키지</li>
+<li><strong>차별화 메시지</strong>: &quot;Agent 운영 자산을 발주처가 직접 키울 수 있는 도구까지 인계&quot;</li>
+</ul>
+<hr>
+<h2 id="6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ID</th><th>리스크</th><th>발생 확률</th><th>영향도</th><th>심각도</th><th>완화 전략</th></tr></thead>
+<tbody>
+<tr><td><strong>R1</strong></td><td><strong>27 Agent 동시 개발 시 품질 분산 + Hallucination</strong> — 27개를 병렬 개발하면 표준 골격 미준수·평가 누락이 빈번</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>Agent 표준 골격(YAML 스펙)을 사업 1주차 확정. CI 단계에서 표준 준수 자동 검증(Schema Lint). Ragas 임계치 미달 시 CD 차단</td></tr>
+<tr><td><strong>R2</strong></td><td><strong>Multi-Agent Orchestration 컨텍스트 폭주</strong> — 호출 사슬이 길어져 토큰 비용·TTFT 폭증, 무한 호출 리스크</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>LangGraph 최대 깊이(MaxRecursion) 강제 제한. Sub-task별 Token Budget 사전 할당. Orchestrator 레벨 Tracing 필수</td></tr>
+<tr><td><strong>R3</strong></td><td><strong>HWP/HWPX 처리 정확도 부족</strong> — 수출실적증명 자동심사 Agent의 핵심 기능 미달 시 도메인 11 Agent 신뢰도 동시 하락</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>Docling + pyhwp + PaddleOCR 사전 PoC (제안 단계 첨부). 골든 데이터셋 100건 사전 구축. 임계치 미달 시 HITL 보정 루프 + 담당자 최종 승인 단계 강제</td></tr>
+<tr><td><strong>R4</strong></td><td><strong>LLM 데이터 외부 유출 사고</strong> — 회원사 데이터가 외부 LLM 학습에 잔류 시 신뢰 사고 + 컴플라이언스 이슈</td><td>Low</td><td>High</td><td><strong>HIGH</strong></td><td>self-hosted vLLM 우선 라우팅 + 외부 LLM은 Presidio·Rebuff 2단 비식별 후만 호출. 모든 외부 호출 페이로드 감사 로그(보관 5년)</td></tr>
+<tr><td><strong>R5</strong></td><td><strong>프롬프트 인젝션 공격</strong> — 사용자 입력으로 시스템 프롬프트·도구 권한 탈취</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>시스템 프롬프트 Vault 격리 + Rebuff 인젝션 탐지 + 입력 필터링 + Output Validator. 침투 테스트(Red Team) 사업 종료 전 필수</td></tr>
+<tr><td><strong>R6</strong></td><td><strong>TTFT(첫 토큰) 응답 지연</strong> — Multi-Agent 호출 사슬로 1차 응답 5~10초 초과</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>Master Agent의 1차 응답(&quot;작업을 시작합니다&quot;) 즉시 스트리밍. 본 작업은 백그라운드 진행 + 진행 상태 SSE 푸시. 캐시 적극 활용</td></tr>
+<tr><td><strong>R7</strong></td><td><strong>외부 LLM 토큰 비용 폭증</strong> — 운영 시 추정 대비 3~5배 비용 발생</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>self-hosted 우선 라우팅 + GPTCache(의미 캐시) 30~50% 절감 + LiteLLM Spend Tracker 일일 알림 + 사용자별 quota 설정</td></tr>
+<tr><td><strong>R8</strong></td><td><strong>MCP 서버 신규 표준 채택 리스크</strong> — Anthropic MCP가 비교적 신생 표준으로 운영 사례 부족</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>MCP SDK 1.x 안정 버전 채택 + 자체 Wrapper Layer 구축으로 표준 변경 시 대응. 8개 도메인 중 핵심 3개를 사전 PoC</td></tr>
+<tr><td><strong>R9</strong></td><td><strong>모델 추상화 성능 손실</strong> — LiteLLM Proxy 경유 시 직접 호출 대비 100~200ms 지연 추가</td><td>Low</td><td>Med</td><td><strong>MED</strong></td><td>LiteLLM 사이드카 패턴(같은 노드 배치)으로 네트워크 지연 최소화. Embedding은 Proxy 우회 직접 호출 옵션</td></tr>
+<tr><td><strong>R10</strong></td><td><strong>Trade Digital Brain L2 데이터 미준비</strong> — TDB 임계경로 슬립 시 Agent의 RAG·지식베이스 빈 깡통</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>TDB와 Agent 통합 PMO 설치. M3(MCP 노출 + Lakehouse MVP) 동기화 게이트 사전 합의. Agent는 우선 5개 도메인 데이터로 시작</td></tr>
+<tr><td><strong>R11</strong></td><td><strong>27 Agent 평가 데이터셋 구축 지연</strong> — 골든 데이터셋 미확보 시 정량 SLA 약속 무효</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>사업 초기 2개월 내 발주처 합동으로 핵심 시나리오 5~7개 골든셋 확정. Argilla 기반 HITL 라벨링 인프라 구축</td></tr>
+<tr><td><strong>R12</strong></td><td><strong>GPU 자원 부족 / 가격 인상</strong> — H100/H200 GPU 수급 불안정 또는 가격 인상</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>KT Cloud GPU 예약 인스턴스 사전 확보. 30B/70B 모델 분할 배치(2 GPU 분산) + Tensor Parallelism 적용</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</h2>
+<h3 id="7-1-사업-본질-재정의">7.1 사업 본질 재정의</h3>
+<blockquote>Trade Agent는 &quot;LLM 챗봇 도입&quot;이 아니라, <strong>&quot;27 Unit Agent + Master + Orchestration + LLM 추상화 + RAG + MCP + 가드레일 + 평가체계&quot;가 한 시스템으로 통합된 Multi-Agent SI</strong>다. 단일 LLM 통합으로 접근하는 SI는 평가 단계에서 탈락한다.</blockquote>
+<h3 id="7-2-제안-5축-메시지">7.2 제안 5축 메시지</h3>
+<ol>
+<li><strong>Vendor-Neutral LLM Stack</strong> — LiteLLM 추상화로 모델 자유도 = 발주처 장기 협상력</li>
+<li><strong>Sovereign Agent</strong> — 회원사 데이터가 외부 LLM·SaaS Trace에 잔류하지 않는 구조</li>
+<li><strong>Eval-Driven Quality SLA</strong> — 27 Agent별 정량 임계치를 분기 SLA로 약속</li>
+<li><strong>MCP-First Architecture</strong> — 신규 도메인을 코드 수정 없이 추가 가능</li>
+<li><strong>Trade-Native Agent Library</strong> — 골든 데이터셋·HITL 인프라까지 운영 자산으로 인계</li>
+</ol>
+<h3 id="7-3-평가표-매핑">7.3 평가표 매핑</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>평가 영역</th><th>점수</th><th>Trade Agent 영역의 매핑</th></tr></thead>
+<tbody>
+<tr><td>기술 및 기능</td><td><strong>25</strong></td><td>SFR-AP-001~012 12개 항목 직접 매핑. 표준 아키텍처·Orchestration·27 Agent·서비스 특화·AI Data 파이프라인·포털 구체 구현안</td></tr>
+<tr><td>보안 요구사항 (기능 내)</td><td>(배점 분포)</td><td>SER-AP-001~004 4개 항목. 가드레일·LLM 데이터 접근·PII·Agent 보안 취약점</td></tr>
+<tr><td>데이터 요구사항 (기능 내)</td><td>(배점 분포)</td><td>DAR-AP-001~003. AI 메타데이터·Prompt Library·사용자 데이터</td></tr>
+<tr><td>성능 및 품질</td><td><strong>15</strong></td><td>PER-AP-001/002 TTFT·동시접속 정량 SLA</td></tr>
+<tr><td>프로젝트 지원</td><td><strong>20</strong></td><td>6개월 무상 안정화 + 골든 데이터셋·HITL 인프라 인계 + Eval-Driven 분기 리뷰</td></tr>
+<tr><td>프로젝트 관리</td><td><strong>15</strong></td><td>27 Agent 병렬 개발의 표준 골격 + 통합 마일스톤 + Risk Register</td></tr>
+</tbody></table></div>
+<h3 id="7-4-Trade-Digital-Brain과의-시너지">7.4 Trade Digital Brain과의 시너지</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>TDB 제공</th><th>Trade Agent 활용</th></tr></thead>
+<tbody>
+<tr><td>Vector·지식</td><td>AI Data Hub (Milvus·BGE·KURE)</td><td>검색형·대화형 Agent의 RAG</td></tr>
+<tr><td>정형 데이터</td><td>Lakehouse + Data Virtualization</td><td>통계 Agent·분석형 Agent</td></tr>
+<tr><td>메타·표준</td><td>DataHub Catalog + DAR-DP 표준</td><td>DAR-AP-001 AI 메타데이터 표준의 상위 호환</td></tr>
+<tr><td>거버넌스</td><td>데이터 표준·품질·리니지</td><td>Prompt Library·시나리오 데이터 거버넌스</td></tr>
+<tr><td>보안</td><td>Presidio·Vault·접근통제</td><td>LLM 입력 비식별·키 관리</td></tr>
+<tr><td>관찰성</td><td>OpenLineage</td><td>Langfuse Trace 연계</td></tr>
+</tbody></table></div>
+<blockquote><strong>단일 메시지</strong>: &quot;Trade Digital Brain이 토대고, Trade Agent가 얼굴이다. 두 시스템은 분리 발주가 아니라 단일 통합 SI로 보아야 한다.&quot;</blockquote>
+<hr>
+<h2 id="부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>RFP 절 / ID</th><th>추정 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>RFP I-3 사업목표</td><td>p.1</td><td>Trade Agent 사업 정의</td></tr>
+<tr><td>RFP I-4 추진범위 (Trade Agent)</td><td>p.3</td><td>Multi Agent 통합 Agent 서비스</td></tr>
+<tr><td>RFP III-다 Trade Agent 구축 (23개 요구사항)</td><td>p.51~64</td><td>Trade Agent 본문</td></tr>
+<tr><td><strong>SFR-AP-001 Agent 공통 기능</strong></td><td>p.51~52</td><td>표준 아키텍처·LLM 추상화·27 Agent·평가</td></tr>
+<tr><td><strong>SFR-AP-002 Orchestration 구성</strong></td><td>p.52~53</td><td>Multi-Agent A2A·워크플로우·맥락</td></tr>
+<tr><td>SFR-AP-003 검색형 Agent</td><td>p.53</td><td>내·외부 데이터 검색·세션</td></tr>
+<tr><td>SFR-AP-004 대화형 Agent</td><td>p.53~54</td><td>멀티턴·다국어·맥락</td></tr>
+<tr><td>SFR-AP-005 분석형 Agent</td><td>p.54</td><td>요약·시각화·인사이트</td></tr>
+<tr><td>SFR-AP-006 추천형 Agent</td><td>p.54</td><td>연계 서비스·후속 작업 추천</td></tr>
+<tr><td>SFR-AP-007 생성형 Agent</td><td>p.54~55</td><td>보고서·HITL·Multi Modal</td></tr>
+<tr><td><strong>SFR-AP-008 Master Agent</strong></td><td>p.54</td><td>의도 분석·시나리오 구성·Welcome</td></tr>
+<tr><td><strong>SFR-AP-009 서비스 특화 Agent</strong></td><td>p.57~58</td><td>수출실적증명·ESG·지재권</td></tr>
+<tr><td><strong>SFR-AP-010 AI Data 파이프라인</strong></td><td>p.55</td><td>Embedding·Chunking·피드백 루프</td></tr>
+<tr><td><strong>SFR-AP-011 AI Data 전처리·가공</strong></td><td>p.55~56</td><td>HWP/HWPX 명문·복합 문서</td></tr>
+<tr><td>SFR-AP-012 Agent 포털</td><td>p.56</td><td>통합 UI·SSO·운영 콘솔</td></tr>
+<tr><td><strong>PER-AP-001 포털 페이지 성능</strong></td><td>p.60</td><td>동시접속·응답시간</td></tr>
+<tr><td><strong>PER-AP-002 Agent 작업 실행 성능</strong></td><td>p.60</td><td>스트리밍·TTFT</td></tr>
+<tr><td>INR-AP-001 데이터 인터페이스</td><td>p.61</td><td>KITA 연계 시스템 API</td></tr>
+<tr><td>INR-AP-002 UI/UX</td><td>p.61</td><td>통합 UI · 표준 디자인</td></tr>
+<tr><td>DAR-AP-001 AI 메타데이터 정의</td><td>p.61</td><td>Agent용 메타 표준</td></tr>
+<tr><td>DAR-AP-002 AI Data 정의</td><td>p.62</td><td>Prompt Library·Workflow·지식데이터</td></tr>
+<tr><td>DAR-AP-003 사용자 데이터·이력·로그</td><td>p.62</td><td>회원·대화 이력·로그</td></tr>
+<tr><td><strong>SER-AP-001 AI 가드레일</strong></td><td>p.62~63</td><td>행동·보안·윤리</td></tr>
+<tr><td><strong>SER-AP-002 LLM 모델 데이터 접근</strong></td><td>p.63</td><td>학습 데이터 유출 방지</td></tr>
+<tr><td><strong>SER-AP-003 민감정보 비식별화</strong></td><td>p.63</td><td>PII 자동 탐지·마스킹</td></tr>
+<tr><td><strong>SER-AP-004 Agent 보안 취약점</strong></td><td>p.63~64</td><td>프롬프트 인젝션 방어·Tool 통제</td></tr>
+<tr><td>RFP I-4 클라우드 인프라 (MCP 서버 구성 포함)</td><td>p.3</td><td>MCP 서버 신규 구축</td></tr>
+<tr><td>RFP 붙임2 Agent 기능 목록</td><td>p.108~</td><td>27 Agent 정확 정의</td></tr>
+</tbody></table></div>
+<h2 id="부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ISP 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>ISP p.5</td><td>14개 과제 중 ②지능형 Trade Agent 서비스 도입이 핵심 사업</td></tr>
+<tr><td>ISP p.7</td><td>&quot;유능한 AI 무역실무자&quot; 비전 + 무역업무특화 AI Agent 및 초개인화</td></tr>
+<tr><td>ISP p.7807</td><td>AI Data Hub 솔루션 후보 비교</td></tr>
+<tr><td>ISP 본문</td><td>Welcome Message·Agent UX·통합 포털 컨셉 (RFP 본문에 흡수)</td></tr>
+</tbody></table></div>
+<hr>
+<blockquote><strong>작성자 메모</strong>: Trade Agent는 Trade Digital Brain과 강하게 결합되어 있어 두 보고서를 함께 검토 권장. Agent 품질의 80%는 L2 데이터 기반(Lakehouse + AI Data Hub)에서 결정되며, Multi-Agent 시스템의 운영 안정성은 LangGraph + Langfuse + Ragas 3축의 성숙도에 직결됨. 평가표 100점 중 Trade Agent 영역이 직간접 영향을 미치는 점수는 <strong>약 50점 이상으로 추정</strong>되며, TDB 영역과 합산 시 본 사업 점수의 절대 다수를 차지함.</blockquote>
+    </article>
+  </div>
+  <footer class="footer">
+    <strong>Trade Agent 시스템 분석 보고서</strong><br>
+    한국무역협회 차세대 플랫폼 구축 RFP 분석 기반 · 임원 보고용 HTML
+  </footer>
+</main>
+</body>
+</html>

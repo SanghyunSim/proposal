@@ -1,0 +1,943 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tradeKorea 기능 고도화 시스템 분석 보고서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+  :root {
+    --navy: #102a43;
+    --blue: #1f5fbf;
+    --teal: #0f766e;
+    --gold: #b7791f;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #d8e2ef;
+    --bg: #f4f7fb;
+    --paper: #ffffff;
+    --soft: #eef5ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    line-height: 1.66;
+    letter-spacing: 0;
+  }
+  .page {
+    max-width: 1220px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+    padding: 58px 68px 50px;
+    color: #fff;
+    background:
+      linear-gradient(135deg, rgba(16, 42, 67, 0.98), rgba(31, 95, 191, 0.9)),
+      radial-gradient(circle at 84% 22%, rgba(45, 212, 191, 0.26), transparent 36%);
+  }
+  .hero:after {
+    content: "";
+    position: absolute;
+    right: -110px;
+    bottom: -180px;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    max-width: 850px;
+    margin: 28px 0 14px;
+    color: #fff;
+    border: 0;
+    padding: 0;
+    font-size: 42px;
+    line-height: 1.22;
+    font-weight: 800;
+  }
+  .subtitle {
+    max-width: 850px;
+    color: rgba(255,255,255,0.86);
+    font-size: 17px;
+  }
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 42px;
+    position: relative;
+    z-index: 1;
+  }
+  .metric {
+    min-height: 92px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.11);
+  }
+  .metric span {
+    display: block;
+    color: rgba(255,255,255,0.66);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .metric strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 34px;
+    padding: 42px 68px 70px;
+  }
+  .toc {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+  .toc-title {
+    margin-bottom: 12px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .toc a {
+    display: block;
+    padding: 8px 0;
+    border-top: 1px solid #e9eef6;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .content h1 {
+    display: none;
+  }
+  h2 {
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--navy);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+  }
+  h2:first-child, hr + h2 {
+    margin-top: 24px;
+  }
+  h3 {
+    margin: 26px 0 10px;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+  }
+  h4 {
+    margin: 20px 0 8px;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  blockquote {
+    margin: 14px 0 18px;
+    padding: 18px 20px;
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+  }
+  ul, ol {
+    margin: 10px 0 18px 22px;
+    padding: 0;
+  }
+  li {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eef2f7;
+    color: #174ea6;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92em;
+  }
+  .code {
+    overflow-x: auto;
+    margin: 16px 0 22px;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 12px;
+    line-height: 1.48;
+  }
+  .code code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+  .code.mermaid {
+    background: #f8fbff;
+    color: #1f2937;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    text-align: left;
+  }
+  th, td {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td {
+    background: #fafcff;
+  }
+  hr {
+    height: 1px;
+    margin: 32px 0;
+    border: 0;
+    background: var(--line);
+  }
+  strong {
+    color: #0f172a;
+    font-weight: 800;
+  }
+  a {
+    color: var(--blue);
+  }
+  .architecture-diagram {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0 28px;
+    padding: 18px;
+    border: 1px solid #c7d7ea;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+  }
+  .arch-layer {
+    border: 1px solid #d4e0ef;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  }
+  .arch-layer.edge {
+    border-color: rgba(15, 118, 110, 0.34);
+    background: #f0fdfa;
+  }
+  .arch-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e5edf6;
+    background: rgba(255,255,255,0.75);
+  }
+  .arch-title {
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .arch-ref {
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .arch-nodes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 14px;
+  }
+  .arch-nodes.four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .arch-node {
+    min-height: 72px;
+    padding: 11px 12px;
+    border: 1px solid #d8e2ef;
+    border-radius: 8px;
+    background: #f8fbff;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .arch-layer.edge .arch-node {
+    border-color: rgba(15, 118, 110, 0.25);
+    background: #fff;
+  }
+  .arch-node strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #0f172a;
+    font-size: 13px;
+  }
+  .arch-flow {
+    align-self: center;
+    justify-self: center;
+    width: 2px;
+    height: 18px;
+    background: linear-gradient(180deg, var(--blue), var(--teal));
+  }
+  .arch-footer {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(31, 95, 191, 0.18);
+    border-radius: 12px;
+    background: #ffffff;
+  }
+  .footer {
+    padding: 24px 68px 34px;
+    background: #0f172a;
+    color: #cbd5e1;
+    font-size: 12px;
+  }
+  .footer strong {
+    color: #fff;
+  }
+  @media (max-width: 960px) {
+    .hero, .layout, .footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .layout {
+      display: block;
+    }
+    .toc {
+      position: static;
+      margin-bottom: 28px;
+    }
+    .hero-metrics {
+      grid-template-columns: 1fr;
+    }
+    .arch-nodes, .arch-nodes.four, .arch-footer {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media print {
+    body {
+      background: #fff;
+    }
+    .page {
+      box-shadow: none;
+    }
+    .toc {
+      display: none;
+    }
+    .layout {
+      display: block;
+      padding: 28px 36px;
+    }
+    h2, h3, .table-wrap, blockquote {
+      break-inside: avoid;
+    }
+  }
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.85);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+  }
+  .top-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .top-nav a:hover,
+  .top-nav a:focus {
+    border-color: #1f5fbf;
+    background: #eef5ff;
+    color: #1f5fbf;
+    outline: none;
+  }
+  
+  .top-nav a.is-active {
+    background: #102a43;
+    border-color: #102a43;
+    color: #fff;
+  }
+  @media print {
+    .top-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav" aria-label="보고서 페이지 이동">
+  <a class="main-link" href="index.html">메인</a>
+  <a href="1_공통.html">1</a>
+  <a href="2_Trade_Digital_Brain.html">2</a>
+  <a href="3_Trade_Agent.html">3</a>
+  <a href="4_Trade_Dashboard.html">4</a>
+  <a href="5_Export_Certification.html">5</a>
+  <a href="6_Global_IP_Service.html">6</a>
+  <a class="is-active" href="7_tradeKorea%20Enhancement.html">7</a>
+  <a href="8_ESG_Compliance_Platform.html">8</a>
+  <a href="9_Academy.html">9</a>
+</nav>
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">Executive Report · RFP Analysis</div>
+    <h1>tradeKorea 기능 고도화 시스템 분석 보고서</h1>
+    <p class="subtitle">AI 기반 B2B 매칭, 모바일 앱 재구축, Inquiry-to-Cash 확장, 글로벌 Edge 성능 전략을 임원 보고용으로 정리한 HTML 보고서</p>
+    <div class="hero-metrics">
+      <div class="metric"><span>SYSTEM</span><strong>tradeKorea 고도화</strong></div>
+      <div class="metric"><span>CORE</span><strong>AI Matching + Inquiry-to-Cash</strong></div>
+      <div class="metric"><span>FOCUS</span><strong>Global Edge·Mobile·신뢰도</strong></div>
+      <div class="metric"><span>DELIVERABLE</span><strong>Executive HTML Report</strong></div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#1-목표-시스템-정의">1. 목표 시스템 정의</a>
+<a href="#2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</a>
+<a href="#3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</a>
+<a href="#4-추천-기술-스택">4. 추천 기술 스택</a>
+<a href="#5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</a>
+<a href="#6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</a>
+<a href="#7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</a>
+<a href="#부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</a>
+<a href="#부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</a>
+<a href="#부록-C-글로벌-e-Invoicing-표준-매핑-제안-시-첨부">부록 C. 글로벌 e-Invoicing 표준 매핑 (제안 시 첨부)</a>
+    </aside>
+    <article class="content">
+      <h1>tradeKorea 기능 고도화 시스템 분석 보고서</h1>
+<hr>
+<h2 id="1-목표-시스템-정의">1. 목표 시스템 정의</h2>
+<h3 id="1-Liner-Definition">1-Liner Definition</h3>
+<blockquote><strong>tradeKorea 기능 고도화는 KITA의 B2B 글로벌 매칭 플랫폼인 tradeKorea를 AI 기반 상품 등록·Inquiry 스코어링·Live Chat·Trade Agent 매칭으로 재구축하고, 모바일 앱을 오프라인 행사·생체인증·개인화 Push 중심으로 재구축하며, 견적-계약-e-Invoicing 모듈을 신규 추가해 매칭 이후 거래 전주기까지 확장하는 KITA 글로벌 무역 사업의 핵심 운영 플랫폼 고도화 사업이다.</strong></blockquote>
+<h3 id="1-1-사업-배경-Why">1.1 사업 배경 (Why)</h3>
+<ul>
+<li><strong>B2B 매칭 경쟁력 정체</strong>: tradeKorea는 KITA의 대표 B2B 매칭 플랫폼이지만 알리바바·EC21 등 글로벌 경쟁사 대비 AI 기반 매칭·진성 회원 검증·다국어 대응 측면에서 뒤처짐 <code>[RFP I-4-사, p.4]</code></li>
+<li><strong>허수 회원·INQ 신뢰도 문제</strong>: 바이어/셀러 DB의 허수 회원·저품질 Inquiry로 인해 매칭 결과 신뢰도 저하. 진성 검증 체계 부재 <code>[RFP III-사-CSR-TK-002, p.86]</code></li>
+<li><strong>모바일 사용성 미흡</strong>: 현재 tradeKorea 모바일은 단순 Web 모바일 변환 수준. 알림·개인화·오프라인 행사 연계가 없음 <code>[RFP III-사-SFR-TK-002, p.87]</code></li>
+<li><strong>매칭 이후 거래 단절</strong>: 바이어/셀러 매칭 후 견적·계약·인보이스 단계는 외부 도구로 이동 → 거래 전주기 데이터가 KITA에 축적되지 않음 <code>[RFP III-사-SFR-TK-003, p.88]</code></li>
+<li><strong>해외 사용자 접속 지연</strong>: 글로벌 바이어가 사용하는 플랫폼이지만 해외 지역 응답시간 SLA가 정의되어 있지 않음. 동남아·미주·유럽 사용자의 첫 세션 연결 지연 빈번 <code>[RFP III-사-PER-TK-001, p.88]</code></li>
+<li><strong>상품 데이터 품질 분산</strong>: 셀러가 등록하는 상품 페이지의 항목별 입력 수준 편차가 커서 검색·매칭 정확도 저하. 데이터 품질 거버넌스 체계 부재 <code>[RFP III-사-CSR-TK-001, p.86]</code></li>
+</ul>
+<h3 id="1-2-구축-목적-What">1.2 구축 목적 (What)</h3>
+<p>RFP I-4 추진범위 일곱째 항목 <code>[RFP I-4, p.4]</code>:</p>
+<blockquote>&quot;B2B 마케팅 플랫폼 경쟁력 제고를 위해 AI 기반으로 플랫폼 바이어/셀러 매칭 기능 강화, 모바일 앱 재구축, 데이터 기반 플랫폼 운영 체계를 구축하고 향후 글로벌 무역 확장을 위한 모델 설계. 견적·계약·물류·해외통관을 연계한 글로벌 무역 확장 모델 설계&quot;</blockquote>
+<p>CSR-TK-001 명문 <code>[RFP III-사-CSR-TK-001, p.86]</code>:</p>
+<blockquote>&quot;회원사 관리 정책 수립 — 바이어, 셀러별 관리 필요 마스터 데이터 정의 + 회원 라이프사이클(가입–활성–휴면–탈퇴) 단계 정의 + 활성화 회원 등급 재정립 + 비활성화 회원 구분 + 정기적 회원 데이터 점검 및 클렌징 기준&quot;</blockquote>
+<h3 id="1-3-최종-지향점-Goal">1.3 최종 지향점 (Goal)</h3>
+<ul>
+<li><strong>AI-First B2B Platform</strong>: 상품 등록(이미지·카탈로그→스펙·키워드 자동), Inquiry 작성·매칭·진정성 스코어링, Live Chat 초기 응답이 모두 AI 기반으로 동작 <code>[RFP III-사-SFR-TK-001, p.86~87]</code></li>
+<li><strong>End-to-End Trade Lifecycle</strong>: 매칭(매칭) → 견적(Quote) → 계약(Contract) → 인보이스(e-Invoice)의 거래 전주기를 단일 플랫폼에서 처리 <code>[RFP III-사-SFR-TK-003, p.88]</code></li>
+<li><strong>Mobile-First Field Engagement</strong>: 오프라인 무역 행사·전시회 현장에서 바이어와 셀러가 즉시 만나고 사후 Inquiry Chat으로 연결되는 현장 중심 모바일 UX <code>[RFP III-사-SFR-TK-002, p.87]</code></li>
+<li><strong>Global Performance SLA</strong>: 해외 지역(동남아·미주·유럽·중국) 응답시간 정량 SLA + Multi-Region Edge 배포 + 진성 회원 글로벌 신뢰도 <code>[RFP III-사-PER-TK-001, p.88]</code></li>
+<li><strong>Trade Agent Integration</strong>: AI 매칭·키워드·상품 특화 정보 자동 도출은 Trade Agent SFR-AP-006(추천형 Agent) + SFR-AP-009(서비스특화 Agent: 바이어/셀러 추천)로 직결 <code>[RFP III-다-SFR-AP-006/009, p.54~58]</code></li>
+</ul>
+<hr>
+<h2 id="2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</h2>
+<h3 id="2-1-논리-아키텍처-4계층-Global-Edge">2.1 논리 아키텍처 (4계층 + Global Edge)</h3>
+<div class="architecture-diagram" aria-label="tradeKorea 기능 고도화 논리 아키텍처 다이어그램">
+  <section class="arch-layer">
+    <div class="arch-head">
+      <div class="arch-title">L4 Presentation Layer</div>
+      <div class="arch-ref">Multi-Channel + Multi-Region</div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node"><strong>tradeKorea Web</strong>다국어 상품·INQ·매칭·견적/계약</div>
+      <div class="arch-node"><strong>tradeKorea Mobile</strong>Push·생체인증·행사 현장 UX</div>
+      <div class="arch-node"><strong>KOMS Admin</strong>회원·상품·INQ 운영 KPI 콘솔</div>
+    </div>
+  </section>
+  <div class="arch-flow"></div>
+  <section class="arch-layer">
+    <div class="arch-head">
+      <div class="arch-title">L3 Service Layer</div>
+      <div class="arch-ref">SFR-TK-001~003</div>
+    </div>
+    <div class="arch-nodes four">
+      <div class="arch-node"><strong>Catalog Service</strong>상품·셀러·인증·품질 게이트</div>
+      <div class="arch-node"><strong>Matching Service</strong>AI 매칭·키워드·유사도</div>
+      <div class="arch-node"><strong>INQ Lifecycle</strong>작성·송수신·이력·스코어링</div>
+      <div class="arch-node"><strong>Live Chat</strong>WebSocket·AI 초기 응답</div>
+      <div class="arch-node"><strong>Quote/Contract</strong>견적·계약·전자서명</div>
+      <div class="arch-node"><strong>e-Invoice</strong>PEPPOL 기반 인보이스</div>
+      <div class="arch-node"><strong>Member Lifecycle</strong>진성 검증·등급·클렌징</div>
+      <div class="arch-node"><strong>Field Engagement</strong>전시회·행사 연계</div>
+    </div>
+  </section>
+  <div class="arch-flow"></div>
+  <section class="arch-layer">
+    <div class="arch-head">
+      <div class="arch-title">L2 Data / AI / Search Layer</div>
+      <div class="arch-ref">CSR-TK-001~003 · SFR-AP-006/009</div>
+    </div>
+    <div class="arch-nodes">
+      <div class="arch-node"><strong>Operational DB</strong>회원·상품·INQ·계약 Master</div>
+      <div class="arch-node"><strong>Vector/Search</strong>상품 임베딩·OpenSearch·추천 검색</div>
+      <div class="arch-node"><strong>AI Scoring</strong>Inquiry 진정성·바이어/셀러 추천</div>
+      <div class="arch-node"><strong>AI 상품등록</strong>이미지·카탈로그 기반 자동 추출</div>
+      <div class="arch-node"><strong>Trade Agent</strong>추천형·서비스특화 Agent 연계</div>
+      <div class="arch-node"><strong>Trade Digital Brain</strong>거래 전주기 데이터 적재·학습</div>
+    </div>
+  </section>
+  <div class="arch-flow"></div>
+  <section class="arch-layer edge">
+    <div class="arch-head">
+      <div class="arch-title">L1 Integration / Global Edge Layer</div>
+      <div class="arch-ref">PER-TK-001 · Global SLA</div>
+    </div>
+    <div class="arch-nodes four">
+      <div class="arch-node"><strong>Akamai/CDN</strong>전 세계 정적 자원·이미지 배포</div>
+      <div class="arch-node"><strong>Multi-Region Edge</strong>KR·SG·US·EU 글로벌 라우팅</div>
+      <div class="arch-node"><strong>PKI/DocuSign</strong>전자서명·글로벌 계약 체결</div>
+      <div class="arch-node"><strong>PEPPOL Hub</strong>e-Invoice 국가별 확장</div>
+      <div class="arch-node"><strong>KYB/신용 API</strong>진성 회원 검증·신뢰도 강화</div>
+      <div class="arch-node"><strong>FCM/APNs</strong>모바일 Push·행사 알림</div>
+      <div class="arch-node"><strong>SNS Login</strong>글로벌 사용자 진입 편의</div>
+      <div class="arch-node"><strong>MCP Server</strong>Trade Agent 안전 호출</div>
+    </div>
+  </section>
+  <section class="arch-footer">
+    <div class="arch-node"><strong>Trade Agent</strong>바이어/셀러 추천·AI Inquiry Scoring</div>
+    <div class="arch-node"><strong>Trade Digital Brain</strong>회원 행동·매칭·거래 데이터 적재</div>
+    <div class="arch-node"><strong>Trade Dashboard</strong>추천 위젯·INQ 위젯·행사 알림</div>
+  </section>
+</div>
+<h3 id="2-2-내부-시스템-연계">2.2 내부 시스템 연계</h3>
+<p>RFP III-사-CSR-TK-003 + SFR-TK-001 <code>[RFP III-사, p.86~87]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>연계 대상</th><th>연계 방식</th><th>데이터/기능</th><th>활용</th></tr></thead>
+<tbody>
+<tr><td><strong>Trade Digital Brain</strong></td><td>Lakehouse + AI Data Hub</td><td>거래 전주기 데이터·매칭 이력·상품 임베딩</td><td>매칭 정확도 학습 + 글로벌 무역 분석</td></tr>
+<tr><td><strong>Trade Agent SFR-AP-006/009</strong></td><td>MCP 서버 (tradeKorea 도메인) + RAG</td><td>바이어/셀러 추천 + Inquiry Scoring + 키워드 자동 도출</td><td>SFR-TK-001 AI 기능 핵심 엔진</td></tr>
+<tr><td><strong>Trade Dashboard SFR-DS-005</strong></td><td>REST + 위젯 매니페스트</td><td>추천 바이어 위젯 + INQ 인박스 + 행사 알림</td><td>회원사 메인 화면 노출</td></tr>
+<tr><td><strong>KOMS (운영 관리)</strong></td><td>내부 API + 관리자 콘솔</td><td>회원·상품·INQ 운영 관리</td><td>운영자 화면</td></tr>
+<tr><td><strong>KITA.NET 통합로그인</strong></td><td>JWT (RFC 7519)</td><td>SSO + 회원 정보 조회</td><td>단일 인증</td></tr>
+<tr><td><strong>Notification Hub</strong></td><td>Kafka Event</td><td>INQ·매칭·행사·상태 변경 알림</td><td>다채널 발송</td></tr>
+<tr><td><strong>무역아카데미</strong></td><td>API</td><td>셀러 교육 (수출 실무·플랫폼 사용법)</td><td>회원 등급 상승 연계</td></tr>
+<tr><td><strong>수출실적증명</strong></td><td>API</td><td>셀러 수출 실적 자동 표시 (인증 마크)</td><td>진성 셀러 신뢰도 강화</td></tr>
+</tbody></table></div>
+<h3 id="2-3-외부-시스템-연계">2.3 외부 시스템 연계</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>외부 시스템</th><th>연계 방식</th><th>용도</th></tr></thead>
+<tbody>
+<tr><td>Akamai CDN (KITA 기존)</td><td>글로벌 CDN</td><td>정적 자원·이미지 글로벌 배포</td></tr>
+<tr><td>Multi-Region Edge (KT Cloud SG/US/EU)</td><td>Edge Compute</td><td>해외 사용자 응답 SLA</td></tr>
+<tr><td><strong>KYB / 신용평가 API</strong> (NICE D&amp;B, Dun &amp; Bradstreet 등)</td><td>REST API</td><td>진성 바이어/셀러 검증</td></tr>
+<tr><td><strong>PEPPOL e-Invoicing Network</strong></td><td>AS4 / OpenPEPPOL</td><td>글로벌 e-Invoicing 표준</td></tr>
+<tr><td><strong>DocuSign / Adobe Sign / 한국 KICA</strong></td><td>API</td><td>글로벌 전자서명</td></tr>
+<tr><td>FCM / APNs / 카톡 알림톡</td><td>API</td><td>Push 알림</td></tr>
+<tr><td>SNS Login (Google·LinkedIn·WeChat)</td><td>OAuth 2.0</td><td>해외 사용자 로그인 편의</td></tr>
+<tr><td>외부 매칭 DB (옵션)</td><td>API</td><td>진성 풀 확장 (Alibaba 등은 협업 X, KOMPASS 등 보조)</td></tr>
+<tr><td>환율·결제 (PayPal 등)</td><td>API</td><td>견적·인보이스 통화 변환</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</h2>
+<p>본 영역은 7개 요구사항으로 규모는 작지만 <strong>AI 매칭 정확도·거래 전주기 확장·해외 성능·진성 회원 거버넌스·모바일 현장 UX</strong>가 평가 핵심 가산점.</p>
+<h3 id="KEY-1-AI-기반-상품-등록-Inquiry-Scoring-Live-Chat-SFR-TK-001">KEY-1. AI 기반 상품 등록·Inquiry Scoring·Live Chat (SFR-TK-001)</h3>
+<p><strong>근거</strong>: <code>[RFP III-사-SFR-TK-001, p.86~87]</code></p>
+<ul>
+<li><strong>AI 기반 상품 사진·카탈로그 → 주요 스펙·상세 설명 등 필드 입력 자동화</strong></li>
+<li>검색에 활용될 <strong>상품 키워드 자동 도출</strong></li>
+<li>상품 등록 단계별 미리 보기 지원</li>
+<li>실시간 메시징 <strong>Live Chat 일원화</strong> + Direct 채팅 + 양식 고도화</li>
+<li><strong>AI 기반 초기 대응</strong> (최초 문의 작성 시)</li>
+<li>INQ 단위 채팅 히스토리 관리</li>
+<li><strong>Trade Agent 연계</strong>: AI 기반 Inquiry <strong>스코어링·진정성 판단</strong>, 키워드·상품 특화 정보 자동 도출, 검색·INQ·매칭 이력 기반 정보 연계</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>tradeKorea 영역의 핵심. AI 기능이 본 영역 평가의 50% 이상</li>
+<li>상품 등록 자동화 정확도(Vision Multimodal) + Inquiry 진정성 스코어링(허수 차단)이 본 영역 운영 KPI 결정</li>
+<li>평가표 &quot;기술 및 기능 25점&quot;의 직접 가산</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>상품 등록 자동화: <strong>Vision Multimodal LLM</strong> (GPT-4o Vision / Claude 3.5 Sonnet / EXAONE Vision) + LayoutLM(카탈로그 PDF) → 스펙·키워드·카테고리 추출</li>
+<li>키워드 도출: BGE-M3 임베딩 + 검색 로그 분석 → SEO·매칭용 키워드 자동 제안</li>
+<li>Inquiry Scoring: <strong>LightGBM</strong> 기반 분류 (특성: 회원 등급·KYB·과거 INQ 패턴·텍스트 품질·발신 패턴) → 진정성 점수(0~100)</li>
+<li>Live Chat: WebSocket + Spring Cloud Stream + AI 초기 응답(Trade Agent SFR-AP-004 대화형 Agent)</li>
+<li>다국어: 자동 번역(BGE-M3 multilingual + Trade Agent 다국어 Agent SFR-AP-009)</li>
+<li>채팅 히스토리: PostgreSQL + Object Storage (첨부 파일) + 검색용 OpenSearch</li>
+</ul>
+<hr>
+<h3 id="KEY-2-Quote-Contract-e-Invoice-거래-전주기-확장-SFR-TK-003">KEY-2. Quote-Contract-e-Invoice 거래 전주기 확장 (SFR-TK-003)</h3>
+<p><strong>근거</strong>: <code>[RFP III-사-SFR-TK-003, p.88]</code></p>
+<ul>
+<li>견적: 표준 템플릿·Cost Breakdown·견적 시뮬레이션·<strong>버전 관리</strong> + 상태 조회·이력(전송/수정/합의/만료)</li>
+<li>계약: 합의된 견적 기반 <strong>자동 생성</strong> + 표준 계약 템플릿 + <strong>독소조항 검토</strong> + <strong>전자서명</strong></li>
+<li>e-Invoice: 계약/주문 정보 기반 발행 + <strong>국가별 규제 준수</strong> + 발행·전달·보관·조회 일원화</li>
+<li>기존 모듈 연계 + 서비스 성과 KPI</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>KITA가 단순 매칭 플랫폼에서 거래 플랫폼으로 도약하는 결정적 영역</li>
+<li>e-Invoicing의 국가별 규제(PEPPOL, 미국 X12, EU EN16931, 베트남 Resolution, 사우디 ZATCA 등)는 글로벌 규제 대응의 정점</li>
+<li>전자서명·독소조항 검토는 법률 전문성 + 도메인 깊이 동시 요구</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>견적 모듈: 표준 템플릿(JSON Schema) + Cost Breakdown 트리 구조 + 시뮬레이션(통화·관세·물류 변수) + 버전 관리(Git-like Diff)</li>
+<li>계약 모듈: <strong>계약 자동 생성</strong> (견적 → 변수 치환 → 표준 템플릿) + <strong>독소조항 검토</strong> (LLM 기반 위험 조항 탐지 + Trade Agent 법률 Agent 연계)</li>
+<li>전자서명: <strong>DocuSign API</strong>(글로벌 표준) + 한국 회원사용 KICA 공인 PKI + 글로벌 호환 ESIGN/eIDAS</li>
+<li>e-Invoicing: <strong>PEPPOL Network</strong> (AS4 프로토콜, OpenPEPPOL 표준) + 국가별 어댑터(EU EN16931, 미국 X12, 베트남, 사우디 등)</li>
+<li>인보이스 보관: 5년+ 무결성 보관 (Object Storage WORM)</li>
+<li>성과 KPI: 견적 → 계약 전환율, 계약 → 인보이스 전환율, 평균 거래 사이클 타임</li>
+</ul>
+<hr>
+<h3 id="KEY-3-해외-사용자-성능-글로벌-Edge-PER-TK-001">KEY-3. 해외 사용자 성능 + 글로벌 Edge (PER-TK-001)</h3>
+<p><strong>근거</strong>: <code>[RFP III-사-PER-TK-001, p.88]</code></p>
+<ul>
+<li>현행 Web 서비스 환경(설정·리소스 경로·도메인) 최적화</li>
+<li><strong>해외 사용자 접속 지연(최초 세션 연결 등) 현상 해소</strong></li>
+<li>해외 지역별 <strong>목표 응답시간 기준 수립</strong></li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>tradeKorea는 글로벌 바이어/셀러가 사용하는 플랫폼 — 해외 응답 SLA가 사업의 본질적 SLA</li>
+<li>평가표 &quot;성능 및 품질 15점&quot;의 직접 매핑</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>글로벌 CDN: <strong>Akamai</strong>(KITA 기존) 메인 + <strong>Cloudflare</strong>(보조) → 정적 자원·이미지 전 세계 배포</li>
+<li>Multi-Region Edge: <strong>KT Cloud + AWS Global Accelerator</strong> 활용 → 동남아(SG)·미주(US-East)·유럽(EU-West)·중국(별도 ICP) 각 리전 Edge POP</li>
+<li>TLS 최적화: TLS 1.3 + 0-RTT + OCSP Stapling</li>
+<li>자원 최적화: 이미지 WebP/AVIF + Lazy Loading + Code Splitting + Brotli 압축</li>
+<li>DNS: GeoDNS (Route 53 / Akamai EdgeDNS) → 가까운 리전 자동 라우팅</li>
+<li>응답시간 SLA 정량 약속:</li>
+<li>한국 P95: 1.5초</li>
+<li>동남아·중국 P95: 2.5초</li>
+<li>미주·유럽 P95: 3초</li>
+<li>첫 세션 연결(TLS Handshake): P95 &lt; 500ms</li>
+<li>모니터링: 글로벌 Synthetic Test (Catchpoint/Pingdom) + RUM(Real User Monitoring)</li>
+</ul>
+<hr>
+<h3 id="KEY-4-회원-상품-데이터-거버넌스-진성-검증-CSR-TK-001-002">KEY-4. 회원·상품 데이터 거버넌스 + 진성 검증 (CSR-TK-001 + 002)</h3>
+<p><strong>근거</strong>: <code>[RFP III-사-CSR-TK-001, p.86]</code> + <code>[CSR-TK-002, p.86]</code></p>
+<ul>
+<li>회원 라이프사이클(가입-활성-휴면-탈퇴) + 등급 재정립 + 비활성 회원 구분(휴면·제재) + 정기 클렌징</li>
+<li>바이어/셀러 차별화 관리 기준 + 셀러 인증(Certificate)</li>
+<li>상품 데이터 품질 기준(필수/선택·최소 입력 요건) + 상태 정의(거래 가능/검수 중/장기 미활성/거래 불가) + 점진적 품질 상향</li>
+<li><strong>진성 바이어/셀러 검증 체계</strong> + 검증 정보 정의 + 관리 방안</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>컨설팅 영역 — 평가표 &quot;전략 및 방법론 15점&quot;</li>
+<li>진성 검증은 글로벌 B2B 플랫폼의 핵심 차별화. 알리바바 등 경쟁사 대비 KITA의 신뢰도 무기</li>
+<li>회원 클렌징은 회원 이탈 리스크 동반 → 거버넌스 정책의 정교함이 평가 가산</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>KYB(Know Your Business) 검증: NICE D&amp;B / Dun &amp; Bradstreet / 사업자등록번호 진위확인 API + 셀러 인증 마크 부여</li>
+<li>회원 등급 모델: 거래 실적·KITA 활동·INQ 응답률·만족도 등 종합 점수 → Bronze/Silver/Gold/Platinum 4단</li>
+<li>상품 품질 점수: 필수 항목 충족률 + 이미지 수·해상도 + 설명 풍부도 + 인증 마크 → 검색 노출 가중치</li>
+<li>데이터 클렌징: 분기 1회 자동 점검 + 휴면 90일 알림 + 1년 미접속 데이터 마스킹</li>
+<li>Argilla 기반 HITL 라벨링 (의심 회원·상품 → 운영자 검토)</li>
+<li>상품 상태 머신: 거래 가능 ↔ 검수 중 ↔ 장기 미활성 ↔ 거래 불가 자동 전이</li>
+</ul>
+<hr>
+<h3 id="KEY-5-모바일-오프라인-행사-현장-연계-SFR-TK-002">KEY-5. 모바일 + 오프라인 행사 현장 연계 (SFR-TK-002)</h3>
+<p><strong>근거</strong>: <code>[RFP III-사-SFR-TK-002, p.87]</code></p>
+<ul>
+<li>알림·개인화 (Push, 메인 편집, <strong>SNS 계정 연동</strong>, <strong>생체 인증</strong>, 다크/라이트 모드)</li>
+<li><strong>오프라인 현장 활용</strong> (행사 사전 알림 + 실시간 행사 정보 + <strong>후속 Inquiry Chat 생성</strong> + 성과 Tracking + 만족도 조사)</li>
+<li>온라인 매칭: 관심 업체 정보·INQ 수신 알림 + <strong>AI Agent 기반 대화형 셀러 검색</strong> + 추천 업체 정보 + 유사 바이어의 관심 셀러</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>모바일 재구축은 본 영역의 명문 요구</li>
+<li>오프라인 행사 연계는 KITA의 차별화 자산(전시회·박람회 운영) → 시스템화하면 강력한 경쟁 우위</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>모바일 프레임워크: <strong>React Native 0.76</strong>(Web과 코드 공유 + 한국 사례 풍부) or <strong>Flutter 3.x</strong>(성능 우위)</li>
+<li>Push: FCM + APNs + 개인화 토픽 구독</li>
+<li>SNS Login: Google · LinkedIn · WeChat (중국 시장) · KakaoTalk (한국)</li>
+<li>생체 인증: WebAuthn / Passkey + iOS Face ID / Android Fingerprint</li>
+<li>오프라인 행사: BLE 비콘 / QR 체크인 → 현장 셀러·바이어 자동 매칭 → Inquiry Chat 자동 생성</li>
+<li>AR 기능 (옵션): 카탈로그·전시 부스 AR 미리보기</li>
+<li>만족도 조사: NPS + 자유 텍스트 → Trade Agent 분석형 Agent로 인사이트 도출</li>
+</ul>
+<hr>
+<h2 id="4-추천-기술-스택">4. 추천 기술 스택</h2>
+<h3 id="4-1-계층별-기술-매트릭스">4.1 계층별 기술 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>계층</th><th>영역</th><th>추천 솔루션</th><th>라이선스</th><th>채택 사유</th></tr></thead>
+<tbody>
+<tr><td><strong>L4 Frontend</strong></td><td>tradeKorea Web</td><td><strong>Next.js 15</strong> + React 18 + TypeScript 5</td><td>MIT</td><td>SSR + 다국어(i18next) + 한국 사례</td></tr>
+<tr><td>L4 Frontend</td><td>tradeKorea Mobile</td><td><strong>React Native 0.76</strong> + Expo SDK 52 (or Flutter 3.x)</td><td>MIT</td><td>Web과 코드 공유 + 빠른 개발</td></tr>
+<tr><td>L4 Frontend</td><td>다국어</td><td>i18next + react-i18next + DeepL API (자동 번역 보조)</td><td>MIT/상용</td><td>한·영·중·일·베·스 등</td></tr>
+<tr><td>L4 Frontend</td><td>KOMS Admin</td><td>Next.js + AntD or Material UI</td><td>MIT</td><td>관리자 콘솔 표준</td></tr>
+<tr><td>L4 Frontend</td><td>시각화</td><td>Apache ECharts 5 + AntV G2</td><td>Apache 2.0</td><td>운영 KPI 차트</td></tr>
+<tr><td><strong>L3 Service</strong></td><td>Application BFF</td><td><strong>Spring Boot 3.3</strong> + Java 17 (전자정부프레임워크 호환)</td><td>Apache 2.0</td><td>공공 표준</td></tr>
+<tr><td>L3 Service</td><td>Live Chat</td><td>Spring Boot + WebSocket (STOMP) + Kafka</td><td>Apache 2.0</td><td>실시간</td></tr>
+<tr><td>L3 Service</td><td>Quote/Contract/e-Invoice</td><td>Spring Boot + 도메인별 모듈 분리</td><td>Apache 2.0</td><td>거래 전주기</td></tr>
+<tr><td>L3 Service</td><td>Member Lifecycle</td><td>Spring Boot + 상태 머신(Spring Statemachine)</td><td>Apache 2.0</td><td>라이프사이클 자동 전이</td></tr>
+<tr><td>L3 Service</td><td>INQ Scoring</td><td>Python FastAPI + LightGBM + Trade Agent MCP</td><td>MIT/Apache</td><td>ML 추론</td></tr>
+<tr><td>L3 Service</td><td>AI 상품 등록</td><td>Python FastAPI + Vision LLM (LiteLLM 경유)</td><td>MIT</td><td>Multimodal</td></tr>
+<tr><td>L3 Service</td><td>Event Service (행사)</td><td>Spring Boot + BLE Beacon SDK</td><td>Apache</td><td>오프라인 연계</td></tr>
+<tr><td><strong>L2 Data</strong></td><td>Operational DB</td><td>PostgreSQL 16 (HA + Patroni + Replica)</td><td>PostgreSQL</td><td>트랜잭션</td></tr>
+<tr><td>L2 Data</td><td>KOMS Master DB</td><td>PostgreSQL 16 (별도 cluster)</td><td>PostgreSQL</td><td>운영 분리</td></tr>
+<tr><td>L2 Data</td><td>Search</td><td><strong>OpenSearch 2.x</strong> (다국어 + 동의어)</td><td>Apache 2.0</td><td>상품·INQ 검색</td></tr>
+<tr><td>L2 Data</td><td>Vector</td><td><strong>Milvus 2.4</strong> (TDB 공유)</td><td>Apache 2.0</td><td>상품·INQ 임베딩 매칭</td></tr>
+<tr><td>L2 Data</td><td>Cache</td><td>Redis 7.x Cluster + Edge Cache(Akamai)</td><td>BSD</td><td>글로벌 응답</td></tr>
+<tr><td>L2 Data</td><td>Object Storage</td><td>MinIO + Akamai (CDN)</td><td>AGPL/상용</td><td>상품 이미지·계약 PDF·인보이스</td></tr>
+<tr><td><strong>L1 Edge</strong></td><td>Global CDN</td><td><strong>Akamai</strong> (KITA 기존) + Cloudflare(보조)</td><td>상용</td><td>정적 자원</td></tr>
+<tr><td>L1 Edge</td><td>Multi-Region Edge</td><td><strong>KT Cloud + AWS Global Accelerator</strong></td><td>상용</td><td>동적 가속</td></tr>
+<tr><td>L1 Edge</td><td>DNS</td><td>GeoDNS (Route 53 or Akamai EdgeDNS)</td><td>상용</td><td>지역 라우팅</td></tr>
+<tr><td><strong>L1 Integration</strong></td><td>API Gateway</td><td>Apache APISIX 3.x</td><td>Apache 2.0</td><td>트래픽·인증·다국어</td></tr>
+<tr><td>L1 Integration</td><td>KYB</td><td>NICE D&amp;B / Dun &amp; Bradstreet API</td><td>상용</td><td>진성 검증</td></tr>
+<tr><td>L1 Integration</td><td>전자서명</td><td><strong>DocuSign</strong>(글로벌) + KICA 공인 PKI(한국)</td><td>상용/표준</td><td>글로벌 호환</td></tr>
+<tr><td>L1 Integration</td><td>e-Invoicing</td><td><strong>PEPPOL Network</strong> (AS4) + 국가별 어댑터</td><td>표준</td><td>글로벌 표준</td></tr>
+<tr><td>L1 Integration</td><td>Trade Agent MCP</td><td>tradeKorea 도메인 MCP 서버</td><td>MIT</td><td>AI 매칭·추천</td></tr>
+<tr><td>L1 Integration</td><td>결제·환율</td><td>PayPal API + 환율 API (한국은행 ECB)</td><td>상용/공공</td><td>통화 변환</td></tr>
+<tr><td>L1 Integration</td><td>SNS Login</td><td>Google · LinkedIn · WeChat · Kakao OAuth 2.0</td><td>표준</td><td>해외 사용자</td></tr>
+<tr><td>L1 Integration</td><td>Push</td><td>FCM + APNs</td><td>SDK</td><td>Android·iOS</td></tr>
+<tr><td><strong>횡단 보안</strong></td><td>KYB·진성 검증</td><td>KYB API + 자체 검증 룰</td><td>상용</td><td>허수 차단</td></tr>
+<tr><td>횡단 보안</td><td>전자서명 무결성</td><td>PDF Adobe LTV + 서명 검증</td><td>표준</td><td>위변조 방지</td></tr>
+<tr><td>횡단 보안</td><td>권한·인증</td><td>Keycloak 26 + JWT + WebAuthn</td><td>Apache 2.0</td><td>생체인증</td></tr>
+<tr><td>횡단 보안</td><td>DDoS·WAF</td><td>Akamai Kona + ModSecurity</td><td>상용</td><td>글로벌 트래픽 보호</td></tr>
+<tr><td><strong>횡단 관찰</strong></td><td>RUM</td><td>Datadog RUM or Cloudflare Web Analytics</td><td>상용</td><td>해외 사용자 응답</td></tr>
+<tr><td>횡단 관찰</td><td>Synthetic</td><td>Catchpoint or Grafana Synthetic</td><td>상용/Apache</td><td>글로벌 모니터링</td></tr>
+<tr><td>횡단 관찰</td><td>APM</td><td>Pinpoint + OpenTelemetry</td><td>Apache</td><td>KITA 표준</td></tr>
+</tbody></table></div>
+<h3 id="4-2-인프라-배치-Multi-Region">4.2 인프라 배치 (Multi-Region)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>메인 리전</th><th>Edge 리전</th><th>사유</th></tr></thead>
+<tbody>
+<tr><td>Frontend (Next.js SSR)</td><td>KT Cloud KR</td><td>Akamai Edge (전 세계)</td><td>정적 자원 캐싱</td></tr>
+<tr><td>BFF·Service</td><td>KT Cloud KR</td><td>KT Cloud SG (보조)</td><td>동남아 사용자 가속</td></tr>
+<tr><td>OpenSearch (검색)</td><td>KT Cloud KR</td><td>Read Replica SG/US</td><td>글로벌 검색 응답</td></tr>
+<tr><td>Operational DB</td><td>Private Cloud KR</td><td>Read Replica (선택)</td><td>트랜잭션 일관성</td></tr>
+<tr><td>Object Storage</td><td>Private Cloud KR</td><td>Akamai NetStorage</td><td>상품 이미지 글로벌 배포</td></tr>
+<tr><td>AI 추론</td><td>KT Cloud GPU KR</td><td>—</td><td>데이터 주권</td></tr>
+</tbody></table></div>
+<h3 id="4-3-글로벌-성능-SLA-제안-시-약속">4.3 글로벌 성능 SLA (제안 시 약속)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>지역</th><th>P95 응답</th><th>첫 세션 (TLS)</th><th>RUM LCP</th></tr></thead>
+<tbody>
+<tr><td>한국</td><td>≤ 1.5초</td><td>&lt; 200ms</td><td>≤ 2.0초</td></tr>
+<tr><td>동남아·중국</td><td>≤ 2.5초</td><td>&lt; 400ms</td><td>≤ 3.0초</td></tr>
+<tr><td>미주·유럽</td><td>≤ 3.0초</td><td>&lt; 500ms</td><td>≤ 3.5초</td></tr>
+<tr><td>모바일 (3G/4G)</td><td>≤ 4.0초</td><td>&lt; 800ms</td><td>≤ 4.5초</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</h2>
+<h3 id="V-1-AI-Native-B2B-Matching-허수-INQ를-시스템이-먼저-거른다">V-1. AI-Native B2B Matching — &quot;허수 INQ를 시스템이 먼저 거른다&quot;</h3>
+<p><strong>고객 Pain</strong>: 해외 바이어가 보내는 Inquiry의 상당수는 스팸·광고·허수. 셀러가 모든 INQ에 대응하면 시간 낭비, 무시하면 진성 기회 손실.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>AI Inquiry Scoring (LightGBM) → 진정성 점수 표시 + 자동 필터링 임계치</li>
+<li>AI Live Chat 초기 응답 → 셀러 본격 대응 전 1차 검증</li>
+<li>키워드·상품 특화 정보 자동 도출 → 매칭 정확도 향상</li>
+<li>분기별 INQ 전환율 + 진성 비율을 발주처와 합동 리뷰</li>
+<li><strong>차별화 메시지</strong>: &quot;셀러는 진성 INQ에만 집중하고 허수는 AI가 먼저 거른다&quot;</li>
+</ul>
+<h3 id="V-2-Match-to-Cash-Lifecycle-매칭-이후-거래-전주기를-KITA가-책임진다">V-2. Match-to-Cash Lifecycle — &quot;매칭 이후 거래 전주기를 KITA가 책임진다&quot;</h3>
+<p><strong>고객 Pain</strong>: tradeKorea가 매칭만 제공하면 매칭 이후 거래는 외부 도구로 이동 → KITA에 데이터·수수료·차별화가 남지 않음.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>견적-계약-e-Invoice 모듈로 매칭 이후 거래 전주기를 단일 플랫폼화</li>
+<li>견적 자동 생성 → 계약 자동 채움 → 인보이스 자동 발행의 데이터 연속성</li>
+<li>PEPPOL 글로벌 표준 + DocuSign으로 글로벌 호환성</li>
+<li>거래 전주기 데이터를 Trade Digital Brain에 적재 → 추천 학습·국가별 통계 분석</li>
+<li><strong>차별화 메시지</strong>: &quot;KITA에서 만난 바이어와의 거래가 KITA에서 끝난다&quot;</li>
+</ul>
+<h3 id="V-3-Field-First-Mobile-오프라인-전시회를-디지털-자산으로-전환">V-3. Field-First Mobile — &quot;오프라인 전시회를 디지털 자산으로 전환&quot;</h3>
+<p><strong>고객 Pain</strong>: KITA는 다수 오프라인 전시회·박람회를 운영하지만 현장 매칭 데이터가 시스템에 축적되지 않음.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>모바일 앱 + BLE 비콘 + QR 체크인으로 현장 셀러·바이어 자동 매칭</li>
+<li>전시 부스 방문 → 자동 INQ Chat 생성 → 사후 추적</li>
+<li>만족도 조사 + Trade Agent 분석 → 행사 ROI 정량 측정</li>
+<li><strong>차별화 메시지</strong>: &quot;전시회가 끝나도 매칭은 계속된다&quot;</li>
+</ul>
+<h3 id="V-4-Global-SLA-Performance-해외-응답시간을-정량-약속한다">V-4. Global SLA Performance — &quot;해외 응답시간을 정량 약속한다&quot;</h3>
+<p><strong>고객 Pain</strong>: 글로벌 바이어가 사용하는 플랫폼인데 해외 응답시간 SLA가 정의되어 있지 않음.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>지역별 P95 SLA 정량 명시(한국 1.5초/동남아 2.5초/미주·유럽 3초)</li>
+<li>Akamai + Multi-Region Edge + GeoDNS로 글로벌 가속</li>
+<li>분기별 RUM(Real User Monitoring) 리포트 + Synthetic Test 결과 발주처 공유</li>
+<li>미달 시 자동 알림 + 우선 개선</li>
+<li><strong>차별화 메시지</strong>: &quot;글로벌 사용자에게 글로벌 SLA로 답한다&quot;</li>
+</ul>
+<h3 id="V-5-Trust-Verified-Membership-진성-회원이-곧-KITA의-차별화">V-5. Trust-Verified Membership — &quot;진성 회원이 곧 KITA의 차별화&quot;</h3>
+<p><strong>고객 Pain</strong>: 알리바바·EC21 등 글로벌 경쟁사 대비 KITA의 차별화는 &quot;공공기관의 신뢰&quot; — 그러나 진성 검증 시스템이 없으면 신뢰가 추상화됨.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>KYB 자동 검증 + 셀러 인증 마크(Verified Seller) + 수출실적 자동 표시</li>
+<li>회원 등급 재정립 (Bronze/Silver/Gold/Platinum) + 등급별 검색 노출 가중치</li>
+<li>분기 정기 클렌징 + 휴면·제재 자동 처리</li>
+<li>&quot;신뢰 점수&quot;를 회원 카드에 시각화</li>
+<li><strong>차별화 메시지</strong>: &quot;KITA tradeKorea의 셀러는 정부 인증 검증 회원이다&quot;</li>
+</ul>
+<hr>
+<h2 id="6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ID</th><th>리스크</th><th>발생 확률</th><th>영향도</th><th>심각도</th><th>완화 전략</th></tr></thead>
+<tbody>
+<tr><td><strong>R1</strong></td><td><strong>AI Inquiry Scoring 오판</strong> — 진성 INQ를 허수로 분류하거나 그 반대</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>도입 초기 6개월간 자동 차단 비활성화(점수 표시만). 골든 데이터셋 1000건+ 사전 구축. 임계치 점진 상향. HITL 운영자 검토 큐</td></tr>
+<tr><td><strong>R2</strong></td><td><strong>해외 사용자 응답 SLA 미달</strong> — 동남아·중국 ICP 미보유 시 응답 지연</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>Akamai + Multi-Region Edge + GeoDNS 사전 설계. 중국은 ICP 라이선스 대안(홍콩 Edge). RUM 일일 모니터링 + SLA 위반 시 자동 알림</td></tr>
+<tr><td><strong>R3</strong></td><td><strong>e-Invoicing 국가별 규제 불일치</strong> — PEPPOL 외 일부 국가는 자체 표준 (베트남 Resolution, 사우디 ZATCA 등)</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>PEPPOL 메인 + 국가별 어댑터 패턴 + 단계적 확장(EU/싱가포르/말레이시아 우선 → 베트남·사우디 후속). 국가별 규제 자문 컨설턴트</td></tr>
+<tr><td><strong>R4</strong></td><td><strong>전자서명 글로벌 호환성</strong> — DocuSign·KICA 간 인증서 호환 충돌</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>DocuSign(글로벌) 메인 + 한국 KICA 공인 PKI 보조. 양쪽 모두 ESIGN/eIDAS 준거. PDF LTV(Long Term Validation)로 장기 검증</td></tr>
+<tr><td><strong>R5</strong></td><td><strong>회원 클렌징 시 회원 이탈</strong> — 휴면·제재 정책 강화 시 회원 수 급감</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>정책 시행 전 사전 알림 캠페인. 휴면 회원에게 재활성 인센티브(쿠폰·포상). 클렌징 단계적 적용(1차 마스킹 → 2차 삭제)</td></tr>
+<tr><td><strong>R6</strong></td><td><strong>KOMS 연계 일정 슬립</strong> — KITA 회원 운영 시스템 연동 변경 작업 지연</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>인터페이스 설계서 사업 초기 1개월 내 동결. KOMS 측 변경 일정 사전 합의. 임시 Mock + 점진 전환</td></tr>
+<tr><td><strong>R7</strong></td><td><strong>AI 상품 등록 자동화 정확도 부족</strong> — Vision LLM이 한국 셀러 카탈로그 형식 인식 실패</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>Vision LLM + LayoutLM + 룰 기반 폴백. 셀러가 자동 추출 결과를 수정 가능. 분기별 정확도 SLA 모니터링</td></tr>
+<tr><td><strong>R8</strong></td><td><strong>Trade Agent SFR-AP-006/009 의존성</strong> — Trade Agent 일정 슬립 시 AI 매칭·추천·다국어 무력</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>통합 PMO 의존성 명시. 1차 룰 기반 매칭(키워드·카테고리) + 2차 Trade Agent 호출 2단 구조</td></tr>
+<tr><td><strong>R9</strong></td><td><strong>글로벌 결제·환율 API 장애</strong> — 견적 시뮬레이션·인보이스 환율 변환 실패</td><td>Low</td><td>Med</td><td><strong>LOW</strong></td><td>한국은행 + ECB + 자체 캐시(시간당 갱신). 장애 시 직전 환율 표시 + &quot;갱신 필요&quot; 안내</td></tr>
+<tr><td><strong>R10</strong></td><td><strong>모바일 OS 정책 변경</strong> — Apple App Tracking Transparency · Google Privacy Sandbox 등</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>추적 동의 UX 명확화. 익명 분석(Server-side) + 사용자 식별 분리. 리뷰 가이드라인 정기 모니터링</td></tr>
+<tr><td><strong>R11</strong></td><td><strong>글로벌 다국어 번역 품질</strong> — 자동 번역(DeepL·Vision LLM)의 무역 도메인 용어 오역</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>무역 도메인 용어 사전(Glossary) 구축 + DeepL Glossary 등록. 핵심 안내문은 사람 검수 필수</td></tr>
+<tr><td><strong>R12</strong></td><td><strong>WeChat·중국 시장 정책</strong> — 중국 인터넷 정책 변경 시 SNS Login·CDN 차단</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>중국 별도 도메인(.cn) + ICP 라이선스 + 홍콩 Edge POP. 정책 변경 시 즉시 폴백</td></tr>
+<tr><td><strong>R13</strong></td><td><strong>PEPPOL 가입·인증 일정</strong> — PEPPOL Network 가입 절차가 KITA 입장에서 처음일 가능성</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>OpenPEPPOL 인증 PSP(PEPPOL Service Provider) 파트너십. 인증 절차 6개월 사전 시작</td></tr>
+<tr><td><strong>R14</strong></td><td><strong>DDoS·봇 트래픽</strong> — 글로벌 노출 플랫폼 특성상 공격 위험</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>Akamai Kona Site Defender + ModSecurity + Rate Limiting. WAF 룰 정기 업데이트</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</h2>
+<h3 id="7-1-사업-본질-재정의">7.1 사업 본질 재정의</h3>
+<blockquote>tradeKorea 기능 고도화는 &quot;기존 시스템 고도화&quot;가 아니라, <strong>&quot;AI 매칭 + 거래 전주기(견적·계약·인보이스) + 글로벌 Edge 성능 + 진성 회원 거버넌스&quot;가 한 시스템으로 통합된 KITA 글로벌 무역 사업의 핵심 운영 플랫폼 재구축</strong>이다. 단순 기능 개선이 아니라 KITA가 알리바바·EC21과 경쟁할 수 있는 글로벌 B2B 플랫폼으로의 도약.</blockquote>
+<h3 id="7-2-제안-5축-메시지">7.2 제안 5축 메시지</h3>
+<ol>
+<li><strong>AI-Native B2B Matching</strong> — 허수 INQ를 시스템이 먼저 거른다</li>
+<li><strong>Match-to-Cash Lifecycle</strong> — 매칭 이후 거래 전주기를 KITA가 책임진다</li>
+<li><strong>Field-First Mobile</strong> — 오프라인 전시회를 디지털 자산으로 전환</li>
+<li><strong>Global SLA Performance</strong> — 해외 응답시간을 정량 약속한다</li>
+<li><strong>Trust-Verified Membership</strong> — 진성 회원이 KITA의 글로벌 차별화</li>
+</ol>
+<h3 id="7-3-평가표-매핑">7.3 평가표 매핑</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>평가 영역</th><th>점수</th><th>tradeKorea 영역의 매핑</th></tr></thead>
+<tbody>
+<tr><td>기술 및 기능</td><td><strong>25</strong></td><td>SFR-TK-001~003 3개 항목 + AI 매칭·거래 전주기·모바일 구체 구현</td></tr>
+<tr><td>컨설팅 (전략·방법론)</td><td><strong>15</strong></td><td>CSR-TK-001~003 3개. 회원·상품·서비스 거버넌스</td></tr>
+<tr><td>성능 및 품질</td><td><strong>15</strong></td><td>PER-TK-001 글로벌 성능 SLA</td></tr>
+<tr><td>인터페이스 (기능 내)</td><td>(배점 분포)</td><td>KYB·전자서명·PEPPOL·Trade Agent·KOMS 연계</td></tr>
+<tr><td>데이터 (기능 내)</td><td>(배점 분포)</td><td>거래 전주기 데이터·진성 검증 데이터·다국어</td></tr>
+<tr><td>프로젝트 지원</td><td><strong>20</strong></td><td>정기 클렌징·진성 검증 운영·글로벌 SLA 분기 리뷰</td></tr>
+</tbody></table></div>
+<h3 id="7-4-다른-시스템과의-시너지-매트릭스">7.4 다른 시스템과의 시너지 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>의존 / 연계 시스템</th><th>tradeKorea 활용</th></tr></thead>
+<tbody>
+<tr><td>27 Unit Agent</td><td>Trade Agent SFR-AP-006/009</td><td>바이어/셀러 추천·INQ Scoring·키워드·다국어 번역</td></tr>
+<tr><td>데이터 기반</td><td>Trade Digital Brain</td><td>거래 전주기 데이터 적재·매칭 학습·글로벌 무역 통계</td></tr>
+<tr><td>사용자 화면</td><td>Trade Dashboard SFR-DS-005 추천 위젯</td><td>추천 바이어 위젯·INQ 인박스·행사 알림</td></tr>
+<tr><td>셀러 인증</td><td>수출실적증명</td><td>셀러 인증 마크 + 수출 실적 자동 표시</td></tr>
+<tr><td>교육 연계</td><td>무역아카데미</td><td>셀러 수출 실무·플랫폼 사용법 교육</td></tr>
+<tr><td>멤버십</td><td>KITA 멤버십 (KNEX)</td><td>회원 등급 + 차등 서비스</td></tr>
+<tr><td>SSO</td><td>KITA.NET 통합로그인</td><td>단일 인증</td></tr>
+<tr><td>알림</td><td>Notification Hub</td><td>INQ·매칭·행사·계약 상태 변경</td></tr>
+</tbody></table></div>
+<blockquote><strong>단일 메시지</strong>: &quot;tradeKorea는 KITA가 글로벌 B2B 플랫폼 시장에서 차별화를 만들 수 있는 마지막 기회다. AI 매칭·거래 전주기·글로벌 SLA·진성 검증의 4축이 본 사업에서 동시에 구축되지 않으면 5년 내 알리바바 등에 종속된다.&quot;</blockquote>
+<hr>
+<h2 id="부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>RFP 절 / ID</th><th>추정 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>RFP I-4 추진범위 (tradeKorea)</td><td>p.4</td><td>B2B 매칭 강화 + 모바일 재구축 + 거래 확장</td></tr>
+<tr><td>RFP III-사 tradeKorea 기능 고도화 (7개 요구사항)</td><td>p.86~88</td><td>본문</td></tr>
+<tr><td><strong>CSR-TK-001 운영 체계 표준화</strong></td><td>p.86</td><td>회원·상품 데이터 거버넌스</td></tr>
+<tr><td>CSR-TK-002 서비스 고도화</td><td>p.86</td><td>INQ 신뢰도·진성 검증·KPI</td></tr>
+<tr><td>CSR-TK-003 상세 설계</td><td>p.87</td><td>tradeKorea·KOMS 화면·기능</td></tr>
+<tr><td><strong>SFR-TK-001 tradeKorea Web 고도화</strong></td><td>p.86~87</td><td>AI 상품 등록·Live Chat·INQ Scoring</td></tr>
+<tr><td><strong>SFR-TK-002 tradeKorea 모바일 고도화</strong></td><td>p.87</td><td>Push·생체·SNS·오프라인 행사</td></tr>
+<tr><td><strong>SFR-TK-003 수출 지원 (견적·계약·e-Invoice)</strong></td><td>p.88</td><td>거래 전주기 확장</td></tr>
+<tr><td><strong>PER-TK-001 서비스 성능 개선</strong></td><td>p.88</td><td>글로벌 응답시간 SLA</td></tr>
+<tr><td>RFP III-다-SFR-AP-006 추천형 Agent</td><td>p.54</td><td>바이어/셀러 추천</td></tr>
+<tr><td>RFP III-다-SFR-AP-009 서비스특화 Agent</td><td>p.57~58</td><td>다국어 번역·바이어/셀러 추천 도메인 Agent</td></tr>
+<tr><td>RFP III-라-SFR-DS-005 자동 추천</td><td>p.66~67</td><td>통합대시보드 추천 위젯</td></tr>
+<tr><td>RFP III-나-DAR-DP-001 데이터 표준화</td><td>p.42</td><td>TDB 표준사전과 정합</td></tr>
+</tbody></table></div>
+<h2 id="부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ISP 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>ISP p.5</td><td>14개 과제 중 ⑦ tK 기능고도화 + ⑧ tK ↔ KTNET 연계</td></tr>
+<tr><td>ISP p.5081</td><td>Seller Direct Communication Hub 구축</td></tr>
+<tr><td>ISP 본문</td><td>tradeKorea As-Is 진단 + 글로벌 무역 확장 모델</td></tr>
+</tbody></table></div>
+<h2 id="부록-C-글로벌-e-Invoicing-표준-매핑-제안-시-첨부">부록 C. 글로벌 e-Invoicing 표준 매핑 (제안 시 첨부)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>시장</th><th>표준</th><th>의무화 시점</th><th>KITA 대응</th></tr></thead>
+<tbody>
+<tr><td>EU</td><td>EN16931 + PEPPOL</td><td>2024~2030 단계 의무화</td><td>PEPPOL Network 가입 (1순위)</td></tr>
+<tr><td>싱가포르</td><td>InvoiceNow (PEPPOL 기반)</td><td>2025년 전면</td><td>PEPPOL로 충족</td></tr>
+<tr><td>말레이시아</td><td>LHDN MyInvois</td><td>2024년 단계 도입</td><td>어댑터 추가</td></tr>
+<tr><td>사우디</td><td>ZATCA</td><td>2023년 의무</td><td>별도 어댑터 + QR</td></tr>
+<tr><td>베트남</td><td>Decree 123</td><td>2022년 의무</td><td>XML 표준 어댑터</td></tr>
+<tr><td>미국</td><td>X12 EDI (전통)</td><td>자율</td><td>DocuSign + 변환</td></tr>
+<tr><td>한국</td><td>NTS 전자세금계산서</td><td>의무</td><td>국세청 API</td></tr>
+</tbody></table></div>
+<hr>
+<blockquote><strong>작성자 메모</strong>: tradeKorea 기능 고도화는 7개 요구사항으로 규모는 중간이지만 KITA가 글로벌 B2B 플랫폼으로 도약하느냐 마느냐를 결정하는 가장 영향력 큰 영역이다. AI 매칭(허수 차단)·거래 전주기(매칭→인보이스)·글로벌 SLA(해외 응답)·진성 검증(KYB) 4축 중 어느 하나라도 부실하면 알리바바·EC21 대비 차별화 무력. 평가표 100점 중 본 영역 직간접 영향 추정 18~22점. <strong>기술적 야심과 운영 현실성 양립</strong>이 본 영역의 본질적 도전.</blockquote>
+    </article>
+  </div>
+  <footer class="footer">
+    <strong>tradeKorea 기능 고도화 시스템 분석 보고서</strong><br>
+    한국무역협회 차세대 플랫폼 구축 RFP 분석 기반 · 임원 보고용 HTML
+  </footer>
+</main>
+</body>
+</html>

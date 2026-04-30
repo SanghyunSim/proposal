@@ -1,0 +1,952 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESG 규제 대응 지원 플랫폼 시스템 분석 보고서</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+  :root {
+    --navy: #102a43;
+    --blue: #1f5fbf;
+    --teal: #0f766e;
+    --gold: #b7791f;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #d8e2ef;
+    --bg: #f4f7fb;
+    --paper: #ffffff;
+    --soft: #eef5ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    line-height: 1.66;
+    letter-spacing: 0;
+  }
+  .page {
+    max-width: 1220px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.09);
+  }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 430px;
+    padding: 58px 68px 50px;
+    color: #fff;
+    background:
+      linear-gradient(135deg, rgba(16, 42, 67, 0.98), rgba(31, 95, 191, 0.9)),
+      radial-gradient(circle at 84% 22%, rgba(45, 212, 191, 0.26), transparent 36%);
+  }
+  .hero:after {
+    content: "";
+    position: absolute;
+    right: -110px;
+    bottom: -180px;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    display: inline-flex;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    max-width: 850px;
+    margin: 28px 0 14px;
+    color: #fff;
+    border: 0;
+    padding: 0;
+    font-size: 42px;
+    line-height: 1.22;
+    font-weight: 800;
+  }
+  .subtitle {
+    max-width: 850px;
+    color: rgba(255,255,255,0.86);
+    font-size: 17px;
+  }
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 42px;
+    position: relative;
+    z-index: 1;
+  }
+  .metric {
+    min-height: 92px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.11);
+  }
+  .metric span {
+    display: block;
+    color: rgba(255,255,255,0.66);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .metric strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 34px;
+    padding: 42px 68px 70px;
+  }
+  .toc {
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfdff;
+  }
+  .toc-title {
+    margin-bottom: 12px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .toc a {
+    display: block;
+    padding: 8px 0;
+    border-top: 1px solid #e9eef6;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .content h1 {
+    display: none;
+  }
+  h2 {
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--navy);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+  }
+  h2:first-child, hr + h2 {
+    margin-top: 24px;
+  }
+  h3 {
+    margin: 26px 0 10px;
+    color: #0f172a;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+  }
+  h4 {
+    margin: 20px 0 8px;
+    color: var(--blue);
+    font-size: 15px;
+    font-weight: 800;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  blockquote {
+    margin: 14px 0 18px;
+    padding: 18px 20px;
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: #f8fbff;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 800;
+  }
+  ul, ol {
+    margin: 10px 0 18px 22px;
+    padding: 0;
+  }
+  li {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+  code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eef2f7;
+    color: #174ea6;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92em;
+  }
+  .code {
+    overflow-x: auto;
+    margin: 16px 0 22px;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 12px;
+    line-height: 1.48;
+  }
+  .code code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+  .code.mermaid {
+    background: #f8fbff;
+    color: #1f2937;
+  }
+  .architecture-diagram {
+    display: grid;
+    gap: 14px;
+    margin: 18px 0 26px;
+    padding: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+  }
+  .architecture-layer {
+    padding: 16px;
+    border: 1px solid #d8e2f0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  }
+  .architecture-layer.accent {
+    border-color: rgba(37, 99, 235, 0.28);
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+  }
+  .architecture-layer.esg {
+    border-color: rgba(15, 118, 110, 0.34);
+    background: linear-gradient(135deg, #f8fffd 0%, #ecfdf5 100%);
+  }
+  .layer-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .layer-title {
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 900;
+  }
+  .layer-ref {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: right;
+  }
+  .node-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .node-grid.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .node-grid.four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .diagram-node {
+    min-height: 88px;
+    padding: 12px;
+    border: 1px solid #dbe5f2;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .diagram-node strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #0f172a;
+    font-size: 13px;
+  }
+  .diagram-node span {
+    display: block;
+    color: #475569;
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+  .integration-band {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 14px;
+    border: 1px dashed rgba(15, 118, 110, 0.45);
+    border-radius: 12px;
+    background: #f8fffd;
+  }
+  .integration-band .diagram-node {
+    min-height: 76px;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 800;
+    text-align: left;
+  }
+  th, td {
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td {
+    background: #fafcff;
+  }
+  hr {
+    height: 1px;
+    margin: 32px 0;
+    border: 0;
+    background: var(--line);
+  }
+  strong {
+    color: #0f172a;
+    font-weight: 800;
+  }
+  a {
+    color: var(--blue);
+  }
+  .footer {
+    padding: 24px 68px 34px;
+    background: #0f172a;
+    color: #cbd5e1;
+    font-size: 12px;
+  }
+  .footer strong {
+    color: #fff;
+  }
+  @media (max-width: 960px) {
+    .hero, .layout, .footer {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .layout {
+      display: block;
+    }
+    .toc {
+      position: static;
+      margin-bottom: 28px;
+    }
+    .hero-metrics {
+      grid-template-columns: 1fr;
+    }
+    .node-grid,
+    .node-grid.two,
+    .node-grid.four,
+    .integration-band {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media print {
+    body {
+      background: #fff;
+    }
+    .page {
+      box-shadow: none;
+    }
+    .toc {
+      display: none;
+    }
+    .layout {
+      display: block;
+      padding: 28px 36px;
+    }
+    h2, h3, .table-wrap, blockquote {
+      break-inside: avoid;
+    }
+  }
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.85);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    overflow-x: auto;
+  }
+  .top-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #102a43;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .top-nav a:hover,
+  .top-nav a:focus {
+    border-color: #1f5fbf;
+    background: #eef5ff;
+    color: #1f5fbf;
+    outline: none;
+  }
+  
+  .top-nav a.is-active {
+    background: #102a43;
+    border-color: #102a43;
+    color: #fff;
+  }
+  @media print {
+    .top-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav" aria-label="보고서 페이지 이동">
+  <a class="main-link" href="index.html">메인</a>
+  <a href="1_공통.html">1</a>
+  <a href="2_Trade_Digital_Brain.html">2</a>
+  <a href="3_Trade_Agent.html">3</a>
+  <a href="4_Trade_Dashboard.html">4</a>
+  <a href="5_Export_Certification.html">5</a>
+  <a href="6_Global_IP_Service.html">6</a>
+  <a href="7_tradeKorea%20Enhancement.html">7</a>
+  <a class="is-active" href="8_ESG_Compliance_Platform.html">8</a>
+  <a href="9_Academy.html">9</a>
+</nav>
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">Executive Report · RFP Analysis</div>
+    <h1>ESG 규제 대응 지원 플랫폼 시스템 분석 보고서</h1>
+    <p class="subtitle">VSME 진단, ESG 규제 모니터링, XBRL 보고서, Peer Review, AI 상담 연계를 정리한 보고서</p>
+    <div class="hero-metrics">
+      <div class="metric"><span>SYSTEM</span><strong>ESG Compliance Platform</strong></div>
+      <div class="metric"><span>CORE</span><strong>VSME Diagnostic + XBRL Report</strong></div>
+      <div class="metric"><span>FOCUS</span><strong>규제 대응·Peer Review·AI 상담</strong></div>
+      <div class="metric"><span>DELIVERABLE</span><strong>Executive HTML Report</strong></div>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#1-목표-시스템-정의">1. 목표 시스템 정의</a>
+<a href="#2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</a>
+<a href="#3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</a>
+<a href="#4-추천-기술-스택">4. 추천 기술 스택</a>
+<a href="#5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</a>
+<a href="#6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</a>
+<a href="#7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</a>
+<a href="#부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</a>
+<a href="#부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</a>
+<a href="#부록-C-글로벌-ESG-규제-매핑-제안-시-첨부">부록 C. 글로벌 ESG 규제 매핑 (제안 시 첨부)</a>
+<a href="#부록-D-ESG-진단-단계별-Action-Plan-매핑">부록 D. ESG 진단 단계별 Action Plan 매핑</a>
+    </aside>
+    <article class="content">
+      <h1>ESG 규제 대응 지원 플랫폼 시스템 분석 보고서</h1>
+<hr>
+<h2 id="1-목표-시스템-정의">1. 목표 시스템 정의</h2>
+<h3 id="1-Liner-Definition">1-Liner Definition</h3>
+<blockquote><strong>ESG 규제 대응 지원 플랫폼은 EU CSRD·CBAM 등 글로벌 ESG 규제 강화에 직면한 수출 중소기업이 EFRAG VSME(중소기업 특화 정보공개 기준)에 따라 자사의 ESG 규제대응·경영 수준을 진단(도입기·정착기·성숙기 3단)하고, 정량/정성 데이터 기반 ESG 현황 보고서(전자공시 XBRL 지원)를 자동 생성하며, 국가·업종·품목별 맞춤형 ESG 규제 정보를 모니터링·푸시받고, AI 챗봇과 1:1 전문가 상담으로 후속 지원받을 수 있는 신규 통합 플랫폼이다.</strong></blockquote>
+<h3 id="1-1-사업-배경-Why">1.1 사업 배경 (Why)</h3>
+<ul>
+<li><strong>글로벌 ESG 규제 강화</strong>: EU CSRD(기업지속가능성공시지침), CBAM(탄소국경조정), EUDR(산림훼손), 美 SEC 기후공시 등 전 세계 ESG 규제가 단기간에 다층화 → 수출 중소기업의 대응 부담 폭증 <code>[RFP I-4-아, p.4]</code></li>
+<li><strong>중소기업 ESG 인프라 부재</strong>: 대기업과 달리 중소기업은 ESG 전담 조직·전문 인력·외부 컨설팅 비용 부담이 어려움. EFRAG VSME 기준조차 인지·해석 단계에서 막힘 <code>[RFP III-아-CSR-ESG-002, p.91]</code></li>
+<li><strong>분산된 규제 정보</strong>: 국가·업종·품목별 ESG 규제 정보가 각국 정부·EU 기관·민간 컨설팅사·KOTRA 등에 분산. 수출 중소기업이 자신의 시장에 적용되는 규제를 적시에 파악하기 어려움 <code>[RFP III-아-CSR-ESG-003, p.91]</code></li>
+<li><strong>공시 포맷 표준화 압박</strong>: EU CSRD는 <strong>XBRL(Extended Business Reporting Language) 포맷 전자공시</strong>를 요구. 수출 중소기업이 XBRL 변환 도구·역량을 보유하기 어려움 <code>[RFP III-아-SFR-ESG-004, p.93]</code></li>
+<li><strong>상담 자원 한계</strong>: KITA TradePro 전문가 상담 풀에 ESG 전문가가 부족. 상담 이력 DB화 시 민감/기업 정보 보호 체계 부재 <code>[RFP III-아-SFR-ESG-005, p.94]</code> + <code>[CSR-ESG-001, p.91]</code></li>
+<li><strong>신규 도메인</strong>: 본 사업으로 처음 구축되는 영역 — KITA 기존 자산이 거의 없음 <code>[RFP I-4, p.4]</code></li>
+</ul>
+<h3 id="1-2-구축-목적-What">1.2 구축 목적 (What)</h3>
+<p>RFP I-4 추진범위 여덟째 항목 <code>[RFP I-4, p.4]</code>:</p>
+<blockquote>&quot;본 과제는 글로벌 ESG 규제 강화(EU CSRD, CBAM 등)에 따른 수출 중소기업의 규제 대응 역량 제고를 위한 ESG 규제 대응 지원 플랫폼 구축. EU 자발적 ESG 정보공개 기준(VSME) 기반 수준/Readiness 진단 서비스 설계 및 구축(도입기/안정기/성숙기). ESG경영 현황보고서(약식 ESG 보고서) 생성 기능 구축(전자공시 포맷 XBRL 지원). 등록/제공 정보 기반 업종/품목/국가별 맞춤형 ESG 규제/정책/가이드 정보 제공. 학습/축적된 정보 기반 AI 상담 후 추가지원 필요 시 1:1 상담 연계&quot;</blockquote>
+<p>CSR-ESG-001 명문 <code>[RFP III-아-CSR-ESG-001, p.91]</code>:</p>
+<blockquote>&quot;외부 전문기관 협력체계 구축 — 맞춤형 정보 제공을 위한 외부 콘텐츠 연계 모델 및 프로세스 수립. 데이터 관리 및 연계 체계 설계 — 수출 국가, 업종, 품목별 ESG 규제 데이터 수집 및 관리 체계 설계&quot;</blockquote>
+<h3 id="1-3-최종-지향점-Goal">1.3 최종 지향점 (Goal)</h3>
+<ul>
+<li><strong>VSME-Aligned Self-Diagnostic</strong>: EFRAG VSME 기준의 정량·정성 평가 문항을 인터랙티브 단계형(선행 → 후행 추가 문항)으로 설계 + 도입기/정착기/성숙기 3단 자동 판정 <code>[RFP III-아-CSR-ESG-002, p.91]</code></li>
+<li><strong>Auto-Generated ESG Report (XBRL Ready)</strong>: 진단 입력값 기반 ESG 현황 보고서 자동 생성(Fact Book + 서술형) + PDF + 편집 가능 파일 + <strong>XBRL 전자공시 포맷</strong> 동시 출력 <code>[RFP III-아-SFR-ESG-004, p.93]</code></li>
+<li><strong>Country×Industry×Product Personalization</strong>: 회원사 수출 국가·업종·품목 + 사용자 설정 키워드 기반 일일 ESG 규제 동향 자동 큐레이션 <code>[RFP III-아-CSR-ESG-003, p.91]</code></li>
+<li><strong>Peer Review Benchmarking</strong>: S&amp;P CSA·MSCI·SASB 중대성 기준에 따라 동종업계 진단 데이터 기반 상대 평가 + 단계별 Action Plan 자동 추천 <code>[RFP III-아-SFR-ESG-003, p.92~93]</code></li>
+<li><strong>Trade Agent ESG Specialist</strong>: Trade Agent SFR-AP-009 도메인 11 중 [ESG] 전문 Agent와 결합 → AI 상담·보고서 작성·1:1 전문가 연계 <code>[RFP III-다-SFR-AP-009, p.57~58]</code></li>
+</ul>
+<hr>
+<h2 id="2-시스템-구성-및-연계-구조">2. 시스템 구성 및 연계 구조</h2>
+<h3 id="2-1-논리-아키텍처-4계층">2.1 논리 아키텍처 (4계층)</h3>
+<div class="architecture-diagram" aria-label="ESG Compliance Platform 논리 아키텍처 다이어그램">
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L4 Presentation Layer</div>
+      <div class="layer-ref">SFR-ESG-001~005 · Dashboard Widget</div>
+    </div>
+    <div class="node-grid two">
+      <div class="diagram-node"><strong>ESG 진단·지원 페이지</strong><span>인입/랜딩/진단/보고서<br>맞춤형 정보 · 상담 · 후속 지원</span></div>
+      <div class="diagram-node"><strong>통합대시보드 ESG 위젯</strong><span>일일 ESG 동향<br>진단 점수 · BM · 규제 알림</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer accent">
+    <div class="layer-head">
+      <div class="layer-title">L3 ESG Service Layer</div>
+      <div class="layer-ref">Diagnostic · Report · Personalization · Counseling</div>
+    </div>
+    <div class="node-grid">
+      <div class="diagram-node"><strong>Diagnostic Engine</strong><span>VSME 단계형 문항<br>도입/정착/성숙기 판정</span></div>
+      <div class="diagram-node"><strong>Report Generator</strong><span>Fact Book + 서술형<br>PDF · 편집파일 · XBRL 출력</span></div>
+      <div class="diagram-node"><strong>Personalization &amp; Recommendation</strong><span>국가 · 업종 · 품목<br>회원사 키워드 기반 추천</span></div>
+      <div class="diagram-node"><strong>Peer Review Engine</strong><span>동종업계 익명 비교<br>S&amp;P CSA · MSCI · SASB 중대성</span></div>
+      <div class="diagram-node"><strong>Regulation Monitor</strong><span>다국가 · 다국어 규제 수집<br>Daily 콘텐츠 큐레이션</span></div>
+      <div class="diagram-node"><strong>Counseling Hub</strong><span>AI 상담 · 1:1 연계<br>FAQ DB · 전문가 Pool</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer esg">
+    <div class="layer-head">
+      <div class="layer-title">L2 Data / AI Layer</div>
+      <div class="layer-ref">Diagnostic DB · Regulation DB · XBRL · ESG Agent</div>
+    </div>
+    <div class="node-grid">
+      <div class="diagram-node"><strong>Diagnostic DB</strong><span>회원사 진단 이력<br>익명화 통계 · Peer Review 기반</span></div>
+      <div class="diagram-node"><strong>Regulation DB</strong><span>국가 · 업종 · 품목<br>CBAM · CSRD · EUDR · SEC 등</span></div>
+      <div class="diagram-node"><strong>Best Practice DB</strong><span>BP/BM 우수기업 사례<br>동종업계 평균 · 개선가이드</span></div>
+      <div class="diagram-node"><strong>XBRL Engine</strong><span>Arelle 기반<br>ESRS/VSME 매핑 · 검증</span></div>
+      <div class="diagram-node"><strong>Trade Agent ESG Specialist</strong><span>SFR-AP-009 ESG Agent<br>상담 · 보고서 작성 지원</span></div>
+      <div class="diagram-node"><strong>Counseling Log Store</strong><span>PII · 기업정보 마스킹<br>WORM 보관 · 감사 대응</span></div>
+    </div>
+  </div>
+
+  <div class="architecture-layer">
+    <div class="layer-head">
+      <div class="layer-title">L1 Integration Layer</div>
+      <div class="layer-ref">Global ESG Channels · Consulting · Notification</div>
+    </div>
+    <div class="node-grid four">
+      <div class="diagram-node"><strong>EU 공식 채널</strong><span>Official Journal · ESMA · EBA<br>EFRAG VSME/ESRS 가이드</span></div>
+      <div class="diagram-node"><strong>미국/한국 정책 채널</strong><span>SEC 기후공시 · CBAM<br>환경부 · 금융위 · 산업부</span></div>
+      <div class="diagram-node"><strong>ESG 표준/평가</strong><span>S&amp;P CSA · MSCI · SASB<br>외부 ESG 평가사 옵션</span></div>
+      <div class="diagram-node"><strong>전문기관/상담</strong><span>DNV · BV · BSI 등<br>TradePro 1:1 전문가 Pool</span></div>
+    </div>
+  </div>
+
+  <div class="integration-band" aria-label="내부 핵심 연계">
+    <div class="diagram-node"><strong>Trade Agent SFR-AP-009</strong><span>ESG 전문 Agent<br>AI 상담 · 보고서 작성 지원</span></div>
+    <div class="diagram-node"><strong>Trade Digital Brain</strong><span>진단 이력 · 규제 데이터 적재<br>회원사 수출 국가/업종 마스터</span></div>
+    <div class="diagram-node"><strong>Trade Dashboard</strong><span>SFR-ESG-002 위젯<br>일일 큐레이션 카드 · 진단 점수</span></div>
+  </div>
+</div>
+<h3 id="2-2-내부-시스템-연계">2.2 내부 시스템 연계</h3>
+<p>RFP III-아 + 통합대시보드/Trade Agent <code>[RFP III-아, p.91~94]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>연계 대상</th><th>연계 방식</th><th>데이터/기능</th><th>활용</th></tr></thead>
+<tbody>
+<tr><td><strong>Trade Digital Brain</strong></td><td>Lakehouse + AI Data Hub</td><td>회원사 마스터·진단 이력·규제 데이터·익명화 통계</td><td>Peer Review·추천·SSOT</td></tr>
+<tr><td><strong>Trade Agent SFR-AP-009 (ESG)</strong></td><td>MCP 서버 (ESG 도메인) + RAG</td><td>ESG 전문 Agent (상담·보고서 작성·진단 안내)</td><td>SFR-ESG-005 AI 상담</td></tr>
+<tr><td><strong>Trade Dashboard SFR-ESG-002</strong></td><td>REST + 위젯 매니페스트</td><td>일일 ESG 동향·진단 점수·규제 알림 위젯</td><td>회원사 메인 화면</td></tr>
+<tr><td><strong>TradePro 1:1 상담</strong></td><td>API + 전문가 Pool 신규</td><td>ESG 전문가 상담 예약·이력</td><td>SFR-ESG-005 1:1 연계</td></tr>
+<tr><td><strong>무역아카데미</strong></td><td>API</td><td>ESG 기초 교육·VSME 학습 콘텐츠</td><td>도입기 회원사 학습 연계</td></tr>
+<tr><td><strong>KITA 멤버십 (KNEX)</strong></td><td>API</td><td>회원사 식별·등급별 차등 서비스</td><td>진단 가능 횟수·심화 보고서 차등</td></tr>
+<tr><td><strong>KITA.NET 통합로그인</strong></td><td>JWT</td><td>SSO + 회원 정보 조회</td><td>단일 인증</td></tr>
+<tr><td><strong>Notification Hub</strong></td><td>Kafka Event</td><td>규제 변경·공시 마감·진단 안내</td><td>카톡·이메일 알림</td></tr>
+</tbody></table></div>
+<h3 id="2-3-외부-시스템-연계-다국가-다채널">2.3 외부 시스템 연계 (다국가 다채널)</h3>
+<p>RFP III-아-CSR-ESG-001 + CSR-ESG-003 명문 <code>[RFP III-아, p.91]</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>외부 채널</th><th>데이터</th><th>연계 방식</th><th>용도</th></tr></thead>
+<tbody>
+<tr><td><strong>EFRAG (EU)</strong></td><td>VSME 기준·CSRD ESRS·기준 변경</td><td>공식 발행물 RSS + 수동 큐레이션</td><td>진단 문항·보고서 표준</td></tr>
+<tr><td><strong>EU Official Journal / ESMA / EBA</strong></td><td>EU 법령·시행 가이드</td><td>RSS·EUR-Lex API</td><td>일일 모니터링</td></tr>
+<tr><td><strong>CBAM Trade System (EU)</strong></td><td>탄소국경조정 데이터</td><td>공식 API (옵션)</td><td>철강·시멘트·알루미늄 등</td></tr>
+<tr><td><strong>美 SEC 기후공시</strong></td><td>공시 양식·시행일</td><td>SEC EDGAR</td><td>미주 수출 회원사</td></tr>
+<tr><td><strong>한국 환경부 / 금융위 / 산업부 / KISA</strong></td><td>한국 ESG 정책·CBAM·녹색분류체계</td><td>RSS·공공데이터포털 API</td><td>한국 정책</td></tr>
+<tr><td><strong>KOTRA·무역협회 IR</strong></td><td>국가·업종별 ESG 동향 보고서</td><td>API or 공유</td><td>일반/종합 정보</td></tr>
+<tr><td><strong>외부 전문 컨설팅·인증기관</strong> (DNV·BV·BSI 등)</td><td>ESG 실사·검증 서비스</td><td>Deeplink</td><td>성숙기 회원사 연결</td></tr>
+<tr><td><strong>S&amp;P CSA·MSCI·SASB</strong></td><td>중대성 기준 매핑</td><td>공개 표준 (라이선스 검토)</td><td>Peer Review 기준</td></tr>
+<tr><td><strong>외부 ESG 평가사</strong> (옵션)</td><td>회원사 외부 점수</td><td>API</td><td>진단 보완</td></tr>
+<tr><td><strong>카카오 알림톡 + Email</strong></td><td>알림</td><td>API</td><td>규제 변경·공시 마감</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="3-핵심-요구사항-및-필수-고려사항-TOP-5">3. 핵심 요구사항 및 필수 고려사항 TOP 5</h2>
+<p>본 영역은 8개 요구사항. <strong>VSME 진단 + XBRL 보고서 + 다국가 규제 모니터링 + Peer Review + 외부 전문기관 연계</strong>가 평가표 &quot;기능 25 + 컨설팅 15 + 데이터&quot; 직접 가산.</p>
+<h3 id="KEY-1-VSME-기반-ESG-수준-진단-단계형-문항-CSR-ESG-002-SFR-ESG-003">KEY-1. VSME 기반 ESG 수준 진단 + 단계형 문항 (CSR-ESG-002 + SFR-ESG-003)</h3>
+<p><strong>근거</strong>: <code>[RFP III-아-CSR-ESG-002, p.91]</code> + <code>[SFR-ESG-003, p.92~93]</code></p>
+<ul>
+<li>EFRAG VSME(중소기업 특화 정보공개 기준) 활용한 ESG경영 + ESG규제 대응수준 진단 구조 설계 (Interactive)</li>
+<li><strong>선행 기본 문항 응답 결과에 따른 후행 추가 문항 답변 가능한 흐름의 단계적 문항 설계</strong> (정량 → 정성 → 서술형 3차)</li>
+<li>도입기·정착기·성숙기 3단 판정 (단계별 최소 만족요구 문항 설계 또는 점수 기준 구간)</li>
+<li><strong>S&amp;P CSA·MSCI·SASB 중대성(Materiality) 기준 → 중점관리 항목 집중 상대 평가</strong> (Peer Review)</li>
+<li>평가결과보고서(PDF) 생성</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>본 영역의 핵심 기능. ESG 도메인 전문성이 SI 일반 영역과 가장 거리가 먼 영역</li>
+<li>VSME는 2024년 EFRAG 발표·2025~2026년 단계 적용 — KITA가 한국 최초 VSME 진단 시스템 구축자가 될 가능성</li>
+<li>평가표 &quot;기술 및 기능 25점&quot; + &quot;컨설팅 15점&quot; 동시 가산</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>인터랙티브 폼 엔진: <strong>SurveyJS 1.x</strong> + 자체 단계형 분기 로직 (Decision Tree YAML 정의)</li>
+<li>VSME 매핑 라이브러리: 영역(E·S·G) × 주제 × 정량/정성/서술 3단 문항 카탈로그 (DB 마스터)</li>
+<li>점수 계산: 정량 가중치 + 정성 룰 + 서술 LLM 평가(NLP 일관성·구체성) → 종합 점수</li>
+<li>단계 판정: 룰 기반 임계치 (도입기 0~40 / 정착기 41~70 / 성숙기 71~100, 발주처 협의 확정)</li>
+<li>Peer Review: 동종업계 진단 데이터 익명화(k-익명성 k≥5) + 클러스터링 → 백분위 표시</li>
+<li>평가결과보고서: 영역별 점수·BP·BM·개선가이드 → PDF 자동 생성</li>
+<li>진단 데이터 DB: PostgreSQL + 변경 이력 + 5년 보관</li>
+</ul>
+<hr>
+<h3 id="KEY-2-ESG-보고서-자동-생성-XBRL-전자공시-SFR-ESG-004">KEY-2. ESG 보고서 자동 생성 + XBRL 전자공시 (SFR-ESG-004)</h3>
+<p><strong>근거</strong>: <code>[RFP III-아-SFR-ESG-004, p.93]</code></p>
+<ul>
+<li>수준진단 시 입력 정보 기반 ESG 현황 보고서 자동 생성</li>
+<li>정량(수치) Fact Book + 정성(서술) 영역별 정리</li>
+<li>ESG 현황 보고서 기본 템플릿 (표지·목차·구성)</li>
+<li>PDF + 편집 가능 파일 추출</li>
+<li><strong>전자공시를 위한 XBRL 포맷 전환/추출</strong></li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★★</p>
+<ul>
+<li>XBRL은 회계·공시 분야 표준이지만 한국 SI 대부분에 생소한 포맷</li>
+<li>EU CSRD ESRS는 XBRL 분류체계(Taxonomy)를 제공하며, 변환 정확도가 공시 수용성을 결정</li>
+<li>평가표 &quot;기능 25점&quot; 직접 매핑 + 평가위원의 깊이 질문 가능성 매우 높음</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>보고서 생성 엔진: <strong>WeasyPrint</strong> or <strong>Puppeteer</strong> (HTML→PDF) + 템플릿 엔진 (Jinja2)</li>
+<li>편집 가능 파일: docx (python-docx) + Markdown</li>
+<li><strong>XBRL 엔진</strong>: <strong>Arelle</strong> (Python, XBRL 표준 오픈소스 처리기) + <strong>EFRAG ESRS Taxonomy 매핑 테이블</strong></li>
+<li>매핑 정확도: 정량 데이터(GHG 배출량·매출 등) → XBRL 컨셉 자동 매칭 + 검증(Calc Linkbase)</li>
+<li>보고서 변경 이력: 진단 회차별 보고서 비교 + 개선 추이 그래프</li>
+<li>디지털 서명(옵션): 보고서 PDF에 회원사 인증 + 위·변조 방지</li>
+<li>AI 보조: Trade Agent ESG Specialist가 서술형 영역 초안 작성 (회원사 검토 후 확정)</li>
+</ul>
+<hr>
+<h3 id="KEY-3-국가-업종-품목별-맞춤형-규제-정보-CSR-ESG-003-SFR-ESG-002-위젯">KEY-3. 국가·업종·품목별 맞춤형 규제 정보 (CSR-ESG-003 + SFR-ESG-002 위젯)</h3>
+<p><strong>근거</strong>: <code>[RFP III-아-CSR-ESG-003, p.91]</code></p>
+<ul>
+<li>사용자 니즈/특성 맞춤형 메뉴 (서비스별·기업 특성별)</li>
+<li>일반/종합 정보 (대시보드) — EU CSRD ESRS 개정 등</li>
+<li><strong>모니터링 필요 국가/채널 정보 리스트업 + 형식·비용·수집주기 등 데이터 속성 상세 정의 (크롤링 솔루션 활용)</strong></li>
+<li>개인화 메뉴 — 회원사 기본/입력 정보 기반 맞춤 표시</li>
+<li><strong>사용자 설정(정보채널·키워드) 기반 Daily 콘텐츠 업데이트</strong> (예: 유럽 내 독일 시장 친환경 지침/법규 제·개정 소식)</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>다국가·다국어 ESG 규제 정보 수집은 도메인 전문성 + 기술 운영 부담 모두 큼</li>
+<li>평가표 &quot;데이터 요구사항&quot;의 직간접 매핑</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>모니터링 채널 카탈로그: 국가별(EU·미국·중국·일본·동남아) × 영역별(환경·인권·공급망) × 채널 유형(공식 RSS·관보·법령 사이트·산업협회) → ~100~200개 채널 마스터 정의</li>
+<li>크롤링 엔진: <strong>Apache Airflow + Scrapy + Playwright Crawler</strong> (JS 렌더링) + <strong>Trafilatura</strong>(HTML 본문 추출)</li>
+<li>다국어 처리: 자동 번역(DeepL Pro / Google Translate) + 핵심 안내문은 사람 검수</li>
+<li>분류·태깅: BGE-M3 임베딩 + LLM 분류기 (영역·국가·산업 자동 태깅)</li>
+<li>개인화: 회원사 수출 국가·업종·품목 + 사용자 설정 키워드 → 매일 Top N 큐레이션</li>
+<li>알림: 카톡 알림톡(중요)·이메일(요약 다이제스트)·App Push(긴급)</li>
+<li>저작권 관리: 외부 콘텐츠 라이선스 메타 + 발행 기관 명시 + Deeplink 우선</li>
+</ul>
+<hr>
+<h3 id="KEY-4-AI-상담-1-1-전문가-연계-민감정보-마스킹-SFR-ESG-005-CSR-ESG-001">KEY-4. AI 상담 + 1:1 전문가 연계 + 민감정보 마스킹 (SFR-ESG-005 + CSR-ESG-001)</h3>
+<p><strong>근거</strong>: <code>[RFP III-아-SFR-ESG-005, p.94]</code> + <code>[CSR-ESG-001, p.91]</code></p>
+<ul>
+<li>AI 문의/상담: 회원사 기본/입력 정보 기반 최신 동향/정보 반영한 챗봇 상담 (Trade Agent 기능 반영)</li>
+<li>1:1 상담 (TradePro 내 기존 메뉴 연결): 전문가 유선상담을 위한 <strong>전문가 Pool 카테고리 신규 구성</strong> (대분류: 사업장/제품/공급망 규제, 소분류: 공시/온실가스/자원순환/실사 등)</li>
+<li>상담이력 DB 조회 (FAQ): 국가별·업종별·품목별 비즈니스 특성 네비게이션</li>
+<li><strong>1:1 상담이력 DB화 시 민감/개인정보 마스킹</strong> — 음성/Text/이미지 등 비/정형 데이터 내 개인/기업/사건 식별 정보 마스킹</li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>AI 상담의 정확도 + 1:1 전문가 신규 Pool 구성 + 민감정보 보호의 3중 도전</li>
+<li>ESG 도메인 RAG 학습 데이터 부족(신규 영역) 리스크</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>AI 상담: Trade Agent <strong>SFR-AP-009 ESG Specialist Agent</strong> + RAG (VSME 매뉴얼 + 외부 규제 + 진단 이력 + BP)</li>
+<li>출처 인용: 모든 AI 응답에 출처 링크 + Faithfulness 임계치 미달 시 차단 + &quot;전문가 상담 안내&quot;</li>
+<li>1:1 전문가 Pool: TradePro 신규 카테고리 (사업장/제품/공급망 규제 × 공시/온실가스/자원순환/실사) — 사업 초기 ESG 전문가 N명 영입 (KITA 행정 협조)</li>
+<li>상담이력 DB: PostgreSQL + Object Storage(녹취 STT 텍스트) + Microsoft Presidio (PII 마스킹) + 기업명·사건정보 비식별</li>
+<li>FAQ: ClickHouse(상담 메타) + 자동 클러스터링 → 빈출 질문 자동 추출 + 운영자 검수 후 공개</li>
+<li>WORM 보관: 상담 원본 5년 + 마스킹본 영구</li>
+</ul>
+<hr>
+<h3 id="KEY-5-외부-전문기관-협력-데이터-거버넌스-CSR-ESG-001">KEY-5. 외부 전문기관 협력 + 데이터 거버넌스 (CSR-ESG-001)</h3>
+<p><strong>근거</strong>: <code>[RFP III-아-CSR-ESG-001, p.91]</code></p>
+<ul>
+<li>ESG규제 대응 진단 + 맞춤형 정보제공 운영체계 정립 (목적·범위·역할·거버넌스·프로세스·서비스 정책)</li>
+<li><strong>외부 전문기관 협력체계 구축</strong> — 외부 콘텐츠 연계 모델 + 프로세스</li>
+<li>데이터 관리·연계 체계 설계 — 수출 국가·업종·품목별 ESG 규제 데이터 수집·관리 + 외부 ESG 지원 플랫폼 연계 + <strong>민감정보 마스킹 처리체계</strong></li>
+</ul>
+<p><strong>난이도/배점 추정</strong>: ★★★★☆</p>
+<ul>
+<li>컨설팅 영역 — 평가표 &quot;전략 및 방법론 15점&quot;</li>
+<li>ESG는 신규 영역이라 외부 전문기관 의존도가 매우 높음</li>
+</ul>
+<p><strong>구현 핵심 포인트</strong>:</p>
+<ul>
+<li>외부 전문기관 후보: DNV·BV·BSI·SGS(글로벌 인증), KSA·KESI(한국 ESG), 4대 회계법인 ESG 자문, 한국지속가능경영원</li>
+<li>협력 모델: API 연계 / Deeplink / 콘텐츠 공동 개발 / 1:1 상담 풀 / 전문가 매칭</li>
+<li>거버넌스: KITA + 외부 기관 합동 ESG 자문 협의체 (분기) + 데이터 정합성 검증 SLA</li>
+<li>민감정보 마스킹 표준: Presidio + 한국어 PII + 기업명/대표자명/계약 금액 마스킹 정책 (텍스트 치환·범주화·암호화·삭제)</li>
+<li>운영 자산 인계: 외부 채널 카탈로그·진단 문항 사전·BP DB·전문가 Pool 운영 매뉴얼</li>
+</ul>
+<hr>
+<h2 id="4-추천-기술-스택">4. 추천 기술 스택</h2>
+<h3 id="4-1-계층별-기술-매트릭스">4.1 계층별 기술 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>계층</th><th>영역</th><th>추천 솔루션</th><th>라이선스</th><th>채택 사유</th></tr></thead>
+<tbody>
+<tr><td><strong>L4 Frontend</strong></td><td>ESG 진단·지원 페이지</td><td>Next.js 15 + React 18 + TypeScript 5</td><td>MIT</td><td>KITA 통합 UX</td></tr>
+<tr><td>L4 Frontend</td><td>인터랙티브 진단 폼</td><td><strong>SurveyJS 1.x</strong> + Decision Tree YAML</td><td>MIT/상용</td><td>단계형 문항 표준</td></tr>
+<tr><td>L4 Frontend</td><td>시각화</td><td>Apache ECharts 5 + AntV G2 (Peer Review·점수)</td><td>Apache 2.0</td><td>비교·추이 차트</td></tr>
+<tr><td>L4 Frontend</td><td>다국어</td><td>i18next + DeepL Pro API</td><td>MIT/상용</td><td>한·영·중·일</td></tr>
+<tr><td><strong>L3 Service</strong></td><td>Application BFF</td><td>Spring Boot 3.3 + Java 17 (전자정부프레임워크)</td><td>Apache 2.0</td><td>공공 표준</td></tr>
+<tr><td>L3 Service</td><td>Diagnostic Engine</td><td>Python FastAPI + Drools or YAML 룰 엔진</td><td>MIT/Apache</td><td>점수·단계 판정</td></tr>
+<tr><td>L3 Service</td><td>Report Generator</td><td>Python + <strong>WeasyPrint</strong> + Jinja2 + python-docx</td><td>LGPL/MIT/BSD</td><td>PDF + docx</td></tr>
+<tr><td>L3 Service</td><td>XBRL Engine</td><td><strong>Arelle</strong> (Python) + EFRAG ESRS Taxonomy</td><td>Apache 2.0</td><td>XBRL 표준 처리</td></tr>
+<tr><td>L3 Service</td><td>Regulation Monitor</td><td>Python + <strong>Apache Airflow 2.10</strong> + <strong>Scrapy</strong> + <strong>Playwright Crawler</strong></td><td>Apache/BSD</td><td>다국가 크롤링</td></tr>
+<tr><td>L3 Service</td><td>Personalization</td><td>Python FastAPI + 룰 매칭</td><td>MIT</td><td>회원사 맞춤</td></tr>
+<tr><td>L3 Service</td><td>Peer Review</td><td>Python + scikit-learn (k-익명성·클러스터링)</td><td>BSD</td><td>동종업계 비교</td></tr>
+<tr><td>L3 Service</td><td>Counseling Hub</td><td>Spring Boot + WebSocket + Trade Agent MCP</td><td>Apache 2.0</td><td>AI + 1:1</td></tr>
+<tr><td><strong>L2 Data</strong></td><td>Operational DB</td><td>PostgreSQL 16 (HA + Patroni)</td><td>PostgreSQL</td><td>진단·상담·회원사</td></tr>
+<tr><td>L2 Data</td><td>Diagnostic History DB</td><td>PostgreSQL + 익명화 View</td><td>PostgreSQL</td><td>5년 보관 + Peer Review</td></tr>
+<tr><td>L2 Data</td><td>Regulation DB</td><td>PostgreSQL + OpenSearch (전문 검색)</td><td>PG/Apache</td><td>다국가·다국어</td></tr>
+<tr><td>L2 Data</td><td>Best Practice DB</td><td>PostgreSQL + Object Storage (사례 첨부)</td><td>PG/MIT</td><td>BP·BM 사례</td></tr>
+<tr><td>L2 Data</td><td>Counseling Log Store</td><td>PostgreSQL + Object Storage (WORM)</td><td>PG/MIT</td><td>5년 + 마스킹</td></tr>
+<tr><td>L2 Data</td><td>Vector</td><td><strong>Milvus 2.4</strong> (TDB 공유)</td><td>Apache 2.0</td><td>RAG·유사 사례 검색</td></tr>
+<tr><td>L2 Data</td><td>Cache</td><td>Redis 7.x</td><td>BSD</td><td>진단 세션·일일 큐레이션</td></tr>
+<tr><td><strong>L2 AI</strong></td><td>Embedding</td><td>BGE-M3 + KURE-v1 (한국어)</td><td>Apache 2.0</td><td>다국어 + 한국어</td></tr>
+<tr><td>L2 AI</td><td>LLM 평가</td><td>Trade Agent SFR-AP-009 ESG Agent (LiteLLM 경유)</td><td>—</td><td>모델 추상화</td></tr>
+<tr><td>L2 AI</td><td>다국어 번역</td><td>DeepL Pro + LLM 보조</td><td>상용</td><td>규제 텍스트</td></tr>
+<tr><td>L2 AI</td><td>NLP 분류</td><td>spaCy + transformers (영역·국가 태깅)</td><td>MIT/Apache</td><td>자동 분류</td></tr>
+<tr><td><strong>L1 Integration</strong></td><td>API Gateway</td><td>Apache APISIX 3.x (TDB 공유)</td><td>Apache 2.0</td><td>인증·트래픽</td></tr>
+<tr><td>L1 Integration</td><td>Crawling 채널</td><td>RSS Reader + EUR-Lex API + 공공데이터포털</td><td>다양</td><td>다국가</td></tr>
+<tr><td>L1 Integration</td><td>XBRL 검증</td><td>Arelle Validation + EFRAG Taxonomy</td><td>Apache</td><td>매핑 정확도</td></tr>
+<tr><td>L1 Integration</td><td>외부 전문기관</td><td>API + Deeplink + 컨설팅 매칭</td><td>협약</td><td>DNV·BV 등</td></tr>
+<tr><td>L1 Integration</td><td>TradePro 1:1</td><td>내부 API + 전문가 Pool 신규</td><td>—</td><td>1:1 상담</td></tr>
+<tr><td>L1 Integration</td><td>Notification</td><td>Kafka + 카톡 알림톡 + Email</td><td>Apache</td><td>알림</td></tr>
+<tr><td><strong>횡단 보안</strong></td><td>PII / 기업정보 마스킹</td><td>Microsoft Presidio + spaCy ko_core_news + 자체 룰</td><td>MIT</td><td>한국어 PII + 기업명</td></tr>
+<tr><td>횡단 보안</td><td>진단 데이터 익명화</td><td>k-익명성 + l-다양성 (Mondrian 알고리즘)</td><td>표준</td><td>Peer Review</td></tr>
+<tr><td>횡단 보안</td><td>권한</td><td>Keycloak 26 + RBAC + RLS (회원/비회원·등급)</td><td>Apache 2.0</td><td>차등</td></tr>
+<tr><td>횡단 보안</td><td>보고서 무결성</td><td>PDF 디지털 서명 + Adobe LTV</td><td>표준</td><td>위변조 방지</td></tr>
+<tr><td><strong>횡단 관찰</strong></td><td>모니터링</td><td>Prometheus + Grafana</td><td>Apache 2.0</td><td>표준</td></tr>
+<tr><td>횡단 관찰</td><td>외부 채널 SLA</td><td>Synthetic Test + 크롤링 성공률</td><td>Apache</td><td>외부 의존 가시화</td></tr>
+<tr><td>횡단 관찰</td><td>LLM Trace</td><td>Langfuse (Trade Agent 공유)</td><td>MIT</td><td>RAG 추적</td></tr>
+</tbody></table></div>
+<h3 id="4-2-인프라-배치">4.2 인프라 배치</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>배치</th><th>사유</th></tr></thead>
+<tbody>
+<tr><td>Frontend·BFF·Service</td><td>Kubernetes (KT Cloud)</td><td>무상태 컨테이너</td></tr>
+<tr><td>Diagnostic / XBRL Engine</td><td>Kubernetes Job + Object Storage</td><td>비동기 보고서 생성</td></tr>
+<tr><td>Regulation Monitor (Airflow)</td><td>KT Cloud (DAG 스케줄러)</td><td>일·주 단위 크롤링</td></tr>
+<tr><td>Regulation DB·Best Practice</td><td>Private Cloud + DR</td><td>도메인 자산</td></tr>
+<tr><td>AI 추론 (Trade Agent ESG)</td><td>TDB·Trade Agent 공유 GPU</td><td>통합 운영</td></tr>
+<tr><td>Counseling Log (WORM)</td><td>Object Storage Lock</td><td>5년 보관</td></tr>
+</tbody></table></div>
+<h3 id="4-3-ESG-도메인-SLA-제안-시-약속">4.3 ESG 도메인 SLA (제안 시 약속)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>지표</th><th>목표</th></tr></thead>
+<tbody>
+<tr><td>진단 응답시간 (단계 전환)</td><td>P95 ≤ 1초</td></tr>
+<tr><td>ESG 보고서 생성 시간</td><td>P95 ≤ 30초 (정량) / ≤ 2분 (정량+정성+XBRL)</td></tr>
+<tr><td>XBRL 매핑 정확도</td><td>EFRAG ESRS Taxonomy 기준 ≥ 98%</td></tr>
+<tr><td>규제 정보 수집 (RSS·공식 채널)</td><td>발행 후 24시간 내 노출</td></tr>
+<tr><td>AI 상담 Faithfulness (Ragas)</td><td>≥ 0.85 (출처 인용 필수)</td></tr>
+<tr><td>1:1 상담 매칭 응답</td><td>영업일 24시간 이내</td></tr>
+<tr><td>진단 데이터 익명화 (k)</td><td>k ≥ 5 (Peer Review 표시 시)</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="5-차별화된-제안-전략-Value-Proposition">5. 차별화된 제안 전략 (Value Proposition)</h2>
+<h3 id="V-1-VSME-First-Diagnostic-한국-최초-EFRAG-VSME-진단-시스템">V-1. VSME-First Diagnostic — &quot;한국 최초 EFRAG VSME 진단 시스템&quot;</h3>
+<p><strong>고객 Pain</strong>: VSME는 2024년 EFRAG 발표 후 한국 적용 사례가 매우 적음. 수출 중소기업이 자체 진단할 도구가 사실상 부재.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>EFRAG VSME 표준 매핑 사전 + 단계형 문항 카탈로그 사업 종료 시 발주처에 인계</li>
+<li>진단 결과를 EU CSRD ESRS Taxonomy로 자동 변환 → XBRL 출력</li>
+<li>VSME 기준 변경(2026~2027년 예상 개정) 시 시스템 자동 반영 구조</li>
+<li><strong>차별화 메시지</strong>: &quot;한국 최초 VSME 진단·XBRL 출력 가능 시스템 — 회원사가 EU 시장에 그대로 제출 가능&quot;</li>
+</ul>
+<h3 id="V-2-Auto-XBRL-Reporting-공시-변환을-시스템이-한다">V-2. Auto-XBRL Reporting — &quot;공시 변환을 시스템이 한다&quot;</h3>
+<p><strong>고객 Pain</strong>: XBRL 변환은 회계·공시 전문 영역. 중소기업이 외부 컨설팅 없이 처리 불가능.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>Arelle 엔진 + EFRAG ESRS Taxonomy 매핑 + 자동 검증</li>
+<li>정량 데이터 → XBRL 컨셉 자동 매칭 + 미매핑 항목은 수동 매핑 UX 제공</li>
+<li>보고서 PDF + 편집 가능 docx + XBRL 3종 출력</li>
+<li>공시 제출 전 검증 리포트 자동 생성 (Calc Linkbase·필수 항목)</li>
+<li><strong>차별화 메시지</strong>: &quot;EU 공시 양식 변환을 시스템이 처리한다 — 회원사는 결과만 검토하고 제출&quot;</li>
+</ul>
+<h3 id="V-3-Daily-Regulation-Curator-매일-아침-회원사에-맞춤-규제-동향이-도착">V-3. Daily Regulation Curator — &quot;매일 아침 회원사에 맞춤 규제 동향이 도착&quot;</h3>
+<p><strong>고객 Pain</strong>: ESG 규제는 빠르게 변하지만 중소기업이 매일 EU·미국·한국 정부 사이트를 모니터링할 수 없음.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>회원사 수출 국가·업종·품목 + 사용자 키워드 기반 매일 Top N 규제 동향 큐레이션</li>
+<li>카톡 알림톡(중요)·이메일 다이제스트(요약)·App Push(긴급) 다채널</li>
+<li>규제 발행 후 24시간 내 노출 SLA + 다국어 자동 번역</li>
+<li>분기별 회원사별 &quot;관심 규제 변화 리포트&quot; 자동 생성</li>
+<li><strong>차별화 메시지</strong>: &quot;ESG 규제를 회원사가 찾아가지 않고 회원사에게 매일 도착한다&quot;</li>
+</ul>
+<h3 id="V-4-Peer-Review-Benchmark-동종업계-어느-수준에-있는지를-객관적으로-보여준다">V-4. Peer-Review Benchmark — &quot;동종업계 어느 수준에 있는지를 객관적으로 보여준다&quot;</h3>
+<p><strong>고객 Pain</strong>: 진단 결과가 절대 점수만 표시되면 회원사가 &quot;이게 좋은가 나쁜가&quot; 판단 어려움.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>k-익명성 기반 동종업계 진단 데이터 풀(k≥5) → 백분위·평균·우수 사례 표시</li>
+<li>S&amp;P CSA·MSCI·SASB 중대성 기준 매핑 → 해당 산업의 중점관리 항목 자동 식별</li>
+<li>&quot;당신은 동종업계 상위 30%, 부족 영역은 공급망 실사&quot;같은 직관적 표시</li>
+<li><strong>차별화 메시지</strong>: &quot;내 ESG 수준이 동종업계 어디에 있는지를 객관적으로 알려준다&quot;</li>
+</ul>
+<h3 id="V-5-Trade-Agent-ESG-Specialist-AI가-24시간-ESG-상담사">V-5. Trade Agent ESG Specialist — &quot;AI가 24시간 ESG 상담사&quot;</h3>
+<p><strong>고객 Pain</strong>: ESG 전문가는 비용이 높고 즉시 답을 받기 어려움. 1차 자가 진단·정보 탐색 단계의 갈증.</p>
+<p><strong>제안 해법</strong>:</p>
+<ul>
+<li>Trade Agent <strong>SFR-AP-009 ESG Specialist</strong> Agent + RAG (VSME + 외부 규제 + BP)</li>
+<li>출처 인용 필수 + Faithfulness 임계치 + 복잡 사안은 1:1 전문가 자동 연계</li>
+<li>진단 결과를 AI에게 &quot;어떻게 개선해야 하나요?&quot; 자연어 질문 → AI가 BP 사례·Action Plan 제시</li>
+<li>회원사 등급별 AI 상담 횟수·심화 답변 차등</li>
+<li><strong>차별화 메시지</strong>: &quot;ESG 전문가가 24시간 회원사 옆에 있다&quot;</li>
+</ul>
+<hr>
+<h2 id="6-예상-리스크-및-대응-방안">6. 예상 리스크 및 대응 방안</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ID</th><th>리스크</th><th>발생 확률</th><th>영향도</th><th>심각도</th><th>완화 전략</th></tr></thead>
+<tbody>
+<tr><td><strong>R1</strong></td><td><strong>VSME 기준 정합성·변경</strong> — EFRAG VSME 기준 변경(2026~2027 개정 예상) 시 진단 문항 일괄 갱신 필요</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>문항 카탈로그를 데이터(YAML/DB)로 관리(코드 분리). 기준 버전 관리 + 마이그레이션 도구. EFRAG 공식 발행물 자동 모니터링</td></tr>
+<tr><td><strong>R2</strong></td><td><strong>XBRL 매핑 정확도 부족</strong> — EFRAG ESRS Taxonomy 매핑 누락·오류 시 공시 거부</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>Arelle 검증 + 회계 전문가 사전 검토. 정확도 SLA ≥ 98% 명시. EFRAG 공식 Taxonomy 자동 동기화</td></tr>
+<tr><td><strong>R3</strong></td><td><strong>다국가 규제 데이터 수집 실패</strong> — 외부 채널 정책 변경·다국어 처리 한계</td><td>High</td><td>High</td><td><strong>CRIT</strong></td><td>채널 카탈로그 다중화(공식 + RSS + 산업협회). 다국어는 DeepL Pro + 사람 검수 이중. 실패 시 캐시 + 알림</td></tr>
+<tr><td><strong>R4</strong></td><td><strong>Peer Review 데이터 부족 (초기)</strong> — 진단 회원사 수가 적으면 익명화 k≥5 기준 미달</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>사업 초기 1년은 Peer Review 비활성화 또는 산업 그룹화 완화. 진단 인센티브(쿠폰·보고서 무료)</td></tr>
+<tr><td><strong>R5</strong></td><td><strong>AI 상담 환각 (Hallucination)</strong> — 잘못된 ESG 가이드 → 회원사 규제 위반 사고</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>Faithfulness 임계치 ≥ 0.85 + 출처 인용 필수 + &quot;참고용&quot; 명시 + 복잡 사안 1:1 전문가 강제. 정기 AI 답변 감사</td></tr>
+<tr><td><strong>R6</strong></td><td><strong>외부 전문기관 협력 지연</strong> — DNV·BV 등 협력 협약 일정 슬립</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>사업 초기 1개월 내 후보 기관 5곳+ 접촉. 협약 지연 시 Deeplink 모드 우선 + 협약 후 API 연계</td></tr>
+<tr><td><strong>R7</strong></td><td><strong>민감/기업정보 유출</strong> — 1:1 상담 음성 STT·텍스트에 기업 매출·전략 정보 잔존</td><td>Low</td><td>High</td><td><strong>HIGH</strong></td><td>Presidio + 자체 기업명 마스킹 + Audit Log + 마스킹 후만 LLM 호출. 5년 보관 후 자동 삭제</td></tr>
+<tr><td><strong>R8</strong></td><td><strong>TradePro ESG 전문가 Pool 신규 구성</strong> — ESG 전문가 영입 어려움</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>사업 초기 KITA 행정 협조로 외부 컨설팅사 풀 영입. 영입 지연 시 AI 상담 + 외부 전문기관 Deeplink로 1차 대응</td></tr>
+<tr><td><strong>R9</strong></td><td><strong>외부 콘텐츠 저작권</strong> — 외부 규제 보고서·뉴스 무단 재배포</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>라이선스 메타 관리 + 발행 기관 명시 + Deeplink 우선. 직접 인용은 무료 공개 콘텐츠로 한정</td></tr>
+<tr><td><strong>R10</strong></td><td><strong>진단 문항 설계 합의 지연</strong> — KITA 부서 + ESG 자문 합의 실패</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>사업 초기 1개월 내 ESG 자문 협의체 발족. EFRAG VSME 기본 적용 후 KITA 자체 보강 항목은 점진 추가</td></tr>
+<tr><td><strong>R11</strong></td><td><strong>Trade Agent SFR-AP-009 의존성</strong> — ESG Specialist Agent 일정 슬립 시 SFR-ESG-005 무력</td><td>Med</td><td>High</td><td><strong>HIGH</strong></td><td>통합 PMO 의존성 명시. 1차 룰 기반 FAQ + 2차 Trade Agent 호출 2단 구조</td></tr>
+<tr><td><strong>R12</strong></td><td><strong>국가별 규제 빈번 개정</strong> — EU·미국·중국 ESG 규제가 분기 단위로 개정</td><td>High</td><td>Med</td><td><strong>HIGH</strong></td><td>자동 모니터링 + 발주처 합동 분기 리뷰 + ESG 자문 협의체에 변경 자문</td></tr>
+<tr><td><strong>R13</strong></td><td><strong>CBAM 데이터 직접 연계 불가</strong> — EU CBAM Trade System은 회원국 정부 또는 인증 기관만 직접 연계</td><td>Med</td><td>Med</td><td><strong>MED</strong></td><td>CBAM은 1차 정보 안내 + 신고 절차 가이드 + 외부 전문기관 연결로 우회. 직접 연계는 향후 확장</td></tr>
+<tr><td><strong>R14</strong></td><td><strong>XBRL Taxonomy 라이선스/접근</strong> — EFRAG Taxonomy 사용 권한</td><td>Low</td><td>Med</td><td><strong>LOW</strong></td><td>EFRAG Taxonomy는 공개 표준이지만 라이선스 검토. Arelle 오픈소스 활용</td></tr>
+</tbody></table></div>
+<hr>
+<h2 id="7-결론-및-제안-핵심-메시지">7. 결론 및 제안 핵심 메시지</h2>
+<h3 id="7-1-사업-본질-재정의">7.1 사업 본질 재정의</h3>
+<blockquote>ESG 규제 대응 지원 플랫폼은 &quot;신규 ESG 정보 포털&quot;이 아니라, <strong>&quot;VSME 진단 + XBRL 자동 공시 + 다국가 규제 큐레이션 + Peer Review + AI 상담 + 외부 전문기관 연계&quot;가 한 시스템으로 통합된 한국 최초 수출 중소기업 ESG 통합 대응 플랫폼</strong>이다. 단순 정보 수집이 아니라 <strong>공시 출력</strong>까지 가능한 &quot;End-to-End ESG Compliance Tool&quot;이 본질.</blockquote>
+<h3 id="7-2-제안-5축-메시지">7.2 제안 5축 메시지</h3>
+<ol>
+<li><strong>VSME-First Diagnostic</strong> — 한국 최초 EFRAG VSME 진단 시스템</li>
+<li><strong>Auto-XBRL Reporting</strong> — EU 공시 변환을 시스템이 처리</li>
+<li><strong>Daily Regulation Curator</strong> — 매일 회원사에 맞춤 규제 동향 도착</li>
+<li><strong>Peer-Review Benchmark</strong> — 동종업계 객관 비교</li>
+<li><strong>Trade Agent ESG Specialist</strong> — AI가 24시간 ESG 상담사</li>
+</ol>
+<h3 id="7-3-평가표-매핑">7.3 평가표 매핑</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>평가 영역</th><th>점수</th><th>ESG 영역의 매핑</th></tr></thead>
+<tbody>
+<tr><td>기술 및 기능</td><td><strong>25</strong></td><td>SFR-ESG-001~005 5개 항목 + VSME·XBRL·Peer Review 구체 구현</td></tr>
+<tr><td>컨설팅 (전략·방법론)</td><td><strong>15</strong></td><td>CSR-ESG-001~003 3개. 운영체계·진단·맞춤 정보·외부 협력</td></tr>
+<tr><td>데이터 (기능 내)</td><td>(배점 분포)</td><td>다국가 규제 DB·진단 데이터·BP DB·민감정보 마스킹</td></tr>
+<tr><td>인터페이스 (기능 내)</td><td>(배점 분포)</td><td>EFRAG/SEC/한국정부·Trade Agent·TradePro·Dashboard</td></tr>
+<tr><td>보안 (기능 내)</td><td>(배점 분포)</td><td>민감/기업정보 마스킹·익명화·WORM 보관</td></tr>
+<tr><td>프로젝트 지원</td><td><strong>20</strong></td><td>VSME 매핑 사전·BP DB·전문가 Pool 운영·외부 채널 카탈로그 인계</td></tr>
+</tbody></table></div>
+<h3 id="7-4-다른-시스템과의-시너지-매트릭스">7.4 다른 시스템과의 시너지 매트릭스</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>영역</th><th>의존 / 연계 시스템</th><th>ESG 활용</th></tr></thead>
+<tbody>
+<tr><td>27 Unit Agent</td><td>Trade Agent SFR-AP-009 ESG Specialist</td><td>AI 상담·보고서 작성·진단 안내</td></tr>
+<tr><td>데이터 기반</td><td>Trade Digital Brain</td><td>회원사 마스터·진단 이력·익명화 통계·BP DB</td></tr>
+<tr><td>사용자 화면</td><td>Trade Dashboard SFR-DS-005</td><td>ESG 위젯·일일 규제 큐레이션·진단 점수</td></tr>
+<tr><td>1:1 상담</td><td>TradePro 신규 ESG 전문가 Pool</td><td>복잡 사안 인간 전문가</td></tr>
+<tr><td>교육</td><td>무역아카데미</td><td>VSME 학습 + ESG 기초 교육</td></tr>
+<tr><td>멤버십</td><td>KITA 멤버십 (KNEX)</td><td>등급별 진단 횟수·심화 보고서 차등</td></tr>
+<tr><td>SSO</td><td>KITA.NET 통합로그인</td><td>단일 인증</td></tr>
+<tr><td>알림</td><td>Notification Hub</td><td>규제 변경·공시 마감·진단 안내</td></tr>
+</tbody></table></div>
+<blockquote><strong>단일 메시지</strong>: &quot;ESG는 KITA 신규 도메인 중 가장 글로벌 표준 의존도가 높은 영역이다. EFRAG VSME + XBRL + 다국가 규제의 3축을 시스템화하면 한국 수출 중소기업의 EU 시장 진출 안전판이 되며, KITA가 한국 ESG 인프라의 사실상 표준 사업자로 자리잡는다.&quot;</blockquote>
+<hr>
+<h2 id="부록-A-참고-RFP-절-요구사항-ID-매핑">부록 A. 참고 RFP 절·요구사항 ID 매핑</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>RFP 절 / ID</th><th>추정 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>RFP I-4 추진범위 (ESG)</td><td>p.4</td><td>EU CSRD·CBAM 대응·VSME·XBRL</td></tr>
+<tr><td>RFP III-아 ESG 규제 대응 지원 플랫폼 (8개 요구사항)</td><td>p.91~94</td><td>본문</td></tr>
+<tr><td><strong>CSR-ESG-001 업무 분석 및 상세 설계</strong></td><td>p.91</td><td>운영체계·외부 협력·데이터 관리·민감정보 마스킹</td></tr>
+<tr><td><strong>CSR-ESG-002 수준진단 후 개선가이드</strong></td><td>p.91</td><td>VSME 단계형 문항·BP/BM·개선방향</td></tr>
+<tr><td>CSR-ESG-003 맞춤형 정보 제공 상세 설계</td><td>p.91</td><td>일반/개인화·국가/업종/품목·크롤링</td></tr>
+<tr><td>SFR-ESG-001 인입 채널</td><td>p.92</td><td>KITA.net 메뉴·회원/비회원 분기</td></tr>
+<tr><td>SFR-ESG-002 랜딩 페이지</td><td>p.92</td><td>히어로·네비·2가지 서비스</td></tr>
+<tr><td><strong>SFR-ESG-003 ESG 수준진단 상세</strong></td><td>p.92~93</td><td>Peer Review·중대성·평가결과보고서 PDF</td></tr>
+<tr><td><strong>SFR-ESG-004 ESG 보고서 생성</strong></td><td>p.93</td><td>Fact Book + 정성 + PDF + <strong>XBRL</strong></td></tr>
+<tr><td>SFR-ESG-005 상담지원 + 1:1 연결</td><td>p.94</td><td>AI 상담·전문가 Pool 신규·FAQ DB</td></tr>
+<tr><td>RFP III-다-SFR-AP-009 (Trade Agent ESG)</td><td>p.57~58</td><td>ESG 전문 Agent (상담·보고서·1:1 연계)</td></tr>
+<tr><td>RFP III-라-SFR-DS-005 자동 추천</td><td>p.66~67</td><td>Dashboard ESG 위젯</td></tr>
+<tr><td>RFP III-나-DAR-DP-001 데이터 표준화</td><td>p.42</td><td>TDB 표준사전과 정합</td></tr>
+</tbody></table></div>
+<h2 id="부록-B-참고-ISP-산출물">부록 B. 참고 ISP 산출물</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>ISP 페이지</th><th>핵심 내용</th></tr></thead>
+<tbody>
+<tr><td>ISP p.5</td><td>14개 과제 중 ⑤ ESG 데이터 연계</td></tr>
+<tr><td>ISP p.7</td><td>&quot;수출중소기업 ESG 규제 대응 역량 제고&quot; 비전</td></tr>
+<tr><td>ISP p.3411</td><td>ESG 정보공개 요구 대응실패비용 예방 (ESG 진단/보고서 생성 플랫폼 도입으로 컨설팅 비용 절감)</td></tr>
+<tr><td>ISP p.3413</td><td>&quot;규제대응 회사(철강 1,100개사 기준) × 컨설팅 수행 가정율 50% × 절감액 0.1억원 = 55억원&quot;</td></tr>
+</tbody></table></div>
+<h2 id="부록-C-글로벌-ESG-규제-매핑-제안-시-첨부">부록 C. 글로벌 ESG 규제 매핑 (제안 시 첨부)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>시장</th><th>규제</th><th>적용 시점</th><th>KITA 대응</th></tr></thead>
+<tbody>
+<tr><td>EU</td><td>CSRD (기업지속가능성공시지침)</td><td>2024~2028 단계 적용</td><td>VSME 진단 + ESRS Taxonomy XBRL</td></tr>
+<tr><td>EU</td><td>CBAM (탄소국경조정)</td><td>2023 전환·2026 전면</td><td>정보 안내 + 신고 절차 가이드</td></tr>
+<tr><td>EU</td><td>EUDR (산림훼손)</td><td>2025년 12월</td><td>공급망 실사 가이드</td></tr>
+<tr><td>미국</td><td>SEC 기후 공시</td><td>2024년 단계</td><td>공시 양식 안내 + Deeplink</td></tr>
+<tr><td>한국</td><td>자율공시 → 의무공시</td><td>2026~2030 단계</td><td>NTS·금융위 연계</td></tr>
+<tr><td>글로벌</td><td>ISSB IFRS S1/S2</td><td>2024~</td><td>VSME와 매핑</td></tr>
+<tr><td>글로벌</td><td>TCFD</td><td>권고 표준</td><td>ESRS와 매핑</td></tr>
+<tr><td>산업</td><td>RBA·Sedex (공급망 실사)</td><td>자율</td><td>정보 안내 + 외부 인증기관 연결</td></tr>
+</tbody></table></div>
+<h2 id="부록-D-ESG-진단-단계별-Action-Plan-매핑">부록 D. ESG 진단 단계별 Action Plan 매핑</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>단계</th><th>점수 범위</th><th>회원사 특성</th><th>추천 Action</th></tr></thead>
+<tbody>
+<tr><td>도입기</td><td>0~40</td><td>ESG 인식 단계</td><td>무역아카데미 ESG 기초 교육 + AI 상담 + VSME 입문 가이드</td></tr>
+<tr><td>정착기</td><td>41~70</td><td>ESG 정책 수립 단계</td><td>TradePro 1:1 자문 상담 + BP 사례 학습 + 비용 지원 사업 매칭</td></tr>
+<tr><td>성숙기</td><td>71~100</td><td>ESG 운영·공시 단계</td><td>XBRL 자동 보고서 + 외부 전문기관(DNV·BV) 검증 연결 + 글로벌 인증</td></tr>
+</tbody></table></div>
+<hr>
+<blockquote><strong>작성자 메모</strong>: ESG 규제 대응 지원 플랫폼은 본 사업의 신규 도메인 중 가장 글로벌 표준 의존도가 높고 미래 ROI 기대가 큰 영역이다. ISP의 비용 효과 분석에서도 &quot;철강 1,100개사 × 컨설팅 절감 = 55억원&quot; 정량 효과를 명시. EFRAG VSME · ESRS Taxonomy · XBRL · 다국가 규제 모니터링 4축을 시스템화하면 KITA가 한국 ESG 인프라의 사실상 표준 사업자가 될 수 있는 전략적 영역. 평가표 100점 중 본 영역 직간접 영향 추정 12~16점이지만 <strong>EU 시장 진출 안전판으로서의 전략적 가치 + ROI 정량 효과</strong>가 단순 점수 이상의 의미.</blockquote>
+    </article>
+  </div>
+  <footer class="footer">
+    <strong>ESG 규제 대응 지원 플랫폼 시스템 분석 보고서</strong><br>
+    한국무역협회 차세대 플랫폼 구축 RFP 분석 기반 · 임원 보고용 HTML
+  </footer>
+</main>
+</body>
+</html>
