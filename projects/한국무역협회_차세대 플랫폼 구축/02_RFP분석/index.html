@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>KITA 차세대 무역플랫폼 구축 사업 브리핑 — 제안팀용</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+
+  body {
+    background: #f5f7fa;
+    color: #1f2937;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 0 24px rgba(0,0,0,0.05);
+  }
+
+  /* Cover */
+  header.cover {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2E5597 50%, #3b82f6 100%);
+    color: #fff;
+    padding: 36px 48px 28px;
+  }
+  header.cover .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  header.cover h1 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  header.cover .sub {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  header.cover .meta {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    font-size: 12px;
+  }
+  header.cover .meta .item {
+    background: rgba(255,255,255,0.1);
+    padding: 8px 12px;
+    border-left: 3px solid #fbbf24;
+  }
+  header.cover .meta .label {
+    opacity: 0.7;
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  header.cover .meta .value {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* Sections */
+  section {
+    padding: 28px 48px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  section h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #1e3a8a;
+    display: inline-block;
+  }
+  section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 16px 0 8px;
+  }
+  section p {
+    margin-bottom: 10px;
+  }
+  section ul, section ol {
+    margin: 6px 0 10px 22px;
+  }
+  section li {
+    margin-bottom: 4px;
+  }
+
+  /* Inline tags */
+  .tag-rfp {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin: 0 2px;
+    font-family: 'Consolas', 'Menlo', monospace;
+  }
+  .tag-num {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin: 0 2px;
+  }
+  .tag-new {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .tag-up {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* TL;DR box */
+  .tldr {
+    background: #fafafa;
+    border-left: 4px solid #1e3a8a;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+  }
+  .tldr strong { color: #1e3a8a; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin: 10px 0;
+  }
+  th {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f9fafb; }
+  td.center { text-align: center; }
+  td.num { text-align: right; font-family: 'Consolas', monospace; font-weight: 600; }
+
+  /* Architecture stack */
+  .arch {
+    margin: 14px 0 8px;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    margin-bottom: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .layer-label {
+    background: #1e3a8a;
+    color: #fff;
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .layer-label .ln {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  .layer-body {
+    padding: 12px 14px;
+    background: #fff;
+  }
+  .layer-body .lname {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 13.5px;
+    margin-bottom: 4px;
+  }
+  .layer-body .ldesc {
+    font-size: 12.5px;
+    color: #4b5563;
+    margin-bottom: 6px;
+  }
+  .layer-body .lcomp {
+    font-size: 11.5px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+  .layer-body .lcomp b { color: #1e3a8a; }
+
+  .layer.l1 .layer-label { background: #6b7280; }
+  .layer.l2 .layer-label { background: #0e7490; }
+  .layer.l3 .layer-label { background: #1e3a8a; }
+  .layer.l4 .layer-label { background: #6d28d9; }
+  .layer.l5 .layer-label { background: #b91c1c; }
+
+  /* Dependency matrix */
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .dep-card {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 10px 12px;
+    background: #f9fafb;
+  }
+  .dep-card .dep-from {
+    font-weight: 700;
+    color: #b91c1c;
+    font-size: 12px;
+  }
+  .dep-card .arrow { color: #6b7280; margin: 0 6px; }
+  .dep-card .dep-to {
+    font-weight: 700;
+    color: #1e3a8a;
+    font-size: 12px;
+  }
+  .dep-card .dep-why {
+    font-size: 11.5px;
+    color: #4b5563;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* Scenario flow */
+  .flow {
+    margin: 12px 0;
+    counter-reset: step;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr 200px;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e5e7eb;
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-no {
+    counter-increment: step;
+    background: #1e3a8a;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .step-no::before { content: counter(step); }
+  .step-text { font-size: 12.5px; color: #1f2937; line-height: 1.55; }
+  .step-text b { color: #1e3a8a; }
+  .step-layer {
+    font-size: 11px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border-left: 3px solid #1e3a8a;
+    text-align: left;
+  }
+
+  /* Scoring chart */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin: 8px 0;
+  }
+  .score-cell {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px 6px;
+    text-align: center;
+    background: #f9fafb;
+  }
+  .score-cell .score-name {
+    font-size: 11px;
+    color: #4b5563;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .score-cell .score-pt {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+  .score-cell.hot { background: #fef3c7; border-color: #f59e0b; }
+  .score-cell.hot .score-pt { color: #b45309; }
+
+  /* Risk box */
+  .risk {
+    border-left: 4px solid #b91c1c;
+    background: #fef2f2;
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-size: 12.5px;
+  }
+  .risk strong { color: #b91c1c; }
+
+  /* Footer */
+  footer {
+    background: #1e3a8a;
+    color: #cbd5e1;
+    padding: 16px 48px;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+  }
+  footer .ktds {
+    background: #ED1C24;
+    color: #fff;
+    padding: 3px 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="cover">
+    <div class="tag">PROPOSAL TEAM BRIEFING</div>
+    <h1>한국무역협회 차세대 AX무역플랫폼 구축 사업</h1>
+    <div class="sub">RFP·ISP 분석 기반 사업 본질 / 시스템 구조 / 의존관계 정리 — 제안팀 공유용</div>
+    <div class="meta">
+      <div class="item"><div class="label">CLIENT</div><div class="value">한국무역협회 (KITA) 무역플랫폼실</div></div>
+      <div class="item"><div class="label">DURATION</div><div class="value">계약일 + 12개월</div></div>
+      <div class="item"><div class="label">REQUIREMENTS</div><div class="value">총 181개 (8개 추진영역)</div></div>
+      <div class="item"><div class="label">EVALUATION</div><div class="value">기술 100점 기준 / PM 직접 발표</div></div>
+    </div>
+  </header>
+
+  <!-- 1. 사업 본질 -->
+  <section>
+    <h2>1. 사업 본질 — 한 줄 정의</h2>
+    <div class="tldr">
+      KITA가 운영 중인 <strong>8개 분산 서비스를 단일 통합 데이터 기반(Lakehouse) 위에서 재구성</strong>하고, 그 위에 <strong>Multi-Agent 기반 27종 Trade Agent</strong>와 <strong>초개인화 통합대시보드</strong>를 올려 <strong>수출기업 업무 전주기를 단일 UX로 제공</strong>하는 12개월짜리 통합 SI 사업. AI 챗봇 도입 사업이 아니라 <strong>"데이터 통합 + AI Agent + 8개 서비스 동시 신·증축 + 클라우드 랜딩존 신규 구성"이 한 계약 안에 묶인 멀티트랙 SI</strong>가 본질.
+    </div>
+
+    <h3>왜 이 사업인가 (As-Is 문제 정의)</h3>
+    <ul>
+      <li><strong>서비스 사일로화</strong> — KITA.net·tradeKorea·TradePro·무역통계·무역아카데미·멤버십·수출실적증명·KNEX(내부)가 별도 운영. 회원 식별·행동 로그·콘텐츠 메타가 서비스 경계에 갇혀 있음.</li>
+      <li><strong>데이터 활용 한계</strong> — 정형/비정형/행동 데이터의 표준·메타·리니지·라이프사이클이 부재. AI 학습/추론에 바로 쓸 수 있는 "AI Readable Data" 계층이 없음.</li>
+      <li><strong>AI 부재 또는 단발성</strong> — TradePro 일부에만 AI 상담 존재. HS Code 매칭, 바이어 추천, 서류 자동심사, ESG 진단, 지재권 모니터링 등 도메인 AI 시나리오 미구현.</li>
+      <li><strong>인프라 노후 및 신규 수요 미대응</strong> — 무역통계 운영계는 Solaris 11/Oracle 19c/NetApp 기반 온프레, ESG·지재권은 시스템 자체가 없음. 클라우드 랜딩존·MCP 서버 신규 구축이 동시에 필요.</li>
+    </ul>
+
+    <h3>RFP 명문 사업 목표 (Section I-3)</h3>
+    <ol>
+      <li>글로벌 무역 데이터 플랫폼 기반 무역 특화 지능형 Trade Agent 구축</li>
+      <li>수출 기업의 업무 전주기를 지원하는 원스톱 통합 서비스 도입 (tradeKorea·수출실적증명·무역아카데미 AI 도입·고도화 + ESG·IP 신규)</li>
+      <li>클라우드 환경 구성을 통한 인프라 운영의 확장성·민첩성 확보 (랜딩존·공통 운영환경·보안체계)</li>
+    </ol>
+  </section>
+
+  <!-- 2. 추진범위 -->
+  <section>
+    <h2>2. 추진 범위 — 8개 트랙 / 신규 vs 고도화</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:24%">트랙</th>
+          <th style="width:11%">분류</th>
+          <th style="width:9%" class="center">요구사항</th>
+          <th>핵심 과업</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Trade Digital Brain</b></td>
+          <td><span class="tag-new">신규</span></td>
+          <td class="center">37</td>
+          <td>Data Lakehouse + AI Data Hub + 메타데이터·표준·품질·리니지·라이프사이클 거버넌스. ECR-DP-001~006 (플랫폼·모델링·메타·DB모니터링·ETL·APIM)</td>
+        </tr>
+        <tr>
+          <td><b>Trade Agent</b></td>
+          <td><span class="tag-new">신규</span></td>
+          <td class="center">23</td>
+          <td>Master/Orchestration + Unit Agent 27종 (범용 16 + 도메인 11). SFR-AP-001~012, 가드레일·평가체계 포함</td>
+        </tr>
+        <tr>
+          <td><b>통합대시보드</b></td>
+          <td><span class="tag-new">신규</span></td>
+          <td class="center">~20</td>
+          <td>HS·관심국가·업종 기반 위젯 자동구성, 행동로그 기반 추천, 다채널 알림(SMS/메신저/Push), 회원 등급 차등</td>
+        </tr>
+        <tr>
+          <td>tradeKorea</td>
+          <td><span class="tag-up">고도화</span></td>
+          <td class="center">~25</td>
+          <td>모바일 App 재구축, AI 매칭 알고리즘, Direct Live Chat, 글로벌 무역 확장 모델 설계 (견적·계약·물류·통관 연계)</td>
+        </tr>
+        <tr>
+          <td>수출실적증명</td>
+          <td><span class="tag-up">고도화</span></td>
+          <td class="center">~12</td>
+          <td>AI 기반 증빙서류 자동 인식·검증·심사 우선순위 추천 (HWP/HWPX/PDF 멀티모달 처리)</td>
+        </tr>
+        <tr>
+          <td>ESG 규제 대응 플랫폼</td>
+          <td><span class="tag-new">신규</span></td>
+          <td class="center">~15</td>
+          <td>VSME 기반 ESG 진단 (도입기/안정기/성숙기), 약식 ESG 보고서 자동생성(XBRL), 업종/품목/국가별 규제 정보, AI 상담 후 1:1 연계</td>
+        </tr>
+        <tr>
+          <td>지재권 특화 서비스</td>
+          <td><span class="tag-new">신규</span></td>
+          <td class="center">~12</td>
+          <td>유관기관 협업구조 설계, 분류체계 수립, 지재권 상담·지원·교육 포털 신규 구축</td>
+        </tr>
+        <tr>
+          <td>무역아카데미</td>
+          <td><span class="tag-up">재구축</span></td>
+          <td class="center">~25</td>
+          <td>LMS 재구축, AI 튜터, 모바일 학습, KNEX/KAMIS 연계, 학습 데이터 분석</td>
+        </tr>
+        <tr>
+          <td>무역통계 전환</td>
+          <td><span class="tag-up">전환</span></td>
+          <td class="center">~12</td>
+          <td>Solaris/Oracle 기반 운영계를 Lakehouse 환경으로 전환, 통계 Report Agent 연계</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:11.5px; color:#6b7280;">* 요구사항 수는 RFP 본문 분포 기준 추정. 최종 범위는 Trade Digital Brain 37개, Trade Agent 23개를 제외한 나머지가 약 121개로 분포.</p>
+  </section>
+
+  <!-- 3. 시스템 아키텍처 계층 -->
+  <section>
+    <h2>3. 시스템 아키텍처 — 5계층 구조</h2>
+    <p>전체 산출물은 다음 5계층으로 정렬된다. 하위 계층의 산출물이 상위 계층의 전제조건이며, 임계 경로(Critical Path)는 L2 → L3 → L5 순서다.</p>
+
+    <div class="arch">
+      <div class="layer l5">
+        <div class="layer-label"><span class="ln">L5</span>UX / Agent</div>
+        <div class="layer-body">
+          <div class="lname">Trade Agent (Multi-Agent) + 단일 포털 UI</div>
+          <div class="ldesc">사용자가 직접 상호작용하는 계층. Master Agent가 의도·맥락 분석 후 Orchestration이 Unit Agent 호출 사슬을 구성. 모든 Agent는 표준 아키텍처(시스템 프롬프트·지식데이터·파이프라인) 기반으로 구현되며, LLM 추상화(LiteLLM)로 모델 종속을 회피.</div>
+          <div class="lcomp"><b>구성요소:</b> Master Agent · Orchestration · Unit Agent 27종 · Agent Portal Web · SSO · 운영자 콘솔(LLM/파라미터 관리)</div>
+        </div>
+      </div>
+
+      <div class="layer l4">
+        <div class="layer-label"><span class="ln">L4</span>Personalization</div>
+        <div class="layer-body">
+          <div class="lname">통합대시보드 + 알림·추천</div>
+          <div class="ldesc">사용자 회원정보·행동로그·관심도(HS·국가·업종)를 기반으로 위젯 자동구성. AI Agent의 추천 결과를 화면 위에 띄우고, 다채널 알림으로 푸시.</div>
+          <div class="lcomp"><b>구성요소:</b> Dashboard Engine · Recommendation Engine · Notification Hub (SMS/메신저/App Push) · A/B 위젯 관리</div>
+        </div>
+      </div>
+
+      <div class="layer l3">
+        <div class="layer-label"><span class="ln">L3</span>Domain Services</div>
+        <div class="layer-body">
+          <div class="lname">8개 도메인 서비스 (신규 4 / 고도화·전환 4)</div>
+          <div class="ldesc">실제 비즈니스 트랜잭션이 발생하는 계층. 모든 서비스는 L2 데이터플랫폼과 표준 API/이벤트로 연계되며, L5 Agent가 도메인 작업을 수행할 때 MCP 서버를 통해 호출됨.</div>
+          <div class="lcomp"><b>구성요소:</b> tradeKorea · 수출실적증명 · 무역아카데미 · 무역통계(전환) · ESG 플랫폼 · 지재권 서비스 · TradePro AI 고도화 · 통합 회원/SSO</div>
+        </div>
+      </div>
+
+      <div class="layer l2">
+        <div class="layer-label"><span class="ln">L2</span>Data Foundation</div>
+        <div class="layer-body">
+          <div class="lname">Trade Digital Brain (Data Lakehouse + AI Data Hub)</div>
+          <div class="ldesc">전사 데이터의 단일 진실 공급원(SSOT). 정형/비정형/반정형 수집 → Parsing/Chunking/Embedding → Lakehouse 적재 → 메타·표준·품질·리니지·라이프사이클 거버넌스. AI Data Hub는 벡터·지식베이스·프롬프트 라이브러리를 표준 메타 기반으로 관리.</div>
+          <div class="lcomp"><b>구성요소:</b> Lakehouse (ACID·메타·고속분석) · AI Data Hub (Vector·RAG) · ETL/CDC 파이프라인 · 메타데이터 카탈로그 · DB 모델링 · DQ/리니지 · APIM</div>
+        </div>
+      </div>
+
+      <div class="layer l1">
+        <div class="layer-label"><span class="ln">L1</span>Infrastructure</div>
+        <div class="layer-body">
+          <div class="lname">클라우드 랜딩존 + 보안 + MCP 인프라</div>
+          <div class="ldesc">멀티 Account 랜딩존, 전용회선, 모니터링/로그/백업/비용관리, 보안체계, 고가용성/Auto Scaling. AI Agent 연계용 MCP 서버를 협회 도메인별로 신규 구축.</div>
+          <div class="lcomp"><b>구성요소:</b> 클라우드 랜딩존 · 네트워크/보안 · 통합 모니터링 · 로그/APM · 백업/DR · MCP 서버 (도메인별)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 의존관계 -->
+  <section>
+    <h2>4. 시스템 간 의존관계 — 임계 경로 식별</h2>
+    <p>제안 일정 설계 시 반드시 인지해야 할 핵심 의존성. <strong>L2 Trade Digital Brain이 모든 상위 계층의 전제조건</strong>이며, L2가 늦으면 L3/L4/L5 전체가 일정 슬립.</p>
+
+    <div class="matrix">
+      <div class="dep-card">
+        <div><span class="dep-from">L5 Trade Agent</span><span class="arrow">→</span><span class="dep-to">L2 Digital Brain</span></div>
+        <div class="dep-why">Agent의 RAG·지식베이스·프롬프트 라이브러리·메타데이터가 L2에 표준화되어야 응답 품질 보장. AI Data Hub 미완성 시 Agent는 빈 깡통.</div>
+      </div>
+      <div class="dep-card">
+        <div><span class="dep-from">L5 Trade Agent</span><span class="arrow">→</span><span class="dep-to">L3 도메인 서비스</span></div>
+        <div class="dep-why">Agent의 Tool Use(MCP) 호출 대상이 L3. 수출실적증명 심사·tradeKorea 매칭·ESG 진단을 Agent가 직접 수행하려면 L3 API가 MCP로 노출되어야 함.</div>
+      </div>
+      <div class="dep-card">
+        <div><span class="dep-from">L4 대시보드</span><span class="arrow">→</span><span class="dep-to">L2 + L5</span></div>
+        <div class="dep-why">L2의 사용자 행동로그·관심 메타로 위젯 구성, L5 추천 Agent의 결과를 위젯에 노출. 양쪽 모두 의존.</div>
+      </div>
+      <div class="dep-card">
+        <div><span class="dep-from">L3 도메인 서비스</span><span class="arrow">→</span><span class="dep-to">L2 Digital Brain</span></div>
+        <div class="dep-why">서비스 간 데이터 공유는 L2를 경유해야 함 (Point-to-Point 연계 금지). 무역통계 전환은 L2 Lakehouse로 직접 마이그레이션.</div>
+      </div>
+      <div class="dep-card">
+        <div><span class="dep-from">전 계층</span><span class="arrow">→</span><span class="dep-to">L1 인프라</span></div>
+        <div class="dep-why">랜딩존·SSO·보안·MCP 서버가 선행되지 않으면 어떤 계층도 구동 불가. L1은 사업 초기 1~2개월 내 완료가 필수.</div>
+      </div>
+      <div class="dep-card">
+        <div><span class="dep-from">전 계층</span><span class="arrow">→</span><span class="dep-to">통합 SSO/IAM</span></div>
+        <div class="dep-why">단일 세션 유지·RBAC·SSO가 L1의 인증 컴포넌트로 일원화되어야 함. 8개 서비스 + 대시보드 + Agent 포털이 같은 토큰 체계 사용.</div>
+      </div>
+    </div>
+
+    <h3>임계 경로 (Critical Path)</h3>
+    <p style="font-size:12.5px; color:#374151;">
+      <span class="tag-num">M1</span> L1 랜딩존·MCP 베이스 →
+      <span class="tag-num">M2</span> L2 Lakehouse·AI Data Hub MVP →
+      <span class="tag-num">M3</span> L3 도메인 API/MCP 서버 노출 →
+      <span class="tag-num">M4</span> L5 Master/Orchestration + Unit Agent 27종 단계 오픈 →
+      <span class="tag-num">M5</span> L4 대시보드 위젯 + 알림 →
+      <span class="tag-num">M6</span> 통합 테스트·전환 리허설.
+      병렬 가능 트랙은 L3 8개 도메인 서비스 내부 고도화이지만, MCP·메타데이터 연계 시점은 M3에 동기화 필요.
+    </p>
+  </section>
+
+  <!-- 5. 데이터 흐름 시나리오 -->
+  <section>
+    <h2>5. 엔드투엔드 시나리오 — 5계층이 한 요청에 어떻게 맞물리는가</h2>
+    <p>예시: 회원사 사용자가 "베트남에 우리 화장품 수출하려는데 절차와 바이어를 알려달라"라고 요청한 경우.</p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">사용자가 통합 포털 접속. <b>SSO 토큰 발급</b>(KITA 통합 IAM) 후 세션 생성.</div>
+        <div class="step-layer">L1 인프라 / L3 SSO</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">대시보드가 사용자 프로필·행동로그·HS Code·관심국가를 조회해 <b>위젯 자동구성</b>. 동시에 추천 Agent 호출.</div>
+        <div class="step-layer">L4 대시보드 ↔ L2 Digital Brain</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">사용자 자연어 입력 → <b>Master Agent</b>가 의도·맥락 분석. 가드레일 통과 후 작업 시나리오 정의 (HS 매칭 → 관세·규제 → 바이어 추천 → 보고서 생성).</div>
+        <div class="step-layer">L5 Master Agent</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text"><b>Orchestration</b>이 Unit Agent 호출 사슬 구성: HS Code 매칭 Agent → 외부검색 Agent (관세규제/TradeNAVI) → 바이어 추천 Agent (tradeKorea) → 생성형 Agent (보고서 초안).</div>
+        <div class="step-layer">L5 Orchestration</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">각 Agent가 <b>RAG 조회 (Vector DB) + Tool Use (MCP)</b>로 데이터/기능 호출. 정형 데이터는 Lakehouse, 비정형/지식은 AI Data Hub, 도메인 트랜잭션은 L3 서비스 MCP 서버.</div>
+        <div class="step-layer">L2 Digital Brain + L3 서비스</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">결과 스트리밍으로 챗 UI에 토큰 단위 출력. 동시에 대시보드 위젯에 <b>후속 추천</b>(예: ESG 진단, 수출실적증명 신청 가이드) 자동 추가.</div>
+        <div class="step-layer">L5 → L4 대시보드</div>
+      </div>
+      <div class="step">
+        <div class="step-no"></div>
+        <div class="step-text">전체 대화·Tool 호출·프롬프트 입출력·LLM 토큰 사용량이 <b>관찰성 스택(Langfuse·OTel)</b>에 트레이스로 기록되며, 가드레일 차단·민감정보 비식별 결과도 감사 로그로 적재.</div>
+        <div class="step-layer">L1 모니터링·감사</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 평가 매핑 -->
+  <section>
+    <h2>6. 기술평가 100점 분포 — 가산점 핫스팟</h2>
+    <div class="score-grid">
+      <div class="score-cell hot"><div class="score-name">기술 및 기능</div><div class="score-pt">25</div></div>
+      <div class="score-cell hot"><div class="score-name">프로젝트 지원</div><div class="score-pt">20</div></div>
+      <div class="score-cell"><div class="score-name">전략 및 방법론</div><div class="score-pt">15</div></div>
+      <div class="score-cell"><div class="score-name">성능 및 품질</div><div class="score-pt">15</div></div>
+      <div class="score-cell"><div class="score-name">프로젝트 관리</div><div class="score-pt">15</div></div>
+      <div class="score-cell"><div class="score-name">조직 및 인력</div><div class="score-pt">10</div></div>
+    </div>
+    <p style="font-size:12.5px; color:#374151;">
+      <strong>기술 및 기능 25점</strong>이 최대 가중치. 평가 기준은 "기능 요구사항·기대사항·제약사항 파악 후 <strong>구현 방안이 구체적으로 기술</strong>"되었는지. <strong>프로젝트 지원 20점</strong>은 품질보증·시험운영·교육·유지관리·하자보수·보안·비상대책. RFP 본문에 "<em>~할 수 있다, 고려한다 등 모호 표현은 불가능으로 간주</em>" 룰이 박혀 있어 <strong>구체성·정량성 없는 표현은 그대로 감점</strong>이 됨. 제안 설명회는 <strong>사업 PM이 직접 발표</strong> 의무.
+    </p>
+  </section>
+
+  <!-- 7. 본질적 리스크 -->
+  <section>
+    <h2>7. 사업 본질 리스크 — 제안팀이 반드시 인지할 4가지</h2>
+
+    <div class="risk">
+      <strong>R1. 12개월 내 5계층 동시 신·증축의 일정 리스크</strong>
+      &nbsp;신규 4개 + 고도화/전환 4개 + 클라우드 랜딩존 + Multi-Agent + 대시보드를 한 계약 안에 묶음. 빅뱅 일정 시 통합 테스트 단계에서 사고 확률 급증. 단계형 이행안(공통 기반 → 핵심 Agent/대시보드 → 도메인 병행 → 통합 테스트·전환)이 평가표 "프로젝트 관리"의 사실상 통과 기준.
+    </div>
+
+    <div class="risk">
+      <strong>R2. L2 Digital Brain의 임계경로 종속</strong>
+      &nbsp;Lakehouse·AI Data Hub·메타·표준·리니지가 늦으면 L5 Agent와 L4 대시보드 전체가 슬립. M2 마일스톤(Lakehouse MVP)이 사업 성패의 첫 분기점.
+    </div>
+
+    <div class="risk">
+      <strong>R3. AI 품질·비용·종속 3중 함정</strong>
+      &nbsp;LLM 모델 종속(SFR-AP-001 명문 금지), 데이터 주권(개인정보·매출정보 외부 유출 방지), 토큰 비용 폭증을 동시에 통제해야 함. LiteLLM·vLLM·GPTCache·Langfuse 조합이 사실상 표준 답안. Hallucination 통제·평가체계(Ragas/DeepEval)가 정량 산출물로 제안서에 명시되지 않으면 평가위원이 "구체성 미달"로 감점.
+    </div>
+
+    <div class="risk">
+      <strong>R4. 도메인 깊이 부족 — 공통 약점</strong>
+      &nbsp;무역 도메인(HS Code, 관세, 수출실적증명, 지재권, ESG VSME) 전문성은 SI사 공통 약점. 무역 도메인 파트너 컨소시엄 없이 단독 제안 시 평가표 "사업수행조직 + 유사분야 수행경험"에서 격차 발생. KTNET 등 무역 정보통신 전문 파트너의 표지 노출이 차별화의 핵심.
+    </div>
+  </section>
+
+  <!-- 8. 한 페이지 요약 -->
+  <section>
+    <h2>8. 제안팀 핵심 메시지 한 페이지</h2>
+    <ol style="font-size:13px; color:#1f2937; line-height:1.8;">
+      <li><strong>이 사업은 AI 챗봇 도입이 아니다.</strong> "데이터 통합 + AI Agent + 8개 도메인 서비스 신·증축 + 클라우드 랜딩존"이 하나의 계약으로 묶인 멀티트랙 SI다.</li>
+      <li><strong>L2 Trade Digital Brain이 사업의 토대.</strong> 임계경로의 첫 분기점이고, 여기서 늦으면 L4·L5 전체가 일정 슬립.</li>
+      <li><strong>Trade Agent는 Unit Agent 27종 + Master + Orchestration의 통합 시스템.</strong> 모델 추상화·MCP·가드레일·평가체계가 표준 답안. 단순 LLM 통합으로 접근하면 평가에서 떨어진다.</li>
+      <li><strong>평가 핵심은 25 + 20 = 45점의 "구체성".</strong> 모호 표현은 불가능 간주 룰이 박혀 있다. 정량 지표·산출물·일정·자산 인계까지 숫자로 박을 것.</li>
+      <li><strong>경쟁력의 본질은 도메인 깊이와 운영 책임.</strong> 기술 스택은 LG CNS·메가존·kt ds 모두 비슷하게 그릴 수 있다. 무역 도메인 컨소시엄 + 12개월 사고 0 + 운영 트랜지션 보증이 차별화의 마지막 칼날.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <div>한국무역협회 차세대 AX무역플랫폼 구축 사업 — 제안팀 브리핑 (RFP·ISP 분석 기반)</div>
+    <div class="ktds">kt ds</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
